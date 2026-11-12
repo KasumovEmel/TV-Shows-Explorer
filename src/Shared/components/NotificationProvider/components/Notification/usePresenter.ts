@@ -1,7 +1,13 @@
-import { useRef, useState, type FocusEvent, type MouseEvent } from 'react';
+import { useRef, useState } from 'react';
+
 import { useTranslation } from 'react-i18next';
+
 import { useDismissTimer } from './useDismissTimer';
+
 import type { NotificationProps } from './types';
+import type { FocusEvent, MouseEvent } from 'react';
+
+
 export function usePresenter({ kind, id, messageKey, onDismiss }: NotificationProps) {
   const { t } = useTranslation();
   const previous = useRef<HTMLElement | null>(null);

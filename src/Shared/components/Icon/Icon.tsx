@@ -1,5 +1,8 @@
 import { usePresenter } from './usePresenter';
+
 import type { IconProps } from './types';
+
+
 export function Icon(props: IconProps) {
   const { path, size } = usePresenter(props);
   return (

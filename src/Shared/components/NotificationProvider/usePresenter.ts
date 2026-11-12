@@ -1,6 +1,9 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
-import type { NotificationEvent } from '@shared/types/notification';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
 import type { QueuedNotification } from './types';
+import type { NotificationEvent } from '@shared/types/notification';
+
+
 export function usePresenter() {
   const [queue, setQueue] = useState<QueuedNotification[]>([]);
   const nextId = useRef(0);

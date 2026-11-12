@@ -1,10 +1,16 @@
 import { StrictMode, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
+
 import { AppShell } from '../../src/AppShell';
-import { Catalog, type CatalogProps } from '../../src/AppShell/components/Catalog';
-import { useNotify, type NotificationEvent } from '@shared/components/NotificationProvider';
+import { Catalog } from '../../src/AppShell/components/Catalog';
+import { useNotify } from '@shared/components/NotificationProvider';
 import { initializeI18n } from '@shared/i18n';
+
+import type { CatalogProps } from '../../src/AppShell/components/Catalog';
+import type { NotificationEvent } from '@shared/components/NotificationProvider';
+
 import '@shared/styles/base.css';
+
 
 function FixtureScreen(props: CatalogProps) {
   const notify = useNotify();

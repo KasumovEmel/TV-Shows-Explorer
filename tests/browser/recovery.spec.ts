@@ -1,4 +1,5 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
+
 
 for (const width of [320, 390, 1440]) {
   test(`восстановление с клавиатуры при ширине ${width}`, async ({ page }, info) => {

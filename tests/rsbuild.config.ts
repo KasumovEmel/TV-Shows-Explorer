@@ -1,5 +1,8 @@
 import { defineConfig, mergeRsbuildConfig } from '@rsbuild/core';
+
 import base from '../rsbuild.config';
+
+
 export default defineConfig(
   mergeRsbuildConfig(base, {
     source: { entry: { index: './src/index.tsx', fixture: './tests/browser/fixture.tsx' } },

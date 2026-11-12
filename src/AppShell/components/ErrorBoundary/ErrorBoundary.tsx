@@ -1,6 +1,10 @@
 import { Component } from 'react';
+
 import { RecoveryScreen } from './components/RecoveryScreen';
-import type { ErrorBoundaryProps, BoundaryState } from './types';
+
+import type { BoundaryState, ErrorBoundaryProps } from './types';
+
+
 export class ErrorBoundary extends Component<ErrorBoundaryProps, BoundaryState> {
   state: BoundaryState = { failed: false, retrying: false, attempt: 0 };
   private locked = false;

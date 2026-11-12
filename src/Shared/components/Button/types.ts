@@ -1,5 +1,7 @@
-import type { ComponentPropsWithRef } from 'react';
 import type { IconName } from '@shared/components/Icon';
+import type { ComponentPropsWithRef } from 'react';
+
+
 type Native = Omit<ComponentPropsWithRef<'button'>, 'children'>;
 export type ButtonProps = Native &
   (

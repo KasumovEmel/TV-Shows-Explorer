@@ -1,4 +1,6 @@
 import type { IconName, IconProps } from './types';
+
+
 const paths: Record<IconName, string> = {
   restore: 'M4 10a8 8 0 1 1 0 6m0-13v7h7',
   close: 'M7 7l10 10M17 7 7 17',

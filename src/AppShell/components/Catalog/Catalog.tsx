@@ -1,10 +1,14 @@
+import { CatalogResults } from './components/CatalogResults';
+import { LanguagePicker } from './components/LanguagePicker';
+import { usePresenter } from './usePresenter';
 import { Brand } from '@shared/components/Brand';
 import { SearchField } from '@shared/components/SearchField';
-import { LanguagePicker } from './components/LanguagePicker';
-import { CatalogResults } from './components/CatalogResults';
-import { usePresenter } from './usePresenter';
+
 import type { CatalogProps } from './types';
+
 import styles from './styles.module.css';
+
+
 export function Catalog(props: CatalogProps) {
   const { t, query, change, inputRef, genre, setGenre, start } = usePresenter(props);
   return (

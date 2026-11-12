@@ -1,6 +1,10 @@
-import type { ShowCardProps } from './types';
 import { usePresenter } from './usePresenter';
+
+import type { ShowCardProps } from './types';
+
 import styles from './styles.module.css';
+
+
 export function ShowCard(props: ShowCardProps) {
   const { title, original, year, genre } = usePresenter(props);
   return (

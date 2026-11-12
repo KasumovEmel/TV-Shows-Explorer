@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react';
+
+
 export interface ErrorBoundaryProps {
   children: (restored: boolean) => ReactNode;
 }

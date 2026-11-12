@@ -1,6 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import type { ChangeEvent } from 'react';
+
 import type { SearchFieldProps } from './types';
+import type { ChangeEvent } from 'react';
+
+
 export function usePresenter({ value, onChange, inputRef }: SearchFieldProps) {
   const { t } = useTranslation();
   function clear() {

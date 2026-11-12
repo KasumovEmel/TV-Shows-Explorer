@@ -1,9 +1,13 @@
+import television from './television.svg';
+import { usePresenter } from './usePresenter';
 import { Brand } from '@shared/components/Brand';
 import { Button } from '@shared/components/Button';
-import { usePresenter } from './usePresenter';
+
 import type { RecoveryScreenProps } from './types';
-import television from './television.svg';
+
 import styles from './styles.module.css';
+
+
 export function RecoveryScreen(props: RecoveryScreenProps) {
   const { heading, title, description, action, retrying, onRestore } = usePresenter(props);
   return (

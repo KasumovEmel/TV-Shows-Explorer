@@ -1,7 +1,11 @@
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
+
 import en from './locales/en.json';
-import { languageNames, preferredLanguage, type Language } from './preferences';
+import { languageNames, preferredLanguage } from './preferences';
+
+import type { Language } from './preferences';
+
 
 export async function setLanguage(language: Language) {
   if (language === 'ru' && !i18next.hasResourceBundle('ru', 'translation')) {

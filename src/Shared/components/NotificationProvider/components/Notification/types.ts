@@ -1,4 +1,6 @@
 import type { NotificationKind } from '@shared/types/notification';
+
+
 export interface NotificationProps {
   kind: NotificationKind;
   id: number;

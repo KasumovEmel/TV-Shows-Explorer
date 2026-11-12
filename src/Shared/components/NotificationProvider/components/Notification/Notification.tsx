@@ -1,8 +1,12 @@
-import { Icon } from '@shared/components/Icon';
-import { Button } from '@shared/components/Button';
 import { usePresenter } from './usePresenter';
+import { Button } from '@shared/components/Button';
+import { Icon } from '@shared/components/Icon';
+
 import type { NotificationProps } from './types';
+
 import styles from './styles.module.css';
+
+
 export function Notification(props: NotificationProps) {
   const { kind, title, message, label, enter, leave, close, onEnter, onLeave } =
     usePresenter(props);

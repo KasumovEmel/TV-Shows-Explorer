@@ -1,9 +1,14 @@
 import { useEffect } from 'react';
+
 import { useTranslation } from 'react-i18next';
 import useSWR from 'swr';
-import { useNotify } from '@shared/components/NotificationProvider';
+
 import { fetchShows } from './utils/fetchShows';
+import { useNotify } from '@shared/components/NotificationProvider';
+
 import type { CatalogResultsProps, Show } from './types';
+
+
 export function usePresenter({ query, genre, onGenre }: CatalogResultsProps) {
   const { t } = useTranslation();
   const notify = useNotify();

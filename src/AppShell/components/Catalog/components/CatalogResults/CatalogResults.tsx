@@ -1,8 +1,12 @@
-import { Button } from '@shared/components/Button';
 import { ShowCard } from './components/ShowCard';
 import { usePresenter } from './usePresenter';
+import { Button } from '@shared/components/Button';
+
 import type { CatalogResultsProps } from './types';
+
 import styles from './styles.module.css';
+
+
 export function CatalogResults(props: CatalogResultsProps) {
   const { t, cards, chips, hasGenres, failed, loading, retry, emptyCatalog, count } =
     usePresenter(props);

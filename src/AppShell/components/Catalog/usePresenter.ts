@@ -1,7 +1,12 @@
 import { useLayoutEffect, useRef, useState } from 'react';
+
 import { useTranslation } from 'react-i18next';
+
 import { useNotify } from '@shared/components/NotificationProvider';
+
 import type { CatalogProps } from './types';
+
+
 export function usePresenter({ restored }: CatalogProps) {
   const { t } = useTranslation();
   const notify = useNotify();

@@ -1,13 +1,15 @@
-import { useState, type ChangeEvent } from 'react';
+import { useState } from 'react';
+
 import { useTranslation } from 'react-i18next';
-import { setLanguage } from '@shared/i18n';
-import {
-  isLanguage,
-  languageNames,
-  rememberLanguage,
-  type Language,
-} from '@shared/i18n/preferences';
+
 import { useNotify } from '@shared/components/NotificationProvider';
+import { setLanguage } from '@shared/i18n';
+import { isLanguage, languageNames, rememberLanguage } from '@shared/i18n/preferences';
+
+import type { Language } from '@shared/i18n/preferences';
+import type { ChangeEvent } from 'react';
+
+
 export function usePresenter() {
   const { i18n, t } = useTranslation();
   const notify = useNotify();

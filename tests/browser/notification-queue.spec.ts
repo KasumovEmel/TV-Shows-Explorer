@@ -1,5 +1,7 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
+
 import { notify } from './notify';
+
 
 test('очередь сохраняет порядок и объединяет повтор активного события', async ({ page }) => {
   await page.goto('/fixture.html');

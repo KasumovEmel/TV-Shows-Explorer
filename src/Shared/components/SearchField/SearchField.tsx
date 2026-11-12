@@ -1,8 +1,12 @@
-import { Icon } from '@shared/components/Icon';
-import { Button } from '@shared/components/Button';
 import { usePresenter } from './usePresenter';
+import { Button } from '@shared/components/Button';
+import { Icon } from '@shared/components/Icon';
+
 import type { SearchFieldProps } from './types';
+
 import styles from './styles.module.css';
+
+
 export function SearchField(props: SearchFieldProps) {
   const { value, change, clear, inputRef, label, placeholder, clearLabel } = usePresenter(props);
   return (

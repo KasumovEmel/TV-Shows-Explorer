@@ -9,7 +9,18 @@
   },
   "editor.defaultFormatter": "oxc.oxc-vscode",
   "editor.formatOnSave": true,
+  "[javascript][javascriptreact][typescript][typescriptreact]": {
+    "editor.defaultFormatter": "webfreak.advanced-local-formatters",
+    "editor.formatOnSaveMode": "file"
+  },
+  "advancedLocalFormatters.formatters": [
+    {
+      "languages": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+      "command": ["node", "scripts/format-source.mjs", "--stdin", "$relativeFilePath"]
+    }
+  ],
   "editor.codeActionsOnSave": {
+    "source.organizeImports": "never",
     "source.fixAll.oxc": "explicit"
   }
 }

@@ -1,5 +1,25 @@
 {
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
   "singleQuote": true,
+  "sortImports": {
+    "customGroups": [
+      {
+        "groupName": "react-core",
+        "modifiers": ["value"],
+        "elementNamePattern": ["react", "react/**", "react-dom", "react-dom/**"]
+      }
+    ],
+    "internalPattern": ["@shared/"],
+    "groups": [
+      "react-core",
+      ["builtin", "external", "unknown"],
+      ["internal", "subpath", "parent", "sibling", "index"],
+      "type",
+      ["style", "side_effect_style"]
+    ],
+    "order": "asc",
+    "newlinesBetween": true,
+    "sortSideEffects": true
+  },
   "ignorePatterns": ["pnpm-lock.yaml", ".agents/skills/openspec-*/**"]
 }

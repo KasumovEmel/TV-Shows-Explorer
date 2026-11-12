@@ -10,8 +10,8 @@
     "test:shell": "playwright test",
     "lint": "oxlint --deny-warnings .",
     "typecheck": "oxlint --type-aware --type-check --deny-warnings .",
-    "format": "oxfmt --write . && node scripts/check-lines.mjs",
-    "format:check": "oxfmt --check . && node scripts/check-lines.mjs",
+    "format": "node scripts/format-project.mjs --write && node scripts/check-lines.mjs",
+    "format:check": "node scripts/format-project.mjs --check && node scripts/check-lines.mjs",
     "check": "pnpm format:check && pnpm typecheck"
   },
   "dependencies": {
@@ -23,12 +23,15 @@
     "swr": "2.5.1"
   },
   "devDependencies": {
+    "@biomejs/js-api": "6.1.0",
+    "@biomejs/wasm-nodejs": "2.6.7",
     "@fission-ai/openspec": "2.0.0",
     "@playwright/test": "1.63.0",
     "@rsbuild/core": "2.3.2",
     "@rsbuild/plugin-react": "2.1.1",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
+    "oxc-parser": "0.158.0",
     "oxfmt": "0.78.0",
     "oxlint": "1.93.0",
     "oxlint-tsgolint": "7.0.2007",
