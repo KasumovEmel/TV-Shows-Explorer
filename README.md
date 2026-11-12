@@ -2,6 +2,10 @@
 
 Учебный проект курса Simple Architecture. Стартовый каталог читает `public/shows.json` через Axios и кеширует ответ с помощью SWR. Для запуска достаточно локального сервера.
 
+## Дизайн поиска сериалов
+
+[Season One — макеты и состояния](docs/design/README.md) · [Альбом в PDF](docs/design/series-search.pdf) · [Справочник компонентов](docs/design/components.md) · [Токены](docs/design/tokens.json). Дизайн относится к следующему заданию; сценарии [поиска](openspec/changes/design-series-search/design.md) и [общих компонентов](openspec/changes/design-app-shell/design.md) описаны в OpenSpec.
+
 ## Запуск
 
 Потребуются Node.js 22.12 или новее и pnpm 12.18.0. Из корня проекта:

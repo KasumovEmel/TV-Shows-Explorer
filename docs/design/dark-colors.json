@@ -1,0 +1,25 @@
+{
+  "color": {
+    "paper": "#201D23",
+    "surface": "#302B33",
+    "ink": "#F5EFE8",
+    "muted": "#C7BDC6",
+    "line": "#554E56",
+    "accent": "#D1BBD9",
+    "lime": "#D9E8C2",
+    "tint": "#413747",
+    "deep": "#F1E5F0",
+    "skeleton": "#413747",
+    "masthead": "#3C3040",
+    "mastheadText": "#F5EFE8",
+    "selectedBackground": "#D9E8C2",
+    "selectedText": "#21142E",
+    "currentPageBackground": "#D1BBD9",
+    "currentPageText": "#241536",
+    "focusRing": "#DBC7E2",
+    "focusOnAccent": "#D9E8C2",
+    "fieldBorder": "#91869F",
+    "brandIconBackground": "#D9CBE5",
+    "brandIconGlyph": "#47394F"
+  }
+}

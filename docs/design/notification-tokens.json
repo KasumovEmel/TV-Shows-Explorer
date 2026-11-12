@@ -1,0 +1,66 @@
+{
+  "variant": {
+    "error": {
+      "light": {
+        "surface": "#FBEAE7",
+        "accent": "#993B37",
+        "border": "#CA877F"
+      },
+      "dark": {
+        "surface": "#402A2B",
+        "accent": "#F1B3AB",
+        "border": "#A26E69"
+      }
+    },
+    "warning": {
+      "light": {
+        "surface": "#FAECCC",
+        "accent": "#815013",
+        "border": "#C79B50"
+      },
+      "dark": {
+        "surface": "#3A301F",
+        "accent": "#F1CD8C",
+        "border": "#A48552"
+      }
+    },
+    "success": {
+      "light": {
+        "surface": "#E5F1E4",
+        "accent": "#356544",
+        "border": "#91B597"
+      },
+      "dark": {
+        "surface": "#27392E",
+        "accent": "#ABDBB5",
+        "border": "#6C9278"
+      }
+    },
+    "info": {
+      "light": {
+        "surface": "#EFEEF0",
+        "accent": "#50515A",
+        "border": "#A7A5AC"
+      },
+      "dark": {
+        "surface": "#303036",
+        "accent": "#D6D3DA",
+        "border": "#82808A"
+      }
+    }
+  },
+  "layoutPx": {
+    "maxWidth": 480,
+    "topDesktop": 24,
+    "topMobile": 12,
+    "sideMobile": 16,
+    "closeTarget": 44,
+    "radius": 14
+  },
+  "dismissAfterMs": {
+    "error": null,
+    "warning": null,
+    "success": 6000,
+    "info": 6000
+  }
+}
