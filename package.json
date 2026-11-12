@@ -1,0 +1,37 @@
+{
+  "name": "tv-shows-explorer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "rsbuild dev",
+    "build": "pnpm typecheck && rsbuild build",
+    "preview": "rsbuild preview",
+    "lint": "oxlint --deny-warnings .",
+    "typecheck": "oxlint --type-aware --type-check --deny-warnings .",
+    "format": "oxfmt --write . && node scripts/check-lines.mjs",
+    "format:check": "oxfmt --check . && node scripts/check-lines.mjs",
+    "check": "pnpm format:check && pnpm typecheck"
+  },
+  "dependencies": {
+    "axios": "1.21.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "swr": "2.5.1"
+  },
+  "devDependencies": {
+    "@fission-ai/openspec": "2.0.0",
+    "@rsbuild/core": "2.3.2",
+    "@rsbuild/plugin-react": "2.1.1",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "oxfmt": "0.78.0",
+    "oxlint": "1.93.0",
+    "oxlint-tsgolint": "7.0.2007",
+    "typescript": "7.0.2"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "packageManager": "pnpm@12.18.0"
+}

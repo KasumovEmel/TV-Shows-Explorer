@@ -1,0 +1,10 @@
+schema: spec-driven
+
+context: |
+  Language: Russian
+  All artifacts must be written in Russian.
+  Keep OpenSpec structural headings and SHALL/MUST keywords in English.
+
+  TV Shows Explorer — учебное React-приложение курса Simple Architecture.
+  Для технических решений используй действующие спецификации в openspec/specs/
+  и правила репозитория в .agents/rules/.

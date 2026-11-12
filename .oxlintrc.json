@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react"],
+  "options": { "typeAware": true, "typeCheck": true },
+  "rules": {
+    "max-lines": ["error", { "max": 120, "skipBlankLines": false, "skipComments": false }],
+    "typescript/no-floating-promises": "error"
+  },
+  "ignorePatterns": ["dist/"]
+}
