@@ -1,17 +1,5 @@
 [
-  { "id": "dark", "title": "Тьма", "originalTitle": "Dark", "year": 2017, "genre": "Фантастика" },
-  {
-    "id": "severance",
-    "title": "Разделение",
-    "originalTitle": "Severance",
-    "year": 2022,
-    "genre": "Триллер"
-  },
-  {
-    "id": "the-bear",
-    "title": "Медведь",
-    "originalTitle": "The Bear",
-    "year": 2022,
-    "genre": "Драма"
-  }
+  { "id": "dark", "originalTitle": "Dark", "year": 2017, "genre": "sciFi" },
+  { "id": "severance", "originalTitle": "Severance", "year": 2022, "genre": "thriller" },
+  { "id": "the-bear", "originalTitle": "The Bear", "year": 2022, "genre": "drama" }
 ]

@@ -3,7 +3,6 @@ import useSWR from 'swr';
 
 interface Show {
   id: string;
-  title: string;
   originalTitle: string;
   year: number;
   genre: string;
