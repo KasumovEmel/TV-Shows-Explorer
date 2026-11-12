@@ -1,0 +1,14 @@
+.layer {
+  position: fixed;
+  z-index: 10;
+  inset-inline: 0;
+  top: calc(24px + env(safe-area-inset-top, 0px));
+  margin-inline: auto;
+  width: min(480px, calc(100% - 32px));
+  pointer-events: none;
+}
+@media (max-width: 767px) {
+  .layer {
+    top: calc(12px + env(safe-area-inset-top, 0px));
+  }
+}

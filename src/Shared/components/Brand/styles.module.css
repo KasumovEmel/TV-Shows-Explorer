@@ -1,0 +1,17 @@
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42em;
+  font: 565 24px / 1 var(--font-display);
+  letter-spacing: -0.45px;
+  white-space: nowrap;
+}
+.brand svg {
+  width: 1.875em;
+  height: 1.5em;
+}
+@media (max-width: 767px) {
+  .brand {
+    font-size: 18.72px;
+  }
+}

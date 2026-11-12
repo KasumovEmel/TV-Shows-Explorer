@@ -4,7 +4,11 @@
 
 ## Дизайн поиска сериалов
 
-[Season One — макеты и состояния](docs/design/README.md) · [Альбом в PDF](docs/design/series-search.pdf) · [Справочник компонентов](docs/design/components.md) · [Токены](docs/design/tokens.json). Дизайн относится к следующему заданию; сценарии [поиска](openspec/changes/design-series-search/design.md) и [общих компонентов](openspec/changes/design-app-shell/design.md) описаны в OpenSpec.
+[Season One — макеты и состояния](docs/design/README.md) · [Альбом в PDF](docs/design/series-search.pdf) · [Справочник компонентов](docs/design/components.md) · [Токены](docs/design/tokens.json).
+
+[Оболочка Season One](openspec/changes/design-app-shell/design.md) оформляет локальный каталог, переключается вместе с системной темой и возвращает пользователя в пустое поле поиска после сбоя рендера. Поле и теги фильтруют демонстрационные данные. Поиск по API и постраничная выдача описаны в [отдельном задании](openspec/changes/design-series-search/design.md).
+
+Общие элементы находятся в [Shared/components](src/Shared/components): `Brand`, `Icon`, `Button`, `SearchField` и `NotificationProvider`. Новый экран может вызвать `useNotify()` и передать событие, например `notify({ kind: 'warning' })`. Для собственного текста передай `messageKey` с ключом из обоих словарей. [Правила очереди, закрытия и фокуса](docs/design/system-components.md).
 
 ## Запуск
 
@@ -24,13 +28,16 @@ npx --yes pnpm@12.18.0 dev
 
 ## Команды
 
-| Команда                                      | Назначение                                          |
-| -------------------------------------------- | --------------------------------------------------- |
-| `pnpm format`                                | Отформатировать файлы и проверить лимит в 120 строк |
-| `pnpm check`                                 | Проверить формат, лимит строк, линтинг и типы       |
-| `pnpm build`                                 | Проверить типы и собрать приложение в `dist/`       |
-| `pnpm preview`                               | Открыть локальный сервер собранного приложения      |
-| `pnpm exec openspec validate --all --strict` | Проверить спецификации и активные изменения         |
+| Команда                                      | Назначение                                              |
+| -------------------------------------------- | ------------------------------------------------------- |
+| `pnpm format`                                | Отформатировать файлы и проверить лимит в 120 строк     |
+| `pnpm check`                                 | Проверить формат, лимит строк, линтинг и типы           |
+| `pnpm build`                                 | Проверить типы и собрать приложение в `dist/`           |
+| `pnpm preview`                               | Открыть локальный сервер собранного приложения          |
+| `pnpm test:shell`                            | Проверить восстановление, темы и уведомления в Chromium |
+| `pnpm exec openspec validate --all --strict` | Проверить спецификации и активные изменения             |
+
+Перед первым запуском браузерных тестов установи Chromium: `pnpm exec playwright install chromium --only-shell`. Тесты используют отдельную сборку и сохраняют снимки экранов в `test-results/`. В обычной сборке нет кнопок или адресов для вызова тестового сбоя.
 
 ## Работа над заданием
 

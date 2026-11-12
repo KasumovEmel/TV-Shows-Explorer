@@ -7,6 +7,7 @@
     "dev": "rsbuild dev",
     "build": "pnpm typecheck && rsbuild build",
     "preview": "rsbuild preview",
+    "test:shell": "playwright test",
     "lint": "oxlint --deny-warnings .",
     "typecheck": "oxlint --type-aware --type-check --deny-warnings .",
     "format": "oxfmt --write . && node scripts/check-lines.mjs",
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "@fission-ai/openspec": "2.0.0",
+    "@playwright/test": "1.63.0",
     "@rsbuild/core": "2.3.2",
     "@rsbuild/plugin-react": "2.1.1",
     "@types/react": "19.3.0",

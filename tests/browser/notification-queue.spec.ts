@@ -1,0 +1,54 @@
+import { test, expect } from '@playwright/test';
+import { notify } from './notify';
+
+test('очередь сохраняет порядок и объединяет повтор активного события', async ({ page }) => {
+  await page.goto('/fixture.html');
+  const search = page.getByRole('searchbox');
+  await search.focus();
+  await page.clock.install();
+  await notify(page, { kind: 'error' }, { kind: 'warning' }, { kind: 'error' }, { kind: 'info' });
+  const visible = page.locator('[data-kind]');
+  await expect(visible).toHaveCount(1);
+  await expect(search).toBeFocused();
+  await page.clock.fastForward(12000);
+  await expect(visible).toHaveAttribute('data-kind', 'error');
+  const close = page.getByRole('button', { name: 'Dismiss notification' });
+  await close.focus();
+  await page.keyboard.press('Enter');
+  await expect(search).toBeFocused();
+  await page.clock.fastForward(12000);
+  await expect(visible).toHaveAttribute('data-kind', 'warning');
+  await close.click();
+  await expect(visible).toHaveAttribute('data-kind', 'info');
+  await page.mouse.move(0, 0);
+  await page.clock.fastForward(6100);
+  await expect(visible).toHaveCount(0);
+});
+test('наведение и фокус независимо приостанавливают остаток шести секунд', async ({ page }) => {
+  await page.goto('/fixture.html');
+  const search = page.getByRole('searchbox');
+  await search.focus();
+  await page.clock.install();
+  await notify(page, { kind: 'success' });
+  const note = page.locator('[data-kind="success"]');
+  await expect(note).toBeVisible();
+  await page.clock.fastForward(3500);
+  await note.hover();
+  await page.clock.fastForward(10000);
+  const close = note.getByRole('button');
+  await close.focus();
+  await page.mouse.move(0, 0);
+  await page.clock.fastForward(10000);
+  await expect(note).toBeVisible();
+  await search.focus();
+  await page.clock.fastForward(1500);
+  await expect(note).toBeVisible();
+  await page.clock.fastForward(1200);
+  await expect(note).toHaveCount(0);
+});
+test('потеря сети в обычном приложении вызывает предупреждение', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByRole('heading', { name: 'Dark' })).toBeVisible();
+  await page.context().setOffline(true);
+  await expect(page.getByText('Network connection lost.')).toBeVisible();
+});

@@ -1,0 +1,68 @@
+@import './palette.css';
+
+@font-face {
+  font-family: 'Unbounded';
+  src: url('../../../docs/design/fonts/Unbounded.ttf') format('truetype');
+  font-weight: 200 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Golos Text';
+  src: url('../../../docs/design/fonts/GolosText.ttf') format('truetype');
+  font-weight: 400 900;
+  font-display: swap;
+}
+
+:root {
+  --font-ui: 'Golos Text', Arial, sans-serif;
+  --font-display: 'Unbounded', Arial, sans-serif;
+  --font-label: Menlo, monospace;
+  --gutter: clamp(20px, 5vw, 72px);
+  --content: 1296px;
+  --target: 44px;
+  --radius: 12px;
+  --focus: 2px solid var(--focus-ring);
+  --focus-offset: 2px;
+  font: 400 100% / 1.45 var(--font-ui);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+button,
+select {
+  cursor: pointer;
+}
+button:disabled,
+select:disabled {
+  cursor: default;
+}
+:focus-visible {
+  outline: var(--focus);
+  outline-offset: var(--focus-offset);
+}
+@media (max-width: 767px) {
+  :root {
+    --gutter: 20px;
+  }
+}

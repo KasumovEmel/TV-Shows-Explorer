@@ -1,0 +1,50 @@
+.toast[data-kind='error'] {
+  --fill: var(--error-surface);
+  --stroke: var(--error-border);
+  --sign: var(--error-accent);
+}
+.toast[data-kind='warning'] {
+  --fill: var(--warning-surface);
+  --stroke: var(--warning-border);
+  --sign: var(--warning-accent);
+}
+.toast[data-kind='success'] {
+  --fill: var(--success-surface);
+  --stroke: var(--success-border);
+  --sign: var(--success-accent);
+}
+.toast[data-kind='info'] {
+  --fill: var(--info-surface);
+  --stroke: var(--info-border);
+  --sign: var(--info-accent);
+}
+.toast {
+  pointer-events: auto;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  min-height: 86px;
+  padding: 15px 4px 17px 16px;
+  border: 1.5px solid var(--stroke);
+  border-radius: 14px;
+  background: var(--fill);
+  color: var(--sign);
+}
+.toast button {
+  margin-top: -14px;
+}
+.copy {
+  overflow-wrap: anywhere;
+}
+.copy strong {
+  font-size: 18px;
+  font-weight: 650;
+  letter-spacing: -0.2px;
+}
+.copy p {
+  margin-top: 4px;
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.5;
+}
