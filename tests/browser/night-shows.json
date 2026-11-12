@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "en": "Night Flight",
+    "ru": "Ночной рейс",
+    "genres": ["Thriller", "Drama"],
+    "poster": "/posters/night-flight.svg",
+    "year": 2024
+  },
+  {
+    "id": 2,
+    "en": "Night Radio",
+    "ru": "Ночной эфир",
+    "genres": ["Mystery"],
+    "poster": "/posters/night-radio.svg",
+    "year": 2021
+  },
+  {
+    "id": 3,
+    "en": "Night Shift",
+    "ru": "Ночная смена",
+    "genres": ["Drama"],
+    "poster": "/posters/night-shift.svg",
+    "year": 2023
+  },
+  {
+    "id": 4,
+    "en": "Night Train",
+    "ru": "Ночной поезд",
+    "genres": ["Thriller"],
+    "poster": "/posters/night-train.svg",
+    "year": 2022
+  },
+  {
+    "id": 5,
+    "en": "Night Lights",
+    "ru": "Ночные огни",
+    "genres": ["Drama"],
+    "poster": "/posters/night-lights.svg",
+    "year": 2019
+  },
+  {
+    "id": 6,
+    "en": "Night Archive",
+    "ru": "Ночной архив",
+    "genres": ["Mystery", "Thriller"],
+    "poster": "/posters/night-archive.svg",
+    "year": 2020
+  },
+  {
+    "id": 7,
+    "en": "Night Screening",
+    "ru": "Ночной сеанс",
+    "genres": ["Comedy"],
+    "poster": "/posters/night-screening.svg",
+    "year": 2025
+  }
+]

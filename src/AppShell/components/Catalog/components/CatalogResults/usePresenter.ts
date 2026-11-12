@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import useSWR from 'swr';
@@ -6,13 +6,18 @@ import useSWR from 'swr';
 import { fetchShows } from './utils/fetchShows';
 import { useNotify } from '@shared/components/NotificationProvider';
 
-import type { CatalogResultsProps, Show } from './types';
+import type { CatalogResultsProps } from './types';
 
 
-export function usePresenter({ query, genre, onGenre }: CatalogResultsProps) {
+export function usePresenter({ query }: CatalogResultsProps) {
   const { t } = useTranslation();
   const notify = useNotify();
-  const { data, error, mutate } = useSWR<Show[], Error>('/shows.json', fetchShows);
+  const [{ genre, revision }, setFilter] = useState({ genre: '', revision: 0 });
+  const { data, error, mutate, isValidating } = useSWR(
+    query ? (['https://api.tvmaze.com/search/shows', query] as const) : null,
+    fetchShows,
+    { shouldRetryOnError: false },
+  );
   const stale = Boolean(data && error);
   useEffect(() => {
     if (stale) {
@@ -20,34 +25,29 @@ export function usePresenter({ query, genre, onGenre }: CatalogResultsProps) {
       notify({ kind: 'info' });
     }
   }, [stale, notify]);
-  const search = query.trim().toLowerCase();
-  const matches = (data ?? [])
-    .map((show) => ({
-      ...show,
-      title: t(`titles.${show.id}`, { defaultValue: show.originalTitle }),
-    }))
-    .filter((show) =>
-      [show.title, show.originalTitle].some((name) => name.toLowerCase().includes(search)),
-    );
-  const genres = [...new Set(matches.map((show) => show.genre).filter(Boolean))];
-  const cards = matches
-    .filter((show) => !genre || show.genre === genre)
-    .map((show) => ({ ...show, genre: t(`genres.${show.genre}`, { defaultValue: show.genre }) }));
-  const chips = ['', ...genres].map((value) => ({
-    value,
-    label: value ? t(`genres.${value}`, { defaultValue: value }) : t('catalog.all'),
-    selected: value === genre,
-    select: () => onGenre(value),
-  }));
+  const genres = [...new Set(data?.flatMap((show) => show.genres))];
+  const chips = genres.length
+    ? ['', ...genres].map((value) => ({
+        value,
+        label: value ? t('genres.' + value, { defaultValue: value }) : t('catalog.all'),
+        selected: value === genre,
+        select: () => setFilter((state) => ({ genre: value, revision: state.revision + 1 })),
+      }))
+    : [];
+  const cards = (data ?? []).filter((show) => !genre || show.genres.includes(genre));
+  const feedback: 'empty' | 'error' | 'loading' | null = data?.length
+    ? null
+    : data
+      ? 'empty'
+      : error && !isValidating
+        ? 'error'
+        : 'loading';
   return {
-    t,
     cards,
+    revision,
     chips,
-    hasGenres: genres.length > 0,
-    failed: !data && Boolean(error),
-    loading: !data && !error,
+    feedback,
+    genreLabel: t('catalog.genres'),
     retry: () => void mutate(),
-    emptyCatalog: data?.length === 0,
-    count: t('catalog.count', { count: cards.length }),
   };
 }

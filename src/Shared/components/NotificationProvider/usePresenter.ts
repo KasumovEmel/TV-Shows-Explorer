@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import type { QueuedNotification } from './types';
+import type { NotificationProviderProps, QueuedNotification } from './types';
 import type { NotificationEvent } from '@shared/types/notification';
 
 
-export function usePresenter() {
+export function usePresenter({ children }: NotificationProviderProps) {
   const [queue, setQueue] = useState<QueuedNotification[]>([]);
   const nextId = useRef(0);
   const notify = useCallback((event: NotificationEvent) => {
@@ -24,5 +24,12 @@ export function usePresenter() {
     window.addEventListener('offline', offline);
     return () => window.removeEventListener('offline', offline);
   }, [notify]);
-  return { active: queue[0], notify, dismiss };
+  const active = queue[0];
+  return {
+    children,
+    alert: active?.kind === 'error' ? active : null,
+    status: active?.kind !== 'error' ? active : null,
+    notify,
+    dismiss,
+  };
 }

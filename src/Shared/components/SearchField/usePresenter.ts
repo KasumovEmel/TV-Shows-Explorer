@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
 
 import type { SearchFieldProps } from './types';
-import type { ChangeEvent } from 'react';
+import type { ChangeEvent, SubmitEvent } from 'react';
 
 
-export function usePresenter({ value, onChange, inputRef }: SearchFieldProps) {
+export function usePresenter({ value, onChange, onSubmit, inputRef }: SearchFieldProps) {
   const { t } = useTranslation();
   function clear() {
     onChange('');
@@ -16,6 +16,10 @@ export function usePresenter({ value, onChange, inputRef }: SearchFieldProps) {
   return {
     value,
     change,
+    submit: (event: SubmitEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      onSubmit();
+    },
     clear,
     inputRef,
     label: t('search.label'),

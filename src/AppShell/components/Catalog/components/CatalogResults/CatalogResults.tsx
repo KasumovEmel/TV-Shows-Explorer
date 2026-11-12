@@ -1,6 +1,7 @@
-import { ShowCard } from './components/ShowCard';
+import { PagedResults } from './components/PagedResults';
+import { QueryFeedback } from './components/QueryFeedback';
 import { usePresenter } from './usePresenter';
-import { Button } from '@shared/components/Button';
+import { GenreChip } from '@shared/components/GenreChip';
 
 import type { CatalogResultsProps } from './types';
 
@@ -8,56 +9,22 @@ import styles from './styles.module.css';
 
 
 export function CatalogResults(props: CatalogResultsProps) {
-  const { t, cards, chips, hasGenres, failed, loading, retry, emptyCatalog, count } =
-    usePresenter(props);
+  const { cards, revision, chips, feedback, retry, genreLabel } = usePresenter(props);
   return (
     <section className={styles.results}>
-      {loading ? (
-        <p role="status">{t('catalog.loading')}</p>
-      ) : failed ? (
-        <div role="alert">
-          <p>{t('catalog.error')}</p>
-          <Button icon="restore" onClick={retry}>
-            {t('catalog.retry')}
-          </Button>
-        </div>
+      {feedback ? (
+        <QueryFeedback state={feedback} retry={retry} />
       ) : (
         <>
-          {hasGenres && (
-            <div className={styles.genres} role="group" aria-label={t('catalog.genres')}>
-              <span>{t('catalog.genres')}</span>
-              {chips.map(({ value, label, selected, select }) => (
-                <Button
-                  key={value}
-                  variant="chip"
-                  icon={selected ? 'check' : undefined}
-                  aria-pressed={selected}
-                  onClick={select}
-                >
-                  {label}
-                </Button>
+          {!!chips.length && (
+            <div className={styles.genres} role="group" aria-label={genreLabel}>
+              <span>{genreLabel}</span>
+              {chips.map(({ value, ...chip }) => (
+                <GenreChip key={value} {...chip} />
               ))}
             </div>
           )}
-          <div className={styles.heading}>
-            <h2>{t('catalog.results')}</h2>
-            <span role="status">{count}</span>
-          </div>
-          {cards.length ? (
-            <>
-              <ul className={styles.list}>
-                {cards.map(({ id, ...card }) => (
-                  <ShowCard key={id} {...card} />
-                ))}
-              </ul>
-              <p className={styles.end}>{t('catalog.end')}</p>
-            </>
-          ) : (
-            <p role="status">
-              {emptyCatalog ? t('catalog.empty') : t('catalog.noMatches')}{' '}
-              {!emptyCatalog && t('catalog.tryAnother')}
-            </p>
-          )}
+          <PagedResults key={revision} cards={cards} />
         </>
       )}
     </section>

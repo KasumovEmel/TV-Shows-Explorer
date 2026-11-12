@@ -10,7 +10,7 @@ import styles from './styles.module.css';
 
 
 export function Catalog(props: CatalogProps) {
-  const { t, query, change, inputRef, genre, setGenre, start } = usePresenter(props);
+  const { t, query, change, inputRef, submit, term, committed, start } = usePresenter(props);
   return (
     <main>
       <header className={start ? styles.start : styles.header}>
@@ -29,12 +29,12 @@ export function Catalog(props: CatalogProps) {
               </div>
             )}
             <div className={styles.search}>
-              <SearchField value={query} onChange={change} inputRef={inputRef} />
+              <SearchField value={query} onChange={change} onSubmit={submit} inputRef={inputRef} />
             </div>
           </div>
         </div>
       </header>
-      {!start && <CatalogResults query={query} genre={genre} onGenre={setGenre} />}
+      {!start && <CatalogResults key={term} query={committed} />}
     </main>
   );
 }

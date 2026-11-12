@@ -1,0 +1,26 @@
+.feedback {
+  padding: 30px 0;
+}
+.feedback p {
+  margin: 10px 0 20px;
+  color: var(--muted);
+}
+.skeletons {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+.skeletons i {
+  background: var(--skeleton);
+  aspect-ratio: 5/4;
+}
+@media (max-width: 1023px) {
+  .skeletons {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .skeletons i {
+    width: 104px;
+  }
+}

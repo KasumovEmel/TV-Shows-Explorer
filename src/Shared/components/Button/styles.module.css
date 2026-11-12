@@ -31,16 +31,20 @@
   background: color-mix(in srgb, currentColor 9%, transparent);
 }
 .chip {
+  max-width: 100%;
+  overflow-wrap: anywhere;
   border-radius: 22px;
-  padding: 8px 17px;
+  padding: 8px 16px;
   border-color: var(--line);
-  background: var(--surface);
+  background: var(--paper);
   color: var(--ink);
   font-weight: 400;
 }
 .chip[aria-pressed='true'] {
   background: var(--selected-background);
   color: var(--selected-text);
-  border-color: var(--selected-background);
+  border-color: var(--selected-text);
+  padding-inline: 12px;
+  gap: 7px;
   font-weight: 600;
 }

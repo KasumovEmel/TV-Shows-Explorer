@@ -1,5 +1,11 @@
 import { expect, test } from '@playwright/test';
 
+import { mockSearch } from './mockSearch';
+
+
+test.beforeEach(async ({ page }) => {
+  await mockSearch(page);
+});
 
 for (const width of [320, 390, 1440]) {
   test(`восстановление с клавиатуры при ширине ${width}`, async ({ page }, info) => {
@@ -60,13 +66,5 @@ test('тема сохраняет ввод, жанр и фокус; язык п�
   await expect(page.locator('html')).toHaveAttribute('lang', 'ru');
   await expect(page.getByRole('heading', { name: 'Медведь' })).toBeVisible();
   await page.reload();
-  await expect(page.getByRole('combobox')).toHaveValue('ru');
-});
-test('ошибка загрузки каталога остаётся в выдаче и допускает повтор', async ({ page }) => {
-  await page.route('**/shows.json', (route) => route.fulfill({ status: 503, body: '' }));
-  await page.goto('/');
-  await expect(page.getByText('Couldn’t load the catalog.')).toBeVisible();
-  await page.unroute('**/shows.json');
-  await page.getByRole('button', { name: 'Try again' }).click();
-  await expect(page.getByRole('heading', { name: 'Dark' })).toBeVisible();
+  await expect(page.getByRole('searchbox', { name: 'Поиск сериалов' })).toBeVisible();
 });

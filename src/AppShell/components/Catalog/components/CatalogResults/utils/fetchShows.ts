@@ -1,8 +1,11 @@
 import axios from 'axios';
 
-import type { Show } from '../types';
+import { normalizeShow } from '../helpers/normalizeShow';
+
+import type { TVmazeShow } from '../types';
 
 
-export async function fetchShows(url: string) {
-  return (await axios.get<Show[]>(url)).data;
+export async function fetchShows([url, q]: readonly [string, string]) {
+  const { data } = await axios.get<{ show: TVmazeShow }[]>(url, { params: { q }, timeout: 10000 });
+  return data.map(({ show }) => normalizeShow(show));
 }

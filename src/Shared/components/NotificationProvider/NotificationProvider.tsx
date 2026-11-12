@@ -7,21 +7,17 @@ import type { NotificationProviderProps } from './types';
 import styles from './styles.module.css';
 
 
-export function NotificationProvider({ children }: NotificationProviderProps) {
-  const { active, notify, dismiss } = usePresenter();
+export function NotificationProvider(props: NotificationProviderProps) {
+  const { alert, status, children, notify, dismiss } = usePresenter(props);
   return (
     <NotifyContext.Provider value={notify}>
       {children}
       <div className={styles.layer}>
         <div role="alert" aria-atomic="true">
-          {active?.kind === 'error' && (
-            <Notification key={active.id} {...active} onDismiss={dismiss} />
-          )}
+          {alert && <Notification key={alert.id} {...alert} onDismiss={dismiss} />}
         </div>
         <div role="status" aria-atomic="true">
-          {active && active.kind !== 'error' && (
-            <Notification key={active.id} {...active} onDismiss={dismiss} />
-          )}
+          {status && <Notification key={status.id} {...status} onDismiss={dismiss} />}
         </div>
       </div>
     </NotifyContext.Provider>

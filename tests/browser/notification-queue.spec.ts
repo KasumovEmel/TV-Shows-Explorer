@@ -50,7 +50,7 @@ test('наведение и фокус независимо приостанав
 });
 test('потеря сети в обычном приложении вызывает предупреждение', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Dark' })).toBeVisible();
+  await expect(page.getByRole('searchbox')).toBeVisible();
   await page.context().setOffline(true);
   await expect(page.getByText('Network connection lost.')).toBeVisible();
 });

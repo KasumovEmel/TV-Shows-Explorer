@@ -7,6 +7,10 @@ export default defineConfig(
   mergeRsbuildConfig(base, {
     source: { entry: { index: './src/index.tsx', fixture: './tests/browser/fixture.tsx' } },
     output: { distPath: { root: '.rsbuild/browser-tests' } },
-    server: { port: 4817, strictPort: true },
+    server: {
+      publicDir: [{ name: 'public' }, { name: 'tests/public' }],
+      port: 4817,
+      strictPort: true,
+    },
   }),
 );

@@ -8,9 +8,10 @@ import styles from './styles.module.css';
 
 
 export function SearchField(props: SearchFieldProps) {
-  const { value, change, clear, inputRef, label, placeholder, clearLabel } = usePresenter(props);
+  const { value, change, submit, clear, inputRef, label, placeholder, clearLabel } =
+    usePresenter(props);
   return (
-    <div role="search" className={styles.field}>
+    <form onSubmit={submit} role="search" className={styles.field}>
       <Icon name="search" size={22} />
       <input
         type="search"
@@ -21,6 +22,6 @@ export function SearchField(props: SearchFieldProps) {
         onChange={change}
       />
       {value && <Button variant="icon" icon="close" aria-label={clearLabel} onClick={clear} />}
-    </div>
+    </form>
   );
 }

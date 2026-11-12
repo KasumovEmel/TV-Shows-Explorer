@@ -1,11 +1,10 @@
 export interface CatalogResultsProps {
-  query: string;
-  genre: string;
-  onGenre: (value: string) => void;
+  query: string | null;
 }
-export interface Show {
-  id: string;
-  originalTitle: string;
-  year: number;
-  genre: string;
+export interface TVmazeShow {
+  id: number;
+  name: string;
+  genres: string[];
+  premiered: string | null;
+  image: { medium: string; original: string } | null;
 }
