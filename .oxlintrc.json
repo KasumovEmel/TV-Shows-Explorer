@@ -1,9 +1,12 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "extends": ["./scripts/oxlint/format.json"],
   "plugins": ["typescript", "react"],
   "jsPlugins": ["./scripts/oxlint/project-rules.mjs"],
   "options": { "typeAware": true, "typeCheck": true },
   "rules": {
+    "import/default": "off",
+    "import/namespace": "off",
     "max-lines": ["error", { "max": 120, "skipBlankLines": false, "skipComments": false }],
     "typescript/no-floating-promises": "error"
   },

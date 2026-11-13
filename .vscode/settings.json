@@ -8,6 +8,9 @@
     "**/styles.module.css": "${dirname}/styles"
   },
   "editor.defaultFormatter": "oxc.oxc-vscode",
+  "oxc.lint.customization": {
+    "import/newline-after-import": { "autofix": false }
+  },
   "editor.formatOnSave": true,
   "[javascript][javascriptreact][typescript][typescriptreact]": {
     "editor.defaultFormatter": "webfreak.advanced-local-formatters",

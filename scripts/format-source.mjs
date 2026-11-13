@@ -1,9 +1,14 @@
 import { Biome } from '@biomejs/js-api/nodejs';
-import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { extname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { parseSync } from 'oxc-parser';
 import { format } from 'oxfmt';
 
 import config from '../.oxfmtrc.json' with { type: 'json' };
+import lintConfig from './oxlint/format.json' with { type: 'json' };
 
 
 const biome = new Biome();
@@ -19,7 +24,7 @@ biome.applyConfiguration(projectKey, {
   },
 });
 
-export async function formatSource(filename, input) {
+async function formatStatements(filename, input) {
   if (/\.(?:[cm]?ts|tsx)$/i.test(filename)) {
     input = biome.lintContent(projectKey, input, {
       filePath: filename,
@@ -31,9 +36,10 @@ export async function formatSource(filename, input) {
 
   const parsed = parseSync(filename, code);
   const lastImport = parsed.module.staticImports.at(-1);
-  if (!lastImport) return code;
+  // Oxlint counts comment lines as spacing and can move an import's trailing comment.
+  const nextComment = lastImport && parsed.comments.find(({ start }) => start >= lastImport.end);
+  if (!nextComment || code.slice(lastImport.end, nextComment.start).trim()) return code;
 
-  // Комментарий в строке импорта остаётся с ним, а JSDoc на следующей — с компонентом.
   let end = lastImport.end;
   for (const comment of parsed.comments) {
     if (comment.start < end) continue;
@@ -44,7 +50,44 @@ export async function formatSource(filename, input) {
   const rest = code.slice(end).trimStart();
   if (!rest) return code;
   const newline = code.includes('\r\n') ? '\r\n' : '\n';
-  return code.slice(0, end) + newline.repeat(3) + rest;
+  return (
+    code.slice(0, end) +
+    newline.repeat(lintConfig.rules['import/newline-after-import'][1].count + 1) +
+    rest
+  );
+}
+
+export async function formatSources(files) {
+  if (!files.length) {
+    return [];
+  }
+  // Oxlint fixes files on disk. Stage the editor buffer or the whole CLI batch in isolation.
+  const directory = mkdtempSync(join(tmpdir(), 'tv-shows-format-'));
+  try {
+    const paths = [];
+    for (const { filename, input } of files) {
+      const path = join(directory, paths.length + extname(filename));
+      writeFileSync(path, await formatStatements(filename, input));
+      paths.push(path);
+    }
+    const cli = new URL('bin/oxlint', import.meta.resolve('oxlint/package.json'));
+    const configPath = fileURLToPath(new URL('./oxlint/format.json', import.meta.url));
+    const args = [fileURLToPath(cli), '-c', configPath, '-A', 'correctness', '--fix', '.'];
+    execFileSync(process.execPath, args, {
+      cwd: directory,
+      stdio: ['ignore', process.stderr, process.stderr],
+    });
+
+    return paths.map((path) => readFileSync(path, 'utf8'));
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
+}
+
+export async function formatSource(filename, input) {
+  const [formatted] = await formatSources([{ filename, input }]);
+
+  return formatted;
 }
 
 if (process.argv[2] === '--stdin') {

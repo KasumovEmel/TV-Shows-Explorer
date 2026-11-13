@@ -3,21 +3,27 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { formatSource } from './format-source.mjs';
+import { formatSources } from './format-source.mjs';
 import { projectFiles } from './project-files.mjs';
 
 
 const mode = process.argv[2];
-if (!['--check', '--write'].includes(mode)) throw new Error('Expected --check or --write');
+if (!['--check', '--write'].includes(mode)) {
+  throw new Error('Expected --check or --write');
+}
 const extensions = ['ts', 'tsx', 'mts', 'cts', 'js', 'jsx', 'mjs', 'cjs'];
-for (const file of projectFiles()) {
-  if (!extensions.includes(extname(file).slice(1))) continue;
-  const original = readFileSync(file, 'utf8');
-  const formatted = await formatSource(file, original);
-  if (formatted === original) continue;
-  if (mode === '--write') writeFileSync(file, formatted);
-  else {
-    console.error('Проверь форматирование: ' + file);
+const files = projectFiles()
+  .filter((file) => extensions.includes(extname(file).slice(1)))
+  .map((filename) => ({ filename, input: readFileSync(filename, 'utf8') }));
+const formatted = await formatSources(files);
+for (const [index, { filename, input }] of files.entries()) {
+  if (formatted[index] === input) {
+    continue;
+  }
+  if (mode === '--write') {
+    writeFileSync(filename, formatted[index]);
+  } else {
+    console.error('Проверь форматирование: ' + filename);
     process.exitCode = 1;
   }
 }
