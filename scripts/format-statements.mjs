@@ -3,6 +3,17 @@ import { Visitor } from 'oxc-parser';
 import { hookName, unwrapExpression } from './hook-call.mjs';
 
 
+const typeDeclarations = new Set([
+  'TSTypeAliasDeclaration',
+  'TSInterfaceDeclaration',
+  'TSEnumDeclaration',
+  'ClassDeclaration',
+]);
+
+function isTypeDeclaration(statement) {
+  return typeDeclarations.has((statement.declaration ?? statement).type);
+}
+
 function isFunctionStatement(statement) {
   const declaration = statement.declaration ?? statement;
   if (
@@ -69,7 +80,8 @@ export function separateStatements(code, parsed) {
       if (
         next.type === 'ReturnStatement' ||
         isFunctionStatement(previous) ||
-        isFunctionStatement(next)
+        isFunctionStatement(next) ||
+        (isTypeDeclaration(previous) && isTypeDeclaration(next))
       ) {
         padAfter(previous, next.start, 1);
       } else if (previous.type === 'VariableDeclaration' && next.type === 'VariableDeclaration') {
@@ -87,6 +99,7 @@ export function separateStatements(code, parsed) {
   new Visitor({
     Program: ({ body }) => visitStatements(body),
     BlockStatement: ({ body }) => visitStatements(body),
+    TSModuleBlock: ({ body }) => visitStatements(body),
     StaticBlock: ({ body }) => visitStatements(body),
     SwitchCase: ({ consequent }) => visitStatements(consequent),
   }).visit(parsed.program);

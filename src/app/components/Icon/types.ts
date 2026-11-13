@@ -9,6 +9,7 @@ export type IconName =
   | 'sun'
   | 'sunMoon'
   | 'moon';
+
 export interface IconProps {
   name: IconName;
   size?: number;

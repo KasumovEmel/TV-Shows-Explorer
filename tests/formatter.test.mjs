@@ -112,3 +112,9 @@ test('между константами и функциями, включая э
     assert.equal(await formatSource('icon.ts', groups.join(separator)), expected);
   }
 });
+
+test('соседние объявления типов отделены одной пустой строкой', async () => {
+  const types = 'export interface A {}|interface B {}|type C = B;|enum D {}|class E {}'.split('|');
+  const expected = types.join('\n\n') + '\n';
+  assert.equal(await formatSource('types.ts', types.join('\n')), expected);
+});

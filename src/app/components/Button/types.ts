@@ -4,6 +4,7 @@ import type { IconName } from '../Icon';
 
 
 type Native = Omit<ComponentPropsWithRef<'button'>, 'children'>;
+
 export type ButtonProps = Native & { transparent?: boolean } & (
     | {
         variant: 'icon' | 'framedIcon';
