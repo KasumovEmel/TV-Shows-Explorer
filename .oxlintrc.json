@@ -8,13 +8,18 @@
     "import/default": "off",
     "import/namespace": "off",
     "max-lines": ["error", { "max": 120, "skipBlankLines": false, "skipComments": false }],
-    "typescript/no-floating-promises": "error"
+    "curly": ["error", "all"],
+    "project/no-nested-ternary": "error",
+    "project/require-request-catch": "error",
+    "typescript/no-floating-promises": ["error", { "ignoreVoid": true, "checkThenables": true }],
+    "typescript/no-misused-promises": "error"
   },
   "overrides": [
     {
       "files": ["src/**"],
       "rules": {
         "project/require-shared-request": "error",
+        "project/require-request-catch": "off",
         "no-restricted-imports": [
           "error",
           {

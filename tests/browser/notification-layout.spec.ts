@@ -42,15 +42,18 @@ for (const [locale, strings] of Object.entries({ en, ru })) {
           const close = note.getByRole('button', { name: strings.notification.dismiss });
           const box = await note.boundingBox(),
             target = await close.boundingBox();
-          if (!box || !target) throw new Error('Missing notification');
+          if (!box || !target) {
+            throw new Error('Missing notification');
+          }
           expect(box.width).toBe(width === 320 ? 288 : 480);
           expect(box.x).toBe((width - box.width) / 2);
           expect(box.y).toBe(width === 320 ? 42 : 24);
           expect(target.width).toBeGreaterThanOrEqual(44);
           expect(target.height).toBeGreaterThanOrEqual(44);
           expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
-          if (kind === 'warning')
+          if (kind === 'warning') {
             await page.screenshot({ path: info.outputPath('notification.png') });
+          }
           await close.click();
           await expect(note).toHaveCount(0);
         }

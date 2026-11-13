@@ -8,6 +8,7 @@ const systemPreference = window.matchMedia('(prefers-color-scheme: dark)');
 function readPreference(): Theme | null {
   try {
     const stored = localStorage.getItem(storageKey);
+
     return stored === 'dark' || stored === 'light' ? stored : null;
   } catch {
     return null;
@@ -16,13 +17,16 @@ function readPreference(): Theme | null {
 
 export function useTheme() {
   const [preference, setPreference] = useState(readPreference);
+
   const [systemDark, setSystemDark] = useState(() => systemPreference.matches);
+
   const theme = preference ?? (systemDark ? 'dark' : 'light');
 
   useEffect(() => {
     const update = () => setSystemDark(systemPreference.matches);
     systemPreference.addEventListener('change', update);
     update();
+
     return () => systemPreference.removeEventListener('change', update);
   }, []);
 

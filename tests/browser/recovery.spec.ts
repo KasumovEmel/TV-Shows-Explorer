@@ -32,7 +32,9 @@ for (const width of [320, 390, 1440]) {
     await page.screenshot({ path: info.outputPath('dark.png') });
     const art = await page.locator('main img').boundingBox(),
       title = await heading.boundingBox();
-    if (!art || !title) throw new Error('Missing recovery content');
+    if (!art || !title) {
+      throw new Error('Missing recovery content');
+    }
     expect(width >= 768 ? art.x >= title.x + title.width : art.y + art.height <= title.y).toBe(
       true,
     );

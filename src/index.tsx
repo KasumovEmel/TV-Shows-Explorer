@@ -5,5 +5,9 @@ import { initializeI18n } from '@shared/i18n';
 
 
 const root = document.getElementById('root');
-if (!root) throw new Error('Отсутствует корневой элемент приложения');
+
+if (!root) {
+  throw new Error('Отсутствует корневой элемент приложения');
+}
+
 void initializeI18n().then(() => createRoot(root).render(<App />));

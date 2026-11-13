@@ -10,10 +10,15 @@ import type { FocusEvent, MouseEvent } from 'react';
 
 export function usePresenter({ kind, id, messageKey, onDismiss }: NotificationProps) {
   const { t } = useTranslation();
+
   const previous = useRef<HTMLElement | null>(null);
+
   const [hover, setHover] = useState(false);
+
   const [focus, setFocus] = useState(false);
+
   useDismissTimer(kind === 'success' || kind === 'info', hover || focus, id, onDismiss);
+
   function enter(event: FocusEvent<HTMLElement>) {
     if (!event.currentTarget.contains(event.relatedTarget)) {
       previous.current = event.relatedTarget instanceof HTMLElement ? event.relatedTarget : null;
@@ -21,13 +26,17 @@ export function usePresenter({ kind, id, messageKey, onDismiss }: NotificationPr
     }
   }
   function leave(event: FocusEvent<HTMLElement>) {
-    if (!event.currentTarget.contains(event.relatedTarget)) setFocus(false);
+    if (!event.currentTarget.contains(event.relatedTarget)) {
+      setFocus(false);
+    }
   }
   function close(event: MouseEvent<HTMLButtonElement>) {
-    if (event.detail === 0 && previous.current?.isConnected)
+    if (event.detail === 0 && previous.current?.isConnected) {
       previous.current.focus({ preventScroll: true });
+    }
     onDismiss(id);
   }
+
   return {
     kind,
     title: t(`notification.${kind}.title`),

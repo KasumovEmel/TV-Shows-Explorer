@@ -10,6 +10,7 @@ import styles from './styles.module.css';
 
 export function RecoveryScreen(props: RecoveryScreenProps) {
   const { heading, title, description, action, retrying, onRestore } = usePresenter(props);
+
   return (
     <main className={styles.page}>
       <header className={styles.header}>

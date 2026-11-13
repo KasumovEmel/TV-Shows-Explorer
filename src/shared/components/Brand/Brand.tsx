@@ -5,6 +5,7 @@ import styles from './styles.module.css';
 
 export function Brand() {
   const { name } = usePresenter();
+
   return (
     <span className={styles.brand} lang="en">
       <svg viewBox="0 0 45 36" aria-hidden="true" focusable="false">

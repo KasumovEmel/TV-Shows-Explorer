@@ -6,6 +6,7 @@ import type { ChangeEvent, SubmitEvent } from 'react';
 
 export function usePresenter({ value, onChange, onSubmit, inputRef }: SearchFieldProps) {
   const { t } = useTranslation();
+
   function clear() {
     onChange('');
     inputRef.current?.focus();
@@ -13,6 +14,7 @@ export function usePresenter({ value, onChange, onSubmit, inputRef }: SearchFiel
   function change(event: ChangeEvent<HTMLInputElement>) {
     onChange(event.target.value);
   }
+
   return {
     value,
     change,

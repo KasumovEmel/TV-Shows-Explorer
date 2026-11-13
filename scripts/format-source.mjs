@@ -8,7 +8,7 @@ import { parseSync } from 'oxc-parser';
 import { format } from 'oxfmt';
 
 import config from '../.oxfmtrc.json' with { type: 'json' };
-import lintConfig from './oxlint/format.json' with { type: 'json' };
+import { separateStatements } from './format-statements.mjs';
 
 
 const biome = new Biome();
@@ -19,42 +19,27 @@ biome.applyConfiguration(projectKey, {
   linter: {
     rules: {
       recommended: false,
-      style: { useImportType: { level: 'error', options: { style: 'separatedType' } } },
+      style: {
+        useBlockStatements: { level: 'error', fix: 'safe' },
+        useImportType: { level: 'error', options: { style: 'separatedType' } },
+      },
     },
   },
 });
 
 async function formatStatements(filename, input) {
-  if (/\.(?:[cm]?ts|tsx)$/i.test(filename)) {
-    input = biome.lintContent(projectKey, input, {
-      filePath: filename,
-      fixFileMode: 'safeFixes',
-    }).content;
-  }
+  input = biome.lintContent(projectKey, input, {
+    filePath: filename,
+    fixFileMode: 'safeFixes',
+  }).content;
   const { code, errors } = await format(filename, input, config);
-  if (errors.length) throw new Error(filename + ': ' + errors[0].message);
+  if (errors.length) {
+    throw new Error(filename + ': ' + errors[0].message);
+  }
 
   const parsed = parseSync(filename, code);
-  const lastImport = parsed.module.staticImports.at(-1);
-  // Oxlint counts comment lines as spacing and can move an import's trailing comment.
-  const nextComment = lastImport && parsed.comments.find(({ start }) => start >= lastImport.end);
-  if (!nextComment || code.slice(lastImport.end, nextComment.start).trim()) return code;
 
-  let end = lastImport.end;
-  for (const comment of parsed.comments) {
-    if (comment.start < end) continue;
-    if (!/^[ \t]*$/.test(code.slice(end, comment.start))) break;
-    end = comment.end;
-  }
-
-  const rest = code.slice(end).trimStart();
-  if (!rest) return code;
-  const newline = code.includes('\r\n') ? '\r\n' : '\n';
-  return (
-    code.slice(0, end) +
-    newline.repeat(lintConfig.rules['import/newline-after-import'][1].count + 1) +
-    rest
-  );
+  return separateStatements(code, parsed);
 }
 
 export async function formatSources(files) {

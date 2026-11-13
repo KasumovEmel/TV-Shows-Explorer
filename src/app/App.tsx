@@ -17,6 +17,7 @@ import '@shared/styles/base.css';
 
 export function App({ children }: PropsWithChildren) {
   const { theme, toggle } = useTheme();
+
   return (
     <StrictMode>
       <NotificationProvider>

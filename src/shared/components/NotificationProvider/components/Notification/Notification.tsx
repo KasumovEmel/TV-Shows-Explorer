@@ -10,6 +10,7 @@ import styles from './styles.module.css';
 export function Notification(props: NotificationProps) {
   const { kind, title, message, label, enter, leave, close, onEnter, onLeave } =
     usePresenter(props);
+
   return (
     <div
       className={styles.toast}

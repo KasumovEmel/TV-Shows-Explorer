@@ -20,12 +20,14 @@ export async function mockSearch(page: Page) {
           image: { medium: poster, original: poster },
         },
       }));
+
       return route.fulfill({ json });
     }
     const show =
       q === 'a'
         ? { id: 54198, name: 'The Bear', genres: ['Drama'] }
         : { id: 17861, name: 'Dark', genres: ['Science-Fiction'] };
+
     return route.fulfill({ json: [{ show: { ...show, premiered: null, image: null } }] });
   });
 }

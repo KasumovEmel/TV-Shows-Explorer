@@ -18,6 +18,7 @@ export async function setLanguage(language: Language) {
   }
   await i18next.changeLanguage(language);
   document.documentElement.lang = language;
+
   return true;
 }
 
@@ -30,5 +31,7 @@ export async function initializeI18n() {
     interpolation: { escapeValue: false },
   });
   const language = preferredLanguage();
-  if (language !== 'en') await setLanguage(language);
+  if (language !== 'en') {
+    await setLanguage(language);
+  }
 }

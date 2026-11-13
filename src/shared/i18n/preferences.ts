@@ -10,7 +10,9 @@ export function isLanguage(value: string | null): value is Language {
 export function preferredLanguage(): Language {
   try {
     const stored = localStorage.getItem(storageKey);
-    if (isLanguage(stored)) return stored;
+    if (isLanguage(stored)) {
+      return stored;
+    }
   } catch {
     // The browser can disable storage. Its language preferences still apply.
   }
@@ -18,8 +20,11 @@ export function preferredLanguage(): Language {
   const languages = navigator.languages.length ? navigator.languages : [navigator.language];
   for (const locale of languages) {
     const base = locale.toLowerCase().split('-')[0];
-    if (isLanguage(base)) return base;
+    if (isLanguage(base)) {
+      return base;
+    }
   }
+
   return 'en';
 }
 

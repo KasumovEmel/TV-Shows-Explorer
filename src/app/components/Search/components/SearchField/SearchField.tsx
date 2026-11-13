@@ -10,6 +10,7 @@ import styles from './styles.module.css';
 export function SearchField(props: SearchFieldProps) {
   const { value, change, submit, clear, inputRef, label, placeholder, clearLabel } =
     usePresenter(props);
+
   return (
     <form onSubmit={submit} role="search" className={styles.field}>
       <Icon name="search" size={22} />

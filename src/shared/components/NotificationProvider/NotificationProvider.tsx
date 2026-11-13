@@ -9,6 +9,7 @@ import styles from './styles.module.css';
 
 export function NotificationProvider(props: NotificationProviderProps) {
   const { alert, status, children, notify, dismiss } = usePresenter(props);
+
   return (
     <NotifyContext.Provider value={notify}>
       {children}
