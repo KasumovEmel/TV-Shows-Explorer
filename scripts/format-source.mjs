@@ -8,6 +8,7 @@ import { parseSync } from 'oxc-parser';
 import { format } from 'oxfmt';
 
 import config from '../.oxfmtrc.json' with { type: 'json' };
+import { orderHookFields } from './format-hook-order.mjs';
 import { separateStatements } from './format-statements.mjs';
 
 
@@ -38,8 +39,9 @@ async function formatStatements(filename, input) {
   }
 
   const parsed = parseSync(filename, code);
+  const ordered = orderHookFields(code, parsed);
 
-  return separateStatements(code, parsed);
+  return separateStatements(ordered, ordered === code ? parsed : parseSync(filename, ordered));
 }
 
 export async function formatSources(files) {

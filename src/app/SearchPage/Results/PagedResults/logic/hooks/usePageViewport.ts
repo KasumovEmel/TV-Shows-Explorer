@@ -18,6 +18,7 @@ export function usePageViewport(
     if (!groups || !toolbar || pages < 2) {
       return;
     }
+
     const markCurrent = () => {
       const y = window.scrollY;
       if (jumpY.current === y) {
@@ -55,6 +56,7 @@ export function usePageViewport(
       }
       select(page);
     };
+
     markCurrent();
     const observer = new ResizeObserver(markCurrent);
     observer.observe(groups);

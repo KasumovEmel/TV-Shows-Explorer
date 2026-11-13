@@ -5,11 +5,8 @@ const duration = 560;
 
 export function useSearchTransition(docked: boolean, finishEntrance: () => void) {
   const introRef = useRef<HTMLElement>(null);
-
   const inputRef = useRef<HTMLInputElement>(null);
-
   const resultsRef = useRef<HTMLElement>(null);
-
   const motion = useRef<Animation | null>(null);
 
   useLayoutEffect(() => {

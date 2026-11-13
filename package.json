@@ -12,7 +12,7 @@
     "typecheck": "oxlint --type-aware --type-check --deny-warnings .",
     "format": "node scripts/format-project.mjs --write && node scripts/check-lines.mjs",
     "format:check": "node scripts/format-project.mjs --check && node scripts/check-lines.mjs",
-    "check": "pnpm format:check && pnpm typecheck",
+    "check": "pnpm format:check && node --test tests/formatter.test.mjs && pnpm typecheck",
     "test": "playwright test"
   },
   "dependencies": {

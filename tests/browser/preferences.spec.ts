@@ -106,8 +106,10 @@ test('русский словарь запрашивается при выбор
   await toggle.click();
   await expect(page.locator('[data-kind="error"]')).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+
   const savedLanguage = () =>
     page.evaluate(() => localStorage.getItem('tv-shows-explorer.language'));
+
   expect(await savedLanguage()).toBeNull();
   await toggle.click();
   await expect(page.locator('html')).toHaveAttribute('lang', 'ru');

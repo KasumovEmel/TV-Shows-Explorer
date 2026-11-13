@@ -5,20 +5,24 @@ import type { QueryFeedbackProps } from './types';
 
 const titleKeys = {
   empty: 'catalog.noMatches',
+  filtered: 'catalog.noGenreMatches',
   error: 'catalog.error',
+} as const;
+const detailKeys = {
+  empty: 'catalog.tryAnother',
+  filtered: 'catalog.tryAnotherGenre',
+  error: 'catalog.retrySearch',
 } as const;
 
 export function usePresenter({ state, retry }: QueryFeedbackProps) {
   const { t } = useTranslation();
-
   const failed = state === 'error';
-  const detailKey = failed ? 'catalog.retrySearch' : 'catalog.tryAnother';
 
   return {
     failed,
     role: failed ? 'alert' : 'status',
     title: t(titleKeys[state]),
-    detail: t(detailKey),
+    detail: t(detailKeys[state]),
     action: t('catalog.retry'),
     retry,
   };

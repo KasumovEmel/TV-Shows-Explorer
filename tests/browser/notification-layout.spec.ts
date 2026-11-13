@@ -34,8 +34,10 @@ for (const [locale, strings] of Object.entries({ en, ru })) {
           );
           await expect(note.locator('strong')).toHaveText(strings.notification[kind].title);
           const { accent, surface, border } = palette.variant[kind][theme];
+
           const rgb = (hex: string) =>
             'rgb(' + [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16)).join(', ') + ')';
+
           await expect(note).toHaveCSS('background-color', rgb(surface));
           await expect(note).toHaveCSS('color', rgb(accent));
           await expect(note).toHaveCSS('border-top-color', rgb(border));

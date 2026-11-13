@@ -1,5 +1,5 @@
-import englishFlag from './english.svg';
-import russianFlag from './russian.svg';
+import englishFlag from './assets/english.svg';
+import russianFlag from './assets/russian.svg';
 import { usePresenter } from './usePresenter';
 import { Button } from '@/app/components/Button';
 

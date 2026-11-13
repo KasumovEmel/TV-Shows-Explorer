@@ -1,4 +1,4 @@
 export interface QueryFeedbackProps {
-  state: 'error' | 'empty';
+  state: 'error' | 'empty' | 'filtered';
   retry: () => void;
 }

@@ -22,8 +22,10 @@ for (const viewport of [
     const current = page.getByRole('navigation').locator('[aria-current="page"]');
     await expect(current).toHaveText('1');
     const cards = page.getByRole('listitem');
+
     const atEnd = () =>
       page.evaluate(() => scrollY + innerHeight >= document.documentElement.scrollHeight - 1);
+
     let checkedFirstOverlap = false;
     let checkedLastBeforeFooter = false;
     for (const direction of [1, -1]) {

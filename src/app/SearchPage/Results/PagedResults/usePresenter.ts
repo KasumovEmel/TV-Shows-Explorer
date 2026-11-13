@@ -11,16 +11,11 @@ import type { PagedResultsProps } from './types';
 
 export function usePresenter({ cards, loading }: PagedResultsProps) {
   const { t } = useTranslation();
-
   const [opened, setOpened] = useState(1);
-
   const [current, setCurrent] = useState(1);
-
   const list = useRef<HTMLDivElement>(null),
     bar = useRef<HTMLDivElement>(null);
-
   const pendingJump = useRef<{ page: number; keyboard: boolean } | null>(null);
-
   const total = loading ? 0 : cards.length;
   const { groups: pageCards, pages, shown } = paginateShows(loading ? [] : cards, opened);
   const visible = pageCards.length;
@@ -30,6 +25,7 @@ export function usePresenter({ cards, loading }: PagedResultsProps) {
     label: t('catalog.page', { page: i + 1 }),
     cards,
   }));
+
   function jump(page: number, keyboard: boolean) {
     if (page <= visible) {
       jumpToPage(page, keyboard);

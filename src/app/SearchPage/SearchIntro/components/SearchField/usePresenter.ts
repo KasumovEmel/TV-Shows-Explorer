@@ -11,6 +11,7 @@ export function usePresenter({ value, onChange, onSubmit, inputRef }: SearchFiel
     onChange('');
     inputRef.current?.focus();
   }
+
   function change(event: ChangeEvent<HTMLInputElement>) {
     onChange(event.target.value);
   }

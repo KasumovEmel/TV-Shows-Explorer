@@ -7,9 +7,7 @@ import type { ShowCardProps } from './types';
 
 export function usePresenter({ show }: ShowCardProps) {
   const { t, i18n } = useTranslation();
-
   const [broken, setBroken] = useState<string>();
-
   const title = t('titles.' + show.id, { defaultValue: show.originalTitle });
   const rating = show.rating?.toLocaleString(i18n.resolvedLanguage) ?? '-';
 

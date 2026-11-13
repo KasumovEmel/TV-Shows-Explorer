@@ -5,9 +5,7 @@ import { behavior } from '@/styles/tokens';
 
 export function useSearchQuery() {
   const [value, setValue] = useState('');
-
-  const [committedQuery, setCommittedQuery] = useState<string | null>(null);
-
+  const [controller, setController] = useState<AbortController | null>(null);
   const [phase, setPhase] = useState<'idle' | 'entering' | 'docked'>('idle');
 
   const finishEntrance = useCallback(() => {
@@ -16,26 +14,25 @@ export function useSearchQuery() {
 
   const term = value.trim();
 
-  function startSearch(query: string) {
-    if (!query) {
-      return;
-    }
-    setCommittedQuery(query);
+  const startSearch = useCallback(() => {
+    setController((current) => current ?? new AbortController());
     setPhase((current) => (current === 'idle' ? 'entering' : current));
-  }
+  }, []);
+
+  useEffect(() => () => controller?.abort(), [controller]);
 
   useEffect(() => {
     if (!term) {
       return;
     }
-    const timer = window.setTimeout(() => startSearch(term), behavior.debounceMs);
+    const timer = window.setTimeout(startSearch, behavior.debounceMs);
 
     return () => window.clearTimeout(timer);
-  }, [term]);
+  }, [term, startSearch]);
 
   function onChange(nextValue: string) {
     if (nextValue.trim() !== term) {
-      setCommittedQuery(null);
+      setController(null);
     }
     if (!nextValue.trim()) {
       setPhase('idle');
@@ -46,10 +43,14 @@ export function useSearchQuery() {
   return {
     value,
     term,
-    committedQuery,
+    search: controller ? { query: term, signal: controller.signal } : null,
     phase,
     finishEntrance,
     onChange,
-    onSubmit: () => startSearch(term),
+    onSubmit: () => {
+      if (term) {
+        startSearch();
+      }
+    },
   };
 }

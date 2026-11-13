@@ -7,7 +7,6 @@ import styles from './styles.module.css';
 
 export function ListBoundary(props: ListBoundaryProps) {
   const { loading, hint, source } = usePresenter(props);
-
   const Source = loading ? 'span' : 'a';
   const placeholder = loading ? styles.placeholder : undefined;
   const href = loading ? undefined : 'https://www.tvmaze.com/';

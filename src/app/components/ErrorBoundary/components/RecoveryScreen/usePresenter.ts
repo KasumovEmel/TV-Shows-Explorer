@@ -7,7 +7,6 @@ import type { RecoveryScreenProps } from './types';
 
 export function usePresenter(props: RecoveryScreenProps) {
   const { t } = useTranslation();
-
   const heading = useRef<HTMLHeadingElement>(null);
 
   useLayoutEffect(() => {

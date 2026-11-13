@@ -13,6 +13,7 @@ function FixtureEvents() {
 
   useEffect(() => {
     const receive = (event: Event) => notify((event as CustomEvent<NotificationEvent>).detail);
+
     window.addEventListener('fixture:notify', receive);
 
     return () => window.removeEventListener('fixture:notify', receive);

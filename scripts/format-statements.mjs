@@ -1,38 +1,30 @@
 import { Visitor } from 'oxc-parser';
 
+import { hookName, unwrapExpression } from './hook-call.mjs';
 import lintConfig from './oxlint/format.json' with { type: 'json' };
 
 
-function isHookCall(expression) {
-  if (
-    ['TSAsExpression', 'TSSatisfiesExpression', 'TSNonNullExpression', 'ChainExpression'].includes(
-      expression?.type,
-    )
-  ) {
-    return isHookCall(expression.expression);
+function isFunctionStatement(statement) {
+  if (statement.type === 'FunctionDeclaration') {
+    return true;
   }
-  if (expression?.type !== 'CallExpression') {
-    return false;
-  }
-  const { callee } = expression;
-  let name = callee.name;
-  if (callee.type === 'MemberExpression') {
-    name = callee.computed ? callee.property.value : callee.property.name;
-  }
-
-  return /^use(?:[A-Z0-9]|$)/u.test(name);
-}
-
-function callsHook(statement) {
   if (statement.type === 'VariableDeclaration') {
-    return statement.declarations.some(({ init }) => isHookCall(init));
+    return statement.declarations.some(({ init }) => {
+      const value = unwrapExpression(init);
+
+      return (
+        value?.type === 'ArrowFunctionExpression' ||
+        value?.type === 'FunctionExpression' ||
+        hookName(value) === 'useCallback'
+      );
+    });
   }
 
-  return isHookCall(statement.expression) || isHookCall(statement.argument);
+  return Boolean(hookName(statement.expression));
 }
 
 export function separateStatements(code, parsed) {
-  const insertions = new Map();
+  const edits = new Map();
   const newline = code.includes('\r\n') ? '\r\n' : '\n';
 
   function padAfter(statement, limit, blankLines) {
@@ -47,26 +39,41 @@ export function separateStatements(code, parsed) {
       }
       end = comment.end;
     }
-    const gap = code.slice(end);
-    const whitespace = gap.match(/^\s*/u)[0];
-    if (whitespace.length === gap.length) {
+    const whitespace = code.slice(end, limit).match(/^\s*/u)[0];
+    const breaks = whitespace.match(/\r?\n/gu)?.length ?? 0;
+    if (
+      end + whitespace.length === code.length ||
+      breaks === blankLines + 1 ||
+      (blankLines === 0 && !breaks)
+    ) {
       return;
     }
-    const missing = blankLines + 1 - (whitespace.split(newline).length - 1);
-    if (missing > 0) {
-      insertions.set(end, Math.max(missing, insertions.get(end) ?? 0));
-    }
+    const indent = whitespace.slice(whitespace.lastIndexOf('\n') + 1);
+    edits.set(end, {
+      length: whitespace.length,
+      replacement: newline.repeat(blankLines + 1) + indent,
+    });
   }
 
   function visitStatements(statements) {
     for (let i = 1; i < statements.length; i++) {
       const previous = statements[i - 1];
       const next = statements[i];
-      if (next.type === 'ReturnStatement' || callsHook(previous) || callsHook(next)) {
+      if (previous.type === 'ImportDeclaration') {
+        continue;
+      }
+      if (
+        next.type === 'ReturnStatement' ||
+        isFunctionStatement(previous) ||
+        isFunctionStatement(next)
+      ) {
         padAfter(previous, next.start, 1);
+      } else if (previous.type === 'VariableDeclaration' && next.type === 'VariableDeclaration') {
+        padAfter(previous, next.start, 0);
       }
     }
   }
+
   const lastImport = parsed.module.staticImports.at(-1);
   // Oxlint counts comment lines as spacing and can move an import's trailing comment.
   const nextComment = lastImport && parsed.comments.find(({ start }) => start >= lastImport.end);
@@ -79,8 +86,8 @@ export function separateStatements(code, parsed) {
     StaticBlock: ({ body }) => visitStatements(body),
     SwitchCase: ({ consequent }) => visitStatements(consequent),
   }).visit(parsed.program);
-  for (const [offset, count] of [...insertions].sort(([a], [b]) => b - a)) {
-    code = code.slice(0, offset) + newline.repeat(count) + code.slice(offset);
+  for (const [offset, { length, replacement }] of [...edits].sort(([a], [b]) => b - a)) {
+    code = code.slice(0, offset) + replacement + code.slice(offset + length);
   }
 
   return code;

@@ -8,12 +8,9 @@ import type { SearchIntroProps } from './types';
 
 
 export function usePresenter({ introRef, restored, field }: SearchIntroProps) {
-  const { inputRef } = field;
-
-  const headingId = useId();
-
   const { t } = useTranslation();
-
+  const { inputRef } = field;
+  const headingId = useId();
   const notify = useNotify();
 
   useLayoutEffect(() => {

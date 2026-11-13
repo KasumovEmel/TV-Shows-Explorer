@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import useSWR from 'swr';
@@ -11,19 +11,14 @@ import { searchShows } from './logic/tasks/searchShows';
 import type { ResultsProps } from './types';
 
 
-export function usePresenter({ query, entering }: ResultsProps) {
+export function usePresenter({ search, entering, genre, selectGenre }: ResultsProps) {
   const { t } = useTranslation();
-
   const notify = useNotify();
-
-  const [{ genre, revision }, setFilter] = useState({ genre: '', revision: 0 });
-
   const { data, error, mutate, isValidating } = useSWR(
-    query ? ([showsSearchUrl, query] as const) : null,
-    ([, term]) => searchShows(term),
-    { shouldRetryOnError: false },
+    search && [showsSearchUrl, search.query],
+    search && (() => searchShows(search.query, search.signal)),
+    { shouldRetryOnError: false, isPaused: () => search?.signal.aborted === true },
   );
-
   const stale = Boolean(data && error);
 
   useEffect(() => {
@@ -37,19 +32,20 @@ export function usePresenter({ query, entering }: ResultsProps) {
     ? ['', ...genres].map((value) => ({
         value,
         selected: value === genre,
-        select: () => setFilter((state) => ({ genre: value, revision: state.revision + 1 })),
+        select: () => selectGenre(value),
       }))
     : [];
-  let feedback: 'empty' | 'error' | 'loading' | null = null;
+  let feedback: 'empty' | 'filtered' | 'error' | 'loading' | null = null;
   if (data === undefined) {
     feedback = error && !isValidating ? 'error' : 'loading';
   } else if (data.length === 0) {
     feedback = 'empty';
+  } else if (cards.length === 0) {
+    feedback = 'filtered';
   }
 
   return {
     cards,
-    revision,
     chips,
     feedback: entering ? ('loading' as const) : feedback,
     genreLabel: t('catalog.genres'),

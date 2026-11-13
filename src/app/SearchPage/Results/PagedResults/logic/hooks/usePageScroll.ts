@@ -16,14 +16,17 @@ export function usePageScroll(
     }
     let previous = window.scrollY;
     let touchY = 0;
+
     // Each boundary belongs to one rendered group. Repeated events before a render are idempotent.
     const atEnd = () =>
       (list.current?.getBoundingClientRect().bottom ?? Infinity) <= window.innerHeight + 2;
+
     function advance() {
       if (opened < pages && atEnd()) {
         open(opened + 1);
       }
     }
+
     function scroll() {
       const y = window.scrollY;
       if (jumpY.current === y) {
@@ -36,14 +39,17 @@ export function usePageScroll(
       }
       previous = y;
     }
+
     function wheel(e: WheelEvent) {
       if (!e.ctrlKey && e.deltaY > 0) {
         advance();
       }
     }
+
     function start(e: TouchEvent) {
       touchY = e.touches[0].clientY;
     }
+
     function move(e: TouchEvent) {
       const y = e.touches[0].clientY;
       if (y < touchY) {
@@ -51,6 +57,7 @@ export function usePageScroll(
       }
       touchY = y;
     }
+
     function key(e: KeyboardEvent) {
       if (
         e.defaultPrevented ||
@@ -67,6 +74,7 @@ export function usePageScroll(
         advance();
       }
     }
+
     window.addEventListener('scroll', scroll, { passive: true });
     window.addEventListener('wheel', wheel, { passive: true });
     window.addEventListener('touchstart', start, { passive: true });

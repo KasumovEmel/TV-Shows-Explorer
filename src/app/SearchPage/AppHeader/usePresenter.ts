@@ -7,7 +7,6 @@ const icons = { system: 'sunMoon', dark: 'moon', light: 'sun' } as const;
 
 export function usePresenter() {
   const { t } = useTranslation();
-
   const { mode, onToggleTheme } = useTheme();
 
   return {

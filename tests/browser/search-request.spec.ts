@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 import { searchRoute } from './mockSearch';
 
 
-test('пустой старт, задержка, Enter и запоздалый ответ после смены и очистки', async ({ page }) => {
+test('пустой старт, задержка, Enter и прерывание неактуального запроса', async ({ page }) => {
   const requests: string[] = [];
   let release!: () => void;
   const old = new Promise<void>((resolve) => {
@@ -39,22 +39,51 @@ test('пустой старт, задержка, Enter и запоздалый �
   await expect(page.getByRole('heading', { name: 'Searching for shows…' })).toHaveCount(0);
   await page.clock.runFor(1);
   await expect.poll(() => requests.slice()).toEqual(['old']);
+  const aborted = page.waitForEvent('requestfailed', (r) => r.url().includes('q=old'));
   await field.fill('new');
   await field.press('Enter');
   await expect(page.getByRole('heading', { name: 'new' })).toBeVisible();
+  release();
+  expect((await aborted).failure()?.errorText).toContain('ERR_ABORTED');
+  await expect(page.getByRole('heading', { name: 'new' })).toBeVisible();
+  await expect(page.locator('[data-kind]')).toHaveCount(0);
   await expect(page.getByText('Year unknown')).toBeVisible();
   await expect(page.getByText('No genre')).toBeVisible();
   await expect(page.getByRole('group')).toHaveCount(0);
   await expect(field).toBeFocused();
   await field.fill('  ');
   await expect(field).toHaveValue('');
-  const response = page.waitForResponse((r) => r.url().includes('q=old'));
-  release();
-  await response;
   await page.clock.runFor(600);
   await expect(page.getByRole('listitem')).toHaveCount(0);
   await expect(intro).not.toHaveAttribute('data-docked');
   expect(requests).toEqual(['old', 'new']);
+});
+test('очистка прерывает загрузку и позволяет сразу повторить отменённый поиск', async ({
+  page,
+}) => {
+  const url = 'https://api.tvmaze.com/search/shows?q=again';
+  let attempts = 0;
+  await page.route(url, async (route) => {
+    if (++attempts === 1) {
+      return;
+    }
+    await route.fulfill({ json: [{ show: { id: 1, name: 'Again', genres: [], image: null } }] });
+  });
+  await page.goto('/');
+  const field = page.getByRole('searchbox');
+  const started = page.waitForRequest(url);
+  await field.fill('again');
+  await field.press('Enter');
+  const request = await started;
+  const aborted = page.waitForEvent('requestfailed', (r) => r === request);
+  await page.getByRole('button', { name: 'Clear search' }).click();
+  expect((await aborted).failure()?.errorText).toContain('ERR_ABORTED');
+  await expect(page.getByRole('listitem')).toHaveCount(0);
+  await field.fill('again');
+  await field.press('Enter');
+  await expect(page.getByRole('heading', { name: 'Again' })).toBeVisible();
+  await expect(page.locator('[data-kind]')).toHaveCount(0);
+  expect(attempts).toBe(2);
 });
 test('ожидание, ошибка, повтор того же запроса и пустой результат', async ({ page }) => {
   const qs: string[] = [];

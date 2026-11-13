@@ -95,10 +95,6 @@ test('жанр седьмой карточки виден сразу; выбор
   await page.getByRole('link', { name: 'Page 3' }).click();
   await page.getByRole('button', { name: 'All' }).click();
   await expect(page.getByRole('listitem')).toHaveCount(3);
-  await page.getByRole('button', { name: 'Comedy' }).click();
-  await page.getByRole('searchbox').fill('dark');
-  await expect(page.getByRole('button', { name: 'All' })).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.getByRole('heading', { name: 'Dark' })).toBeVisible();
 });
 
 test('короткий список: переход ко второй группе сам не раскрывает третью', async ({ page }) => {

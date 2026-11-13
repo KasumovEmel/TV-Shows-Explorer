@@ -8,7 +8,6 @@ import type { NotificationProviderProps, QueuedNotification } from './types';
 
 export function usePresenter({ children }: NotificationProviderProps) {
   const [queue, setQueue] = useState<QueuedNotification[]>([]);
-
   const nextId = useRef(0);
 
   const notify = useCallback((event: NotificationEvent) => {
@@ -23,6 +22,7 @@ export function usePresenter({ children }: NotificationProviderProps) {
 
   useEffect(() => {
     const offline = () => notify({ kind: 'warning' });
+
     window.addEventListener('offline', offline);
 
     return () => window.removeEventListener('offline', offline);

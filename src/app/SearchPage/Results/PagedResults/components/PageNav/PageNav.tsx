@@ -9,7 +9,6 @@ import styles from './styles.module.css';
 
 export function PageNav(props: PageNavProps) {
   const { label, links, loading } = usePresenter(props);
-
   const Container = loading ? 'div' : 'nav';
 
   return (

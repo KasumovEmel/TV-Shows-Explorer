@@ -70,12 +70,14 @@ for (const locale of ['ru', 'en']) {
       // Capture the actual glyphs while font responses are still held.
       // Playwright's regular screenshot waits for document.fonts.ready.
       const cdp = await page.context().newCDPSession(page);
+
       const capture = async () =>
         (
           await cdp.send('Page.captureScreenshot', {
             clip: { ...area, scale: 1 },
           })
         ).data;
+
       await expect
         .poll(() => page.evaluate(() => performance.getEntriesByType('paint').length))
         .toBeGreaterThan(0);

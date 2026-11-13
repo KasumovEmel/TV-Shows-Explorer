@@ -8,13 +8,11 @@ import { useNotify } from '@/app/notifications';
 
 export function usePresenter() {
   const { i18n, t } = useTranslation();
-
   const notify = useNotify();
-
   const [pending, setPending] = useState(false);
-
   const russian = i18n.resolvedLanguage === 'ru';
   const next = russian ? 'en' : 'ru';
+
   async function toggle() {
     if (pending) {
       return;
