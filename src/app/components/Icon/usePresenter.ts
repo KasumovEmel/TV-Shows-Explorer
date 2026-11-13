@@ -16,6 +16,7 @@ const paths: Record<IconName, string> = {
   success: 'M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Zm-15 0 3.5 3.5 6.5-7',
   info: 'M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0ZM12 11v6m0-10v.15',
 };
+
 export function usePresenter({ name, size = 24 }: IconProps) {
   return { path: paths[name], size };
 }

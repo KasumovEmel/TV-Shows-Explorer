@@ -4,11 +4,16 @@ import { hookName, unwrapExpression } from './hook-call.mjs';
 
 
 function isFunctionStatement(statement) {
-  if (statement.type === 'FunctionDeclaration') {
+  const declaration = statement.declaration ?? statement;
+  if (
+    declaration.type === 'FunctionDeclaration' ||
+    declaration.type === 'FunctionExpression' ||
+    declaration.type === 'ArrowFunctionExpression'
+  ) {
     return true;
   }
-  if (statement.type === 'VariableDeclaration') {
-    return statement.declarations.some(({ init }) => {
+  if (declaration.type === 'VariableDeclaration') {
+    return declaration.declarations.some(({ init }) => {
       const value = unwrapExpression(init);
 
       return (

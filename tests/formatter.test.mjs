@@ -98,3 +98,17 @@ test('типы завершают свою группу импортов в ал
   const expected = groups.map((group) => group.join('\n')).join('\n\n') + '\n\n\n' + code;
   assert.equal(await formatSource('imports.ts', input), expected);
 });
+
+test('между константами и функциями, включая экспортируемые, одна пустая строка', async () => {
+  const groups = [
+    'const size = 2;\nconst paths = { icon: size };',
+    'export function usePresenter() {\n  return paths;\n}',
+    'export const read = () => paths;',
+    'function local() {}',
+    'export default function render() {\n  local();\n}',
+  ];
+  const expected = groups.join('\n\n') + '\n';
+  for (const separator of ['\n', '\n\n\n', '\n\n']) {
+    assert.equal(await formatSource('icon.ts', groups.join(separator)), expected);
+  }
+});
