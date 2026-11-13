@@ -11,20 +11,22 @@ for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: wide ? 1000 : 844 });
     await page.addInitScript(() => localStorage.setItem('tv-shows-explorer.language', 'ru'));
     await page.goto('/');
-    const field = page.getByRole('searchbox', { name: 'Поиск сериалов' });
+    const banner = page.getByRole('banner');
+    const intro = page.getByRole('region', { name: 'Что смотрим?' });
+    const field = intro.getByRole('searchbox', { name: 'Поиск сериалов' });
     await page.keyboard.press('Tab');
-    await expect(page.getByRole('button', { name: 'Включить тёмную тему' })).toBeFocused();
+    await expect(banner.getByRole('button', { name: 'Включить тёмную тему' })).toBeFocused();
     await page.keyboard.press('Tab');
-    await expect(page.getByRole('button', { name: 'Переключить на английский' })).toBeFocused();
+    await expect(banner.getByRole('button', { name: 'Переключить на английский' })).toBeFocused();
     await page.keyboard.press('Tab');
     await expect(field).toBeFocused();
     await page.evaluate(() => document.fonts.ready);
-    const banner = page.getByRole('banner');
     await expect(banner.getByText('Season One')).toBeVisible();
-    await expect(banner.getByRole('heading', { level: 1 })).toBeVisible();
-    const form = page.getByRole('search');
+    await expect(banner.getByRole('searchbox')).toHaveCount(0);
+    await expect(intro.getByRole('heading', { level: 1 })).toBeVisible();
+    const form = intro.getByRole('search');
     const initial = await form.boundingBox();
-    const top = await banner.boundingBox();
+    const top = await intro.boundingBox();
     expect(initial!.y).toBeGreaterThan(top!.y + top!.height);
     expect(initial!.width).toBe(wide ? 640 : 350);
     let release!: () => void;
@@ -46,7 +48,7 @@ for (const width of [1440, 390]) {
       await Promise.all(el.getAnimations().map((a) => a.finished));
     });
     const docked = await form.boundingBox();
-    const end = await banner.boundingBox();
+    const end = await intro.boundingBox();
     expect(docked!.y + docked!.height).toBeLessThanOrEqual(end!.y + end!.height);
     if (wide) {
       expect(docked!.x).toBeGreaterThan(initial!.x);
@@ -60,7 +62,7 @@ for (const width of [1440, 390]) {
     const posters = page.locator('li img');
     const first = await posters.first().boundingBox();
     expect(first).toEqual(skeleton);
-    const header = await page.locator('header > div').boundingBox();
+    const header = await banner.boundingBox();
     const results = await container.boundingBox();
     expect(results!.x).toBe(header!.x);
     expect(results!.width).toBe(header!.width);

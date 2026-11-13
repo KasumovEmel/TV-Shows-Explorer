@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client';
 
-import { initializeI18n } from '@shared/i18n';
+import { initializeI18n } from '@/i18n';
 
 
 const root = document.getElementById('root');

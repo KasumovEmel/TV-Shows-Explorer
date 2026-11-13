@@ -9,7 +9,7 @@
         "elementNamePattern": ["react", "react/**", "react-dom", "react-dom/**"]
       }
     ],
-    "internalPattern": ["@shared/"],
+    "internalPattern": ["@/"],
     "groups": [
       "react-core",
       ["builtin", "external", "unknown"],

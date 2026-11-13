@@ -1,5 +1,5 @@
+import type { NotificationEvent } from '../../src/app/notifications';
 import type { Page } from '@playwright/test';
-import type { NotificationEvent } from '@shared/components/NotificationProvider';
 
 
 export async function notify(page: Page, ...events: NotificationEvent[]) {

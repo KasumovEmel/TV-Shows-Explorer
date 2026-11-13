@@ -77,9 +77,9 @@ for (const width of [320, 1440]) {
         if (total === 2) {
           await expect(chips).toHaveCount(0);
           if (width === 320) {
-            const banner = await page.getByRole('banner').boundingBox();
+            const intro = await page.getByRole('region', { name: 'What to watch?' }).boundingBox();
             const heading = await main.getByRole('heading', { level: 2 }).boundingBox();
-            expect(heading!.y - banner!.y - banner!.height).toBeLessThanOrEqual(12);
+            expect(heading!.y - intro!.y - intro!.height).toBeLessThanOrEqual(12);
           }
         } else if (width === 320) {
           const lastChip = await chips.getByRole('button').last().boundingBox();

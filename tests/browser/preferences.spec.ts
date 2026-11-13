@@ -32,7 +32,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
   test('подсветка и подсказки кнопок шапки, тема ' + colorScheme, async ({ page }) => {
     await page.emulateMedia({ colorScheme });
     await page.goto('/');
-    const themeName = colorScheme === 'light' ? 'Use dark theme' : 'Use light theme';
+    const themeName = 'System theme. Use dark theme';
     const theme = page.getByRole('button', { name: themeName });
     const language = page.getByRole('button', { name: 'Switch to Russian' });
     await expect(theme).toHaveAttribute('title', themeName);
@@ -87,4 +87,30 @@ test('язык и тема доступны до поиска, сохраняю�
   await expect(html).toHaveAttribute('lang', 'en');
   await page.emulateMedia({ colorScheme: 'dark' });
   await expect(html).toHaveCSS('color-scheme', 'light');
+});
+
+test('русский словарь запрашивается при выборе, язык сохраняется после успешного повтора', async ({
+  page,
+}) => {
+  const dictionary = /\/locale-ru\.[^/]+\.js$/;
+  let attempts = 0;
+  await page.route(dictionary, (route) => {
+    attempts++;
+
+    return attempts === 1 ? route.abort() : route.continue();
+  });
+  await page.goto('/');
+  const toggle = page.getByRole('button', { name: 'Switch to Russian' });
+  await expect(toggle).toBeVisible();
+  expect(attempts).toBe(0);
+  await toggle.click();
+  await expect(page.locator('[data-kind="error"]')).toBeVisible();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  const savedLanguage = () =>
+    page.evaluate(() => localStorage.getItem('tv-shows-explorer.language'));
+  expect(await savedLanguage()).toBeNull();
+  await toggle.click();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'ru');
+  expect(await savedLanguage()).toBe('ru');
+  expect(attempts).toBe(2);
 });

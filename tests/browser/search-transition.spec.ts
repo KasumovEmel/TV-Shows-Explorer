@@ -19,11 +19,11 @@ for (const reducedMotion of ['reduce', 'no-preference'] as const) {
     });
     await page.goto('/');
     const field = page.getByRole('searchbox');
-    const header = page.getByRole('banner');
+    const intro = page.getByRole('region', { name: 'What to watch?' });
     const input = await field.elementHandle();
     const results = page.getByRole('main');
     const skeletons = results.getByRole('status').locator('ul[aria-hidden="true"] > li');
-    const motions = await header.evaluateHandle((el) => {
+    const motions = await intro.evaluateHandle((el) => {
       const motions: Animation[] = [];
       const observer = new MutationObserver(() => {
         for (const motion of document.getAnimations()) {
@@ -47,7 +47,7 @@ for (const reducedMotion of ['reduce', 'no-preference'] as const) {
     await field.evaluate((el: HTMLInputElement) => el.setSelectionRange(1, 4));
     await field.press('Enter');
     await request;
-    await expect(header).toHaveAttribute('data-docked', '');
+    await expect(intro).toHaveAttribute('data-docked', '');
     await expect(skeletons).toHaveCount(3);
     const moving = reducedMotion === 'no-preference';
     expect(await motions.evaluate((list) => list.length)).toBe(moving ? 2 : 0);
@@ -85,7 +85,7 @@ for (const reducedMotion of ['reduce', 'no-preference'] as const) {
     await expect(page.getByRole('heading', { name: 'The Bear' })).toBeVisible();
     expect(await motions.evaluate((list) => list.length)).toBe(moving ? 2 : 0);
     await page.getByRole('button', { name: 'Clear search' }).click();
-    await expect(header).not.toHaveAttribute('data-docked');
+    await expect(intro).not.toHaveAttribute('data-docked');
     if (moving) {
       await motions.evaluate((list) => list[list.length - 1].finish());
     }
@@ -94,7 +94,7 @@ for (const reducedMotion of ['reduce', 'no-preference'] as const) {
     await expect(page.getByRole('listitem')).toHaveCount(0);
     // Cache hits must dock the field too, even without a new network request.
     await field.fill('night');
-    await expect(header).toHaveAttribute('data-docked', '');
+    await expect(intro).toHaveAttribute('data-docked', '');
     if (moving) {
       await motions.evaluate((list) => list.slice(-2).forEach((motion) => motion.finish()));
     }

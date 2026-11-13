@@ -28,14 +28,14 @@
                 "name": "axios",
                 "importNames": ["default", "Axios", "create", "getAdapter"],
                 "allowTypeImports": true,
-                "message": "Для запросов используй request() из @shared/utils/request."
+                "message": "Для запросов используй request() из @/app/utils/request."
               }
             ],
             "patterns": [
               {
                 "group": ["axios/**"],
                 "allowTypeImports": true,
-                "message": "Для запросов используй request() из @shared/utils/request."
+                "message": "Для запросов используй request() из @/app/utils/request."
               }
             ]
           }
@@ -43,7 +43,7 @@
       }
     },
     {
-      "files": ["src/shared/utils/request.ts"],
+      "files": ["src/app/utils/request.ts"],
       "rules": {
         "no-restricted-imports": "off",
         "project/require-shared-request": "off",

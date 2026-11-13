@@ -1,0 +1,46 @@
+/* docs/design/{tokens,dark-colors,notification-tokens}.json */
+:root {
+  color-scheme: light dark;
+  --paper: light-dark(#f8f5ef, #201d23);
+  --surface: light-dark(#fffdfa, #302b33);
+  --ink: light-dark(#332d39, #f5efe8);
+  --muted: light-dark(#625b64, #c7bdc6);
+  --line: light-dark(#d5cec9, #554e56);
+  --accent: light-dark(#665375, #d1bbd9);
+  --rating: light-dark(#855300, #ffbb45);
+  --lime: #d9e8c2;
+  --tint: light-dark(#eee6ef, #413747);
+  --deep: light-dark(#47394f, #f1e5f0);
+  --skeleton: var(--tint);
+  --masthead: light-dark(#e9dfee, #3c3040);
+  --masthead-text: var(--ink);
+  --selected-background: var(--lime);
+  --selected-text: light-dark(var(--ink), #21142e);
+  --current-page-background: var(--accent);
+  --current-page-text: light-dark(var(--surface), #241536);
+  --focus-ring: light-dark(var(--accent), #dbc7e2);
+  --focus-on-accent: var(--lime);
+  --field-border: light-dark(var(--muted), #91869f);
+  --brand-icon-background: #d9cbe5;
+  --brand-icon-glyph: #47394f;
+  --error-surface: light-dark(#fbeae7, #402a2b);
+  --error-accent: light-dark(#993b37, #f1b3ab);
+  --error-border: light-dark(#ca877f, #a26e69);
+  --warning-surface: light-dark(#faeccc, #3a301f);
+  --warning-accent: light-dark(#815013, #f1cd8c);
+  --warning-border: light-dark(#c79b50, #a48552);
+  --success-surface: light-dark(#e5f1e4, #27392e);
+  --success-accent: light-dark(#356544, #abdbb5);
+  --success-border: light-dark(#91b597, #6c9278);
+  --info-surface: light-dark(#efeef0, #303036);
+  --info-accent: light-dark(#50515a, #d6d3da);
+  --info-border: light-dark(#a7a5ac, #82808a);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}

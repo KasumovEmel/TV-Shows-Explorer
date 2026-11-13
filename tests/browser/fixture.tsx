@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import { App } from '../../src/app';
-import { useNotify } from '@shared/components/NotificationProvider';
-import { initializeI18n } from '@shared/i18n';
+import { useNotify } from '../../src/app/notifications';
+import { initializeI18n } from '@/i18n';
 
-import type { NotificationEvent } from '@shared/components/NotificationProvider';
+import type { NotificationEvent } from '../../src/app/notifications';
 
 
 function FixtureEvents() {

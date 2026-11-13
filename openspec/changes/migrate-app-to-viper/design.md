@@ -30,7 +30,7 @@
 ```text
 src/app/
 ├── App.tsx                       # StrictMode, оболочка, слот для children, SearchPage
-├── ApiProvider/                  # SWRConfig, включая onError
+├── AppSWRConfig/                  # SWRConfig, включая onError
 ├── ErrorBoundary/                # включая RecoveryScreen
 ├── NotificationProvider/         # очередь, Notification и публичный useNotify
 ├── components/                   # Button, Icon, Brand
@@ -60,7 +60,7 @@ Presenter `Results` хранит выбранный жанр в локально
 ## Risks / Trade-offs
 
 - Смена запроса в полёте или два запуска по Enter и таймеру → сохранить раздельные текст и ключ, проверить список сетевых запросов и запоздалый ответ в `search-request.spec.ts`.
-- Изменение порядка провайдеров меняет время жизни кеша и очереди → сохранить `NotificationProvider → ErrorBoundary → ApiProvider → SearchPage` и тестовый `children` внутри `ApiProvider`. Проверить пустой поиск после восстановления и сохранённую выдачу при HTTP 429.
+- Изменение порядка провайдеров меняет время жизни кеша и очереди → сохранить `NotificationProvider → ErrorBoundary → AppSWRConfig → SearchPage` и тестовый `children` внутри `AppSWRConfig`. Проверить пустой поиск после восстановления и сохранённую выдачу при HTTP 429.
 - Перемонтирование поля при анимации теряет фокус и выделение → оставить один экземпляр поля; проверить обычное и уменьшенное движение в `search-transition.spec.ts`.
 - Перенос парсера или стилей меняет текст карточки либо размеры скелетона → проверить HTML-сущности, лимит описания, реальные и пустые карточки, мобильную ширину и клавиатурный переход к странице.
 

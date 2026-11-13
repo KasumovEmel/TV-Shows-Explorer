@@ -1,0 +1,16 @@
+.masthead {
+  --field-gap: clamp(24px, 8svh, 96px);
+  --field-height: 62px;
+  background: var(--masthead) url('./assets/signal.svg') no-repeat right top / auto 257px;
+  color: var(--masthead-text);
+}
+.masthead:not(:has([data-docked])) {
+  margin-bottom: calc(var(--field-gap) + var(--field-height));
+}
+@media (max-width: 767px) {
+  .masthead {
+    --field-height: 52px;
+    background-image: url('./assets/signal-mobile.svg');
+    background-size: auto 230px;
+  }
+}

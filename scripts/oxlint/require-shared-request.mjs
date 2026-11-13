@@ -1,7 +1,7 @@
 import { binding, requestTarget } from './request-target.mjs';
 
 
-const message = 'Для запросов используй request() из @shared/utils/request.';
+const message = 'Для запросов используй request() из @/app/utils/request.';
 
 export const requireSharedRequest = {
   create(context) {

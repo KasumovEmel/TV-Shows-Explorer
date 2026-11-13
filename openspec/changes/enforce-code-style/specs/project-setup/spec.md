@@ -31,7 +31,7 @@ Oxlint MUST проверять использование промисов и н
 
 #### Scenario: Новый эндпоинт
 
-- **WHEN** эндпоинт вызывает `request()` из `@shared/utils/request`
+- **WHEN** эндпоинт вызывает `request()` из `@/app/utils/request`
 - **THEN** проверка разрешает вызов без локального `try/catch`
 - **WHEN** код приложения за пределами общего клиента подключает клиент Axios или использует браузерный `fetch` или `XMLHttpRequest`
 - **THEN** Oxlint указывает использовать `request()`, даже если вызов обёрнут в `try/catch`
