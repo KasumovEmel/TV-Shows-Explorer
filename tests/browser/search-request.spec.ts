@@ -23,7 +23,9 @@ test('пустой старт, задержка, Enter и запоздалый �
   await page.clock.install();
   const now = new Date();
   await page.clock.pauseAt(now.getTime() + 1000);
-  await expect(page.locator('main').getByRole('button')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Use dark theme' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Switch to Russian' })).toBeVisible();
+  await expect(page.getByRole('listitem')).toHaveCount(0);
   expect(requests).toEqual([]);
   await field.fill('ol');
   await page.clock.runFor(200);

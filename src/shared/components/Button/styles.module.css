@@ -1,0 +1,47 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: var(--target);
+  min-width: var(--target);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  font-weight: 600;
+}
+.button:disabled {
+  opacity: 0.65;
+}
+.button:hover:enabled {
+  filter: brightness(0.96);
+}
+.primary {
+  background: var(--current-page-background);
+  color: var(--current-page-text);
+  font-size: 18px;
+  min-height: 56px;
+  padding: 10px 20px;
+}
+.icon {
+  padding: 0;
+  background: transparent;
+  color: inherit;
+}
+.icon:hover:enabled {
+  background: color-mix(in srgb, currentColor 9%, transparent);
+}
+.chip {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  border-radius: 22px;
+  padding: 8px 16px;
+  border-color: var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 400;
+}
+.chip[aria-pressed='true'] {
+  background: var(--selected-background);
+  color: var(--selected-text);
+  border-color: var(--selected-text);
+}

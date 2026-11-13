@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
 
 import palette from '../../docs/design/notification-tokens.json' with { type: 'json' };
-import en from '../../src/Shared/i18n/locales/en.json' with { type: 'json' };
-import ru from '../../src/Shared/i18n/locales/ru.json' with { type: 'json' };
+import en from '../../src/shared/i18n/locales/en.json' with { type: 'json' };
+import ru from '../../src/shared/i18n/locales/ru.json' with { type: 'json' };
 import { notify } from './notify';
 
 import type { NotificationKind } from '@shared/components/NotificationProvider';

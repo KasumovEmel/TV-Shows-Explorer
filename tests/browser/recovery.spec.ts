@@ -53,6 +53,7 @@ for (const width of [320, 390, 1440]) {
   });
 }
 test('тема сохраняет ввод, жанр и фокус; язык переключается на месте', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/');
   const field = page.getByRole('searchbox');
   await field.fill('a');
@@ -62,8 +63,16 @@ test('тема сохраняет ввод, жанр и фокус; язык п�
   await expect(chip).toBeFocused();
   await expect(chip).toHaveAttribute('aria-pressed', 'true');
   await expect(field).toHaveValue('a');
-  await page.getByRole('combobox').selectOption('ru');
+  const language = page.getByRole('button', { name: 'Switch to Russian' });
+  const bounds = await language.boundingBox();
+  expect(bounds!.height).toBeGreaterThanOrEqual(44);
+  expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(320);
+  await field.focus();
+  await page.keyboard.press('Shift+Tab');
+  await expect(language).toBeFocused();
+  await language.press('Enter');
   await expect(page.locator('html')).toHaveAttribute('lang', 'ru');
+  await expect(page.getByRole('button', { name: 'Переключить на английский' })).toBeFocused();
   await expect(page.getByRole('heading', { name: 'Медведь' })).toBeVisible();
   await page.reload();
   await expect(page.getByRole('searchbox', { name: 'Поиск сериалов' })).toBeVisible();

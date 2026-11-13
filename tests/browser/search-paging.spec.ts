@@ -14,11 +14,15 @@ test('граница раскрывает ровно одну группу, вк
   const cards = page.getByRole('listitem');
   await page.setViewportSize({ width: 1440, height: 2200 });
   await expect(cards).toHaveCount(3);
+  const hint = page.locator('footer').getByRole('status');
+  await expect(hint).toHaveText('Showing 3 of 7. Scroll down to see the rest.');
   await page.mouse.wheel(0, 150);
   await expect(cards).toHaveCount(6);
+  await expect(hint).toHaveText('Showing 6 of 7. Scroll down to see the rest.');
   await page.mouse.wheel(0, 150);
   await expect(cards).toHaveCount(7);
-  await expect(page.getByText('Showing all results')).toBeVisible();
+  await expect(hint).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Data from TVmaze' })).toBeVisible();
   await page.mouse.wheel(0, 150);
   await expect(cards).toHaveCount(7);
   expect(await cards.locator('h3').allTextContents()).toEqual([
@@ -47,7 +51,8 @@ test('клавиатурный переход 1 → 3 → 1 сохраняет �
   expect(group!.y).toBeGreaterThanOrEqual(top!.y + top!.height);
   expect(group!.y).toBeLessThan(top!.y + top!.height + 16);
   await page.setViewportSize({ width: 1440, height: 700 });
-  await page.mouse.wheel(0, 550);
+  const pageTwo = await page.getByRole('list', { name: 'Page 2' }).boundingBox();
+  await page.mouse.wheel(0, Math.ceil(pageTwo!.y - group!.y));
   await expect(nav.getByRole('link', { name: 'Page 2' })).toHaveAttribute('aria-current', 'page');
   await expect(first).toBeFocused();
   await page.mouse.wheel(0, 1500);
@@ -55,12 +60,16 @@ test('клавиатурный переход 1 → 3 → 1 сохраняет �
 });
 test('жанр седьмой карточки виден сразу; выбор и сброс начинают новую выдачу', async ({ page }) => {
   const comedy = page.getByRole('button', { name: 'Comedy' });
+  const width = (await comedy.boundingBox())!.width;
   await comedy.focus();
   await comedy.press('Space');
   await expect(comedy).toHaveAttribute('aria-pressed', 'true');
+  await expect(comedy.locator('svg')).toHaveCount(0);
+  expect((await comedy.boundingBox())!.width).toBe(width);
   await expect(page.getByText('1 show', { exact: true })).toBeVisible();
   await expect(page.getByRole('listitem')).toHaveCount(1);
   await expect(page.getByRole('heading', { name: 'Night Screening' })).toBeVisible();
+  await expect(page.locator('footer').getByRole('status')).toHaveCount(0);
   await expect(page.getByRole('navigation')).toHaveCount(0);
   await page.getByRole('button', { name: 'Mystery' }).click();
   await expect(page.getByRole('listitem')).toHaveCount(2);

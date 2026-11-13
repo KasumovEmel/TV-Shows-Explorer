@@ -9,11 +9,13 @@ export async function mockSearch(page: Page) {
   await page.route(searchRoute, (route) => {
     const q = new URL(route.request().url()).searchParams.get('q');
     if (q === 'night' || q === 'ноч') {
-      const json = nightShows.map(({ id, en, ru, genres, year, poster }) => ({
+      const json = nightShows.map(({ id, en, ru, genres, year, poster, rating, summary }) => ({
         show: {
           id,
           name: q === 'ноч' ? ru : en,
           genres,
+          rating: { average: rating },
+          summary,
           premiered: year + '-01-01',
           image: { medium: poster, original: poster },
         },

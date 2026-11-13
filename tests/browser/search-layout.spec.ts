@@ -12,11 +12,29 @@ for (const width of [1440, 390]) {
     await page.goto('/');
     const field = page.getByRole('searchbox', { name: 'Поиск сериалов' });
     await page.keyboard.press('Tab');
+    await expect(page.getByRole('button', { name: 'Включить тёмную тему' })).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(page.getByRole('button', { name: 'Переключить на английский' })).toBeFocused();
+    await page.keyboard.press('Tab');
     await expect(field).toBeFocused();
     const form = page.getByRole('search');
     const initial = await form.boundingBox();
     expect(initial!.width).toBe(wide ? 640 : 350);
+    let release!: () => void;
+    const pending = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    await page.route(searchRoute, async (route) => {
+      await pending;
+      await route.fallback();
+    });
     await field.fill('ноч');
+    const skeletons = page.getByRole('status').locator('[aria-hidden="true"] > div > div');
+    await expect(skeletons).toHaveCount(3);
+    await page.evaluate(() => document.fonts.ready);
+    const skeleton = await skeletons.first().boundingBox();
+    await expect(skeletons.first()).toHaveCSS('border-radius', '12px');
+    release();
     await expect(page.getByRole('listitem')).toHaveCount(3);
     await page.evaluate(() => document.fonts.ready);
     const same = await field.evaluate((el) => el === document.activeElement);
@@ -24,10 +42,18 @@ for (const width of [1440, 390]) {
     const posters = page.locator('li img');
     const first = await posters.nth(0).boundingBox(),
       second = await posters.nth(1).boundingBox();
-    expect(first!.x).toBe(wide ? 72 : 20);
-    expect(first!.width).toBe(wide ? 416 : 104);
-    expect(Math.abs(first!.y - (wide ? 454 : 470))).toBeLessThan(8);
-    expect(wide ? second!.x - first!.x : second!.y - first!.y).toBeCloseTo(wide ? 440 : 104, 0);
+    expect(first!.x).toBe(skeleton!.x);
+    expect(first!.width).toBe(skeleton!.width);
+    expect(first!.height).toBe(skeleton!.height);
+    const header = await page.locator('header > div').boundingBox();
+    const results = await page.locator('main > section').boundingBox();
+    expect(results!.x).toBe(header!.x);
+    expect(results!.width).toBe(header!.width);
+    expect(first!.height).toBeCloseTo((first!.width * 7) / 5, 1);
+    await expect(posters.first()).toHaveCSS('object-fit', 'contain');
+    await expect(posters.first().locator('..')).toHaveCSS('border-radius', '12px');
+    if (wide) expect(second!.x - first!.x).toBeCloseTo((results!.width + 24) / 3, 1);
+    else expect(second!.y).toBeGreaterThanOrEqual(first!.y + first!.height);
     await expect(form).toHaveCSS('height', wide ? '62px' : '52px');
     await expect(page.getByRole('button', { name: 'Очистить поиск' })).toHaveCSS(
       'min-width',
