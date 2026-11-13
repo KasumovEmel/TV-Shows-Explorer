@@ -1,7 +1,6 @@
 import { Visitor } from 'oxc-parser';
 
 import { hookName, unwrapExpression } from './hook-call.mjs';
-import lintConfig from './oxlint/format.json' with { type: 'json' };
 
 
 function isFunctionStatement(statement) {
@@ -74,11 +73,11 @@ export function separateStatements(code, parsed) {
     }
   }
 
-  const lastImport = parsed.module.staticImports.at(-1);
-  // Oxlint counts comment lines as spacing and can move an import's trailing comment.
-  const nextComment = lastImport && parsed.comments.find(({ start }) => start >= lastImport.end);
-  if (nextComment && !code.slice(lastImport.end, nextComment.start).trim()) {
-    padAfter(lastImport, code.length, lintConfig.rules['import/newline-after-import'][1].count);
+  for (const [index, statement] of parsed.program.body.entries()) {
+    const next = parsed.program.body[index + 1];
+    if (statement.type === 'ImportDeclaration' && next?.type !== 'ImportDeclaration') {
+      padAfter(statement, next?.start ?? code.length, 2);
+    }
   }
   new Visitor({
     Program: ({ body }) => visitStatements(body),

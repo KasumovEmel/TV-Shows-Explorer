@@ -1,7 +1,0 @@
-{
-  "$schema": "../../node_modules/oxlint/configuration_schema.json",
-  "plugins": ["import"],
-  "rules": {
-    "import/newline-after-import": ["error", { "count": 2 }]
-  }
-}

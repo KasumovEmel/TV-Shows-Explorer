@@ -63,3 +63,16 @@ test('локальный аргумент остаётся до вызова х�
   );
   assert.equal(await formatSource('View.tsx', formatted), formatted);
 });
+
+test('после блока импортов остаются ровно две пустые строки', async () => {
+  const imports = "import './a';\nimport './b';";
+  for (const tail of ['', ' // для импорта']) {
+    const next = '// для функции\nexport function run() {}\n';
+    const expected = imports + tail + '\n\n\n' + next;
+    for (const separator of ['\n', '\n\n\n', '\n\n\n\n']) {
+      assert.equal(await formatSource('module.ts', imports + tail + separator + next), expected);
+    }
+  }
+  assert.equal(await formatSource('module.ts', imports), imports + '\n');
+  assert.equal(await formatSource('module.js', imports + '\nrun();'), imports + '\n\n\nrun();\n');
+});

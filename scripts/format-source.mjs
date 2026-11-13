@@ -1,9 +1,5 @@
 import { Biome } from '@biomejs/js-api/nodejs';
-import { execFileSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { extname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readFileSync } from 'node:fs';
 import { parseSync } from 'oxc-parser';
 import { format } from 'oxfmt';
 
@@ -28,7 +24,7 @@ biome.applyConfiguration(projectKey, {
   },
 });
 
-async function formatStatements(filename, input) {
+export async function formatSource(filename, input) {
   input = biome.lintContent(projectKey, input, {
     filePath: filename,
     fixFileMode: 'safeFixes',
@@ -45,34 +41,10 @@ async function formatStatements(filename, input) {
 }
 
 export async function formatSources(files) {
-  if (!files.length) {
-    return [];
+  const formatted = [];
+  for (const { filename, input } of files) {
+    formatted.push(await formatSource(filename, input));
   }
-  // Oxlint fixes files on disk. Stage the editor buffer or the whole CLI batch in isolation.
-  const directory = mkdtempSync(join(tmpdir(), 'tv-shows-format-'));
-  try {
-    const paths = [];
-    for (const { filename, input } of files) {
-      const path = join(directory, paths.length + extname(filename));
-      writeFileSync(path, await formatStatements(filename, input));
-      paths.push(path);
-    }
-    const cli = new URL('bin/oxlint', import.meta.resolve('oxlint/package.json'));
-    const configPath = fileURLToPath(new URL('./oxlint/format.json', import.meta.url));
-    const args = [fileURLToPath(cli), '-c', configPath, '-A', 'correctness', '--fix', '.'];
-    execFileSync(process.execPath, args, {
-      cwd: directory,
-      stdio: ['ignore', process.stderr, process.stderr],
-    });
-
-    return paths.map((path) => readFileSync(path, 'utf8'));
-  } finally {
-    rmSync(directory, { recursive: true, force: true });
-  }
-}
-
-export async function formatSource(filename, input) {
-  const [formatted] = await formatSources([{ filename, input }]);
 
   return formatted;
 }
