@@ -8,17 +8,25 @@ import { behavior } from '@shared/styles/tokens';
 import type { PagedResultsProps } from './types';
 
 
-export function usePresenter({ cards }: PagedResultsProps) {
+export function usePresenter({ cards, loading }: PagedResultsProps) {
   const { t } = useTranslation();
-  const total = cards.length,
+
+  const total = loading ? 0 : cards.length,
     pages = Math.ceil(total / behavior.pageSize);
+
   const [opened, setOpened] = useState(1);
+
   const [current, setCurrent] = useState(1);
+
   const list = useRef<HTMLDivElement>(null),
     bar = useRef<HTMLDivElement>(null);
+
   const tail = useRef<HTMLDivElement>(null);
+
   const jumpY = useRef<number | null>(null);
+
   const [target, setTarget] = useState<{ page: number; keyboard: boolean } | null>(null);
+
   const visible = Math.min(opened, pages);
   const groups = Array.from({ length: visible }, (_, i) => ({
     page: i + 1,
@@ -30,16 +38,27 @@ export function usePresenter({ cards }: PagedResultsProps) {
     setOpened((n) => Math.max(n, page));
     setTarget({ page, keyboard });
   }
+
   usePageScroll(list, bar, jumpY, visible, pages, setOpened, setCurrent);
+
   useLayoutEffect(() => {
-    if (tail.current) tail.current.style.height = '0px';
+    if (tail.current) {
+      tail.current.style.height = '0px';
+    }
   }, [visible]);
+
   useLayoutEffect(() => {
-    if (!tail.current) return;
-    if (!target || !list.current || !bar.current) return;
+    if (!tail.current) {
+      return;
+    }
+    if (!target || !list.current || !bar.current) {
+      return;
+    }
     tail.current.style.height = '0px';
     const group = list.current.children[target.page - 1];
-    if (!(group instanceof HTMLElement)) return;
+    if (!(group instanceof HTMLElement)) {
+      return;
+    }
     const top = bar.current.offsetHeight;
     const y = window.scrollY + group.getBoundingClientRect().top - top;
     // Give a short group enough room to reach the toolbar, without moving the footer.
@@ -50,11 +69,15 @@ export function usePresenter({ cards }: PagedResultsProps) {
       ) + 'px';
     window.scrollTo(0, y);
     jumpY.current = window.scrollY;
-    if (target.keyboard) group.focus({ preventScroll: true });
+    if (target.keyboard) {
+      group.focus({ preventScroll: true });
+    }
     setCurrent(target.page);
     setTarget(null);
   }, [target, pages]);
+
   return {
+    loading,
     heading: t('catalog.results'),
     count: t('catalog.count', { count: total }),
     pages,

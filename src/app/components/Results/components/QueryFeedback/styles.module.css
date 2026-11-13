@@ -1,13 +1,7 @@
 .feedback {
   padding: 30px 0;
 }
-.feedback p {
+.feedback > p {
   margin: 10px 0 20px;
   color: var(--muted);
-}
-.skeletons {
-  margin-top: 24px;
-}
-.skeleton {
-  background: var(--skeleton);
 }

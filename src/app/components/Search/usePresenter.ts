@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useLayoutEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
@@ -8,6 +8,8 @@ import type { SearchProps } from './types';
 
 
 export function usePresenter({
+  headerRef,
+  inputRef,
   restored,
   value,
   onChange,
@@ -16,17 +18,18 @@ export function usePresenter({
   onToggleTheme,
 }: SearchProps) {
   const { t } = useTranslation();
+
   const notify = useNotify();
-  const inputRef = useRef<HTMLInputElement>(null);
+
   useLayoutEffect(() => {
     if (restored) {
       inputRef.current?.focus();
       notify({ kind: 'success' });
     }
-  }, [restored, notify]);
+  }, [restored, notify, inputRef]);
 
   return {
-    start: !value,
+    headerRef,
     label: t('search.label'),
     heading: t('catalog.heading'),
     themeIcon: theme === 'dark' ? ('sun' as const) : ('moon' as const),

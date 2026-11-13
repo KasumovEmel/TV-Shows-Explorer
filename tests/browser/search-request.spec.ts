@@ -12,7 +12,9 @@ test('пустой старт, задержка, Enter и запоздалый �
   await page.route(searchRoute, async (route) => {
     const q = new URL(route.request().url()).searchParams.get('q')!;
     requests.push(q);
-    if (q === 'old') await old;
+    if (q === 'old') {
+      await old;
+    }
     await route.fulfill({
       json: [{ show: { id: 1, name: q, genres: [], premiered: null, image: null } }],
     });
@@ -32,6 +34,8 @@ test('пустой старт, задержка, Enter и запоздалый �
   await field.fill(' old ');
   await page.clock.runFor(299);
   expect(requests).toEqual([]);
+  await expect(page.getByRole('banner')).not.toHaveAttribute('data-docked');
+  await expect(page.getByRole('heading', { name: 'Searching for shows…' })).toHaveCount(0);
   await page.clock.runFor(1);
   await expect.poll(() => requests.slice()).toEqual(['old']);
   await field.fill('new');
@@ -48,14 +52,18 @@ test('пустой старт, задержка, Enter и запоздалый �
   await response;
   await page.clock.runFor(600);
   await expect(page.getByRole('listitem')).toHaveCount(0);
+  await expect(page.getByRole('banner')).not.toHaveAttribute('data-docked');
   expect(requests).toEqual(['old', 'new']);
 });
 test('ожидание, ошибка, повтор того же запроса и пустой результат', async ({ page }) => {
   const qs: string[] = [];
   await page.route(searchRoute, async (route) => {
     qs.push(new URL(route.request().url()).searchParams.get('q')!);
-    if (qs.length === 1) await route.fulfill({ status: 503, body: '' });
-    else await route.fulfill({ json: [] });
+    if (qs.length === 1) {
+      await route.fulfill({ status: 503, body: '' });
+    } else {
+      await route.fulfill({ json: [] });
+    }
   });
   await page.goto('/');
   const field = page.getByRole('searchbox');
@@ -67,8 +75,10 @@ test('ожидание, ошибка, повтор того же запроса 
   await expect(page.locator('[data-kind="error"]')).toContainText(
     'Could not load the data. Please try again.',
   );
+  await expect(page.getByRole('banner')).toHaveAttribute('data-docked', '');
   await page.getByRole('button', { name: 'Try again' }).click();
   await expect(page.getByText('No shows found')).toBeVisible();
+  await expect(page.getByRole('banner')).toHaveAttribute('data-docked', '');
   await expect(field).toHaveValue('unknown');
   expect(qs).toEqual(['unknown', 'unknown']);
 });

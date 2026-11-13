@@ -9,7 +9,7 @@ import { useNotify } from '@shared/components/NotificationProvider';
 import type { ResultsProps } from './types';
 
 
-export function usePresenter({ query }: ResultsProps) {
+export function usePresenter({ query, entering }: ResultsProps) {
   const { t } = useTranslation();
   const notify = useNotify();
   const [{ genre, revision }, setFilter] = useState({ genre: '', revision: 0 });
@@ -44,7 +44,7 @@ export function usePresenter({ query }: ResultsProps) {
     cards,
     revision,
     chips,
-    feedback,
+    feedback: entering ? ('loading' as const) : feedback,
     genreLabel: t('catalog.genres'),
     retry: () => void mutate(),
   };

@@ -4,6 +4,7 @@ import { ApiProvider } from './components/ApiProvider';
 import { Results } from './components/Results';
 import { Search } from './components/Search';
 import { useSearchQuery } from './useSearchQuery';
+import { useSearchTransition } from './useSearchTransition';
 import { ErrorBoundary } from '@shared/components/ErrorBoundary';
 import { NotificationProvider } from '@shared/components/NotificationProvider';
 import { useTheme } from '@shared/theme/useTheme';
@@ -33,10 +34,16 @@ export function App({ children }: PropsWithChildren) {
 }
 
 function SearchPage({ restored, theme, onToggleTheme }: SearchPageProps) {
-  const { value, term, committedQuery, onChange, onSubmit } = useSearchQuery();
+  const { value, term, committedQuery, phase, finishEntrance, onChange, onSubmit } =
+    useSearchQuery();
+
+  const { headerRef, inputRef, resultsRef } = useSearchTransition(phase !== 'idle', finishEntrance);
+
   return (
-    <main>
+    <>
       <Search
+        headerRef={headerRef}
+        inputRef={inputRef}
         value={value}
         onChange={onChange}
         onSubmit={onSubmit}
@@ -44,7 +51,11 @@ function SearchPage({ restored, theme, onToggleTheme }: SearchPageProps) {
         theme={theme}
         onToggleTheme={onToggleTheme}
       />
-      {term && <Results key={term} query={committedQuery} />}
-    </main>
+      <main ref={resultsRef}>
+        {phase !== 'idle' && (
+          <Results key={term} query={committedQuery} entering={phase === 'entering'} />
+        )}
+      </main>
+    </>
   );
 }

@@ -3,15 +3,16 @@
   top: 0;
   z-index: 1;
   background: var(--paper);
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  min-height: calc(var(--target) + 4px);
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
   gap: 8px;
   padding: 2px 0;
   margin-bottom: 18px;
 }
-.heading > div {
+.heading > :first-child {
   display: flex;
   align-items: center;
   gap: 18px;
@@ -22,13 +23,19 @@
   font-weight: 600;
   letter-spacing: -1.2px;
 }
-.heading span[role='status'] {
+.count {
   background: var(--tint);
   color: var(--deep);
   border-radius: 18px;
   padding: 8px 16px;
   font: 400 12px var(--font-label);
   text-transform: uppercase;
+}
+.countSkeleton {
+  width: 86px;
+  height: 30px;
+  border-radius: 18px;
+  background: var(--skeleton);
 }
 .groups {
   display: grid;
@@ -48,7 +55,7 @@
   .heading {
     margin-bottom: 8px;
   }
-  .heading > div {
+  .heading > :first-child {
     flex-direction: column;
     align-items: start;
     gap: 2px;
@@ -56,11 +63,23 @@
   .heading h2 {
     font-size: 23px;
   }
-  .heading span[role='status'] {
+  .count {
     padding: 0;
     background: transparent;
     color: var(--muted);
     font: 400 14px var(--font-ui);
     text-transform: none;
+  }
+  .countSkeleton {
+    width: 60px;
+    height: 1lh;
+    font: 400 14px/normal var(--font-ui);
+    background: linear-gradient(var(--skeleton), var(--skeleton)) left center / 100% 0.7em no-repeat;
+  }
+}
+@media (max-width: 480px) {
+  .heading {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto var(--target);
   }
 }

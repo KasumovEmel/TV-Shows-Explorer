@@ -4,8 +4,9 @@ import type { PageNavProps } from './types';
 import type { MouseEvent } from 'react';
 
 
-export function usePresenter({ pages, current, jump }: PageNavProps) {
+export function usePresenter({ pages, current, jump, loading }: PageNavProps) {
   const { t } = useTranslation();
+
   const numbers = Array.from({ length: pages }, (_, i) => i + 1).filter(
     (n) => pages <= 5 || n === 1 || n === pages || Math.abs(n - current) <= 1,
   );
@@ -20,5 +21,6 @@ export function usePresenter({ pages, current, jump }: PageNavProps) {
       jump(page, event.detail === 0);
     },
   }));
-  return { links, label: t('catalog.pages') };
+
+  return { links, loading, label: t('catalog.pages') };
 }

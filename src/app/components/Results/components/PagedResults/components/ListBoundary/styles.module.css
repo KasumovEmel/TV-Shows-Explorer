@@ -16,8 +16,14 @@
   }
 }
 
-.end a {
+.source {
   margin-inline-start: auto;
   color: inherit;
   font-size: 14px;
+}
+.placeholder {
+  color: transparent;
+  background: linear-gradient(var(--skeleton), var(--skeleton)) center / 100% 0.75em no-repeat;
+  box-decoration-break: clone;
+  user-select: none;
 }

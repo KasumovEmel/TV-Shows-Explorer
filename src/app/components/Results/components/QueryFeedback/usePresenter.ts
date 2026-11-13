@@ -1,21 +1,24 @@
 import { useTranslation } from 'react-i18next';
 
-import { behavior } from '@shared/styles/tokens';
-
 import type { QueryFeedbackProps } from './types';
 
 
+const titleKeys = {
+  empty: 'catalog.noMatches',
+  error: 'catalog.error',
+} as const;
+
 export function usePresenter({ state, retry }: QueryFeedbackProps) {
   const { t } = useTranslation();
-  const failed = state === 'error',
-    loading = state === 'loading';
+
+  const failed = state === 'error';
+  const detailKey = failed ? 'catalog.retrySearch' : 'catalog.tryAnother';
+
   return {
     failed,
-    loading,
-    skeletonCount: behavior.pageSize,
     role: failed ? 'alert' : 'status',
-    title: t(failed ? 'catalog.error' : loading ? 'catalog.loading' : 'catalog.noMatches'),
-    detail: loading ? null : t(failed ? 'catalog.retrySearch' : 'catalog.tryAnother'),
+    title: t(titleKeys[state]),
+    detail: t(detailKey),
     action: t('catalog.retry'),
     retry,
   };

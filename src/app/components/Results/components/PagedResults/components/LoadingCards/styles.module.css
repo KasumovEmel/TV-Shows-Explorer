@@ -1,0 +1,55 @@
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.skeletons {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.title,
+.year,
+.rating > span,
+.genres,
+.summary > span {
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 0.24em;
+  background: var(--skeleton);
+  height: 0.8em;
+}
+.title {
+  width: 78%;
+}
+.year {
+  width: 11ch;
+}
+.rating {
+  color: var(--skeleton);
+}
+.rating > span {
+  width: 2.5ch;
+}
+.genres {
+  width: 64%;
+}
+.summary {
+  display: grid;
+  grid-auto-rows: 1lh;
+  align-items: center;
+}
+.summary > :nth-child(even) {
+  width: 91%;
+}
+.summary > :last-child {
+  width: 62%;
+}
+@media (max-width: 1023px) {
+  .summary > :nth-child(n + 3):not(:last-child) {
+    display: none;
+  }
+}

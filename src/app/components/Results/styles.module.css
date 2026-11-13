@@ -5,29 +5,53 @@
   padding: 26px 0 44px;
 }
 .genres {
-  display: flex;
+  --chip-rows-height: var(--target);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: var(--chip-rows-height);
   align-items: center;
-  flex-wrap: wrap;
   gap: 8px;
   border-bottom: 1px solid var(--line);
   padding-bottom: 30px;
   margin-bottom: 26px;
 }
-.genres span {
+.genres > span {
   margin-right: 23px;
   font-size: 18px;
   color: var(--muted);
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: start;
+  gap: 8px;
+  height: calc(var(--chip-rows-height) + 8px);
+  padding: 4px;
+  margin: -4px;
+  overflow: auto;
+  scrollbar-width: thin;
+}
+.chipSkeleton {
+  height: var(--target);
+  border-radius: 22px;
+  background: var(--skeleton);
+}
+.chips[aria-hidden='true'] {
+  overflow: hidden;
 }
 @media (max-width: 767px) {
   .results {
     padding-top: 6px;
   }
   .genres {
+    --chip-rows-height: calc(2 * var(--target) + 8px);
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 1.45em var(--chip-rows-height);
+    font-size: 15px;
     padding-bottom: 18px;
     margin-bottom: 17px;
   }
-  .genres span {
-    flex-basis: 100%;
+  .genres > span {
     font-size: 15px;
   }
 }
