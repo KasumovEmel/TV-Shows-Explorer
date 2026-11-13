@@ -15,7 +15,7 @@ export function usePresenter({ state, retry }: QueryFeedbackProps) {
     skeletonCount: behavior.pageSize,
     role: failed ? 'alert' : 'status',
     title: t(failed ? 'catalog.error' : loading ? 'catalog.loading' : 'catalog.noMatches'),
-    detail: loading ? null : t(failed ? 'catalog.checkConnection' : 'catalog.tryAnother'),
+    detail: loading ? null : t(failed ? 'catalog.retrySearch' : 'catalog.tryAnother'),
     action: t('catalog.retry'),
     retry,
   };

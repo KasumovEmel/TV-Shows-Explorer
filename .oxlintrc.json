@@ -1,10 +1,47 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "plugins": ["typescript", "react"],
+  "jsPlugins": ["./scripts/oxlint/project-rules.mjs"],
   "options": { "typeAware": true, "typeCheck": true },
   "rules": {
     "max-lines": ["error", { "max": 120, "skipBlankLines": false, "skipComments": false }],
     "typescript/no-floating-promises": "error"
   },
+  "overrides": [
+    {
+      "files": ["src/**"],
+      "rules": {
+        "project/require-shared-request": "error",
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "axios",
+                "importNames": ["default", "Axios", "create", "getAdapter"],
+                "allowTypeImports": true,
+                "message": "Для запросов используй request() из @shared/utils/request."
+              }
+            ],
+            "patterns": [
+              {
+                "group": ["axios/**"],
+                "allowTypeImports": true,
+                "message": "Для запросов используй request() из @shared/utils/request."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/shared/utils/request.ts"],
+      "rules": {
+        "no-restricted-imports": "off",
+        "project/require-shared-request": "off",
+        "project/require-request-catch": "error"
+      }
+    }
+  ],
   "ignorePatterns": ["dist/"]
 }

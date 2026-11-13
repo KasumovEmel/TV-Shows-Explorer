@@ -1,7 +1,6 @@
 import { StrictMode } from 'react';
 
-import { SWRConfig } from 'swr';
-
+import { ApiProvider } from './components/ApiProvider';
 import { Results } from './components/Results';
 import { Search } from './components/Search';
 import { useSearchQuery } from './useSearchQuery';
@@ -15,8 +14,6 @@ import type { PropsWithChildren } from 'react';
 import '@shared/styles/base.css';
 
 
-const searchCache = { provider: () => new Map() };
-
 export function App({ children }: PropsWithChildren) {
   const { theme, toggle } = useTheme();
   return (
@@ -24,10 +21,10 @@ export function App({ children }: PropsWithChildren) {
       <NotificationProvider>
         <ErrorBoundary>
           {(restored) => (
-            <SWRConfig value={searchCache}>
+            <ApiProvider>
               {children}
               <SearchPage restored={restored} theme={theme} onToggleTheme={toggle} />
-            </SWRConfig>
+            </ApiProvider>
           )}
         </ErrorBoundary>
       </NotificationProvider>

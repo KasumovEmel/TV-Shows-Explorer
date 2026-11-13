@@ -64,6 +64,9 @@ test('ожидание, ошибка, повтор того же запроса 
   await expect(
     page.getByRole('alert').filter({ hasText: 'Couldn’t load the results' }),
   ).toBeVisible();
+  await expect(page.locator('[data-kind="error"]')).toContainText(
+    'Could not load the data. Please try again.',
+  );
   await page.getByRole('button', { name: 'Try again' }).click();
   await expect(page.getByText('No shows found')).toBeVisible();
   await expect(field).toHaveValue('unknown');

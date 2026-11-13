@@ -16,7 +16,7 @@
     "all": "All",
     "count_one": "{{count}} show",
     "count_other": "{{count}} shows",
-    "checkConnection": "Check your connection and try the same search again.",
+    "retrySearch": "You can try the same search again.",
     "noYear": "Year unknown",
     "premiereYear": "Premiered: {{year}}",
     "rating": "Rating: {{rating}}/10",
@@ -73,11 +73,13 @@
     "dismiss": "Dismiss notification",
     "error": {
       "title": "Error",
-      "message": "Could not update the results."
+      "message": "Could not update the results.",
+      "requestFailed": "Could not load the data. Please try again."
     },
     "warning": {
       "title": "Warning",
-      "message": "Network connection lost."
+      "message": "Network connection lost.",
+      "rateLimit": "Too many requests. Please wait a moment and try again."
     },
     "success": {
       "title": "Success",

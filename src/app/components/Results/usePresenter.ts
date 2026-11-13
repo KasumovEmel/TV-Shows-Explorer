@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useSWR from 'swr';
 
-import { fetchShows } from './utils/fetchShows';
+import { fetchShows, showsSearchUrl } from './api/fetchShows';
 import { useNotify } from '@shared/components/NotificationProvider';
 
 import type { ResultsProps } from './types';
@@ -14,14 +14,13 @@ export function usePresenter({ query }: ResultsProps) {
   const notify = useNotify();
   const [{ genre, revision }, setFilter] = useState({ genre: '', revision: 0 });
   const { data, error, mutate, isValidating } = useSWR(
-    query ? (['https://api.tvmaze.com/search/shows', query] as const) : null,
+    query ? ([showsSearchUrl, query] as const) : null,
     fetchShows,
     { shouldRetryOnError: false },
   );
   const stale = Boolean(data && error);
   useEffect(() => {
     if (stale) {
-      notify({ kind: 'error' });
       notify({ kind: 'info' });
     }
   }, [stale, notify]);

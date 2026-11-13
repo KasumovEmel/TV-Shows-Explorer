@@ -1,6 +1,6 @@
 import { shortSummary } from './shortSummary';
 
-import type { TVmazeShow } from '../types';
+import type { TVmazeShow } from '../api/types';
 import type { Show } from '@shared/types/show';
 
 
