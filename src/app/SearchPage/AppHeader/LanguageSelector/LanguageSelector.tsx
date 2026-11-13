@@ -6,7 +6,7 @@ import { Button } from '@/app/components/Button';
 import styles from './styles.module.css';
 
 
-export function LanguagePicker() {
+export function LanguageSelector() {
   const { label, russian, pending, toggle } = usePresenter();
 
   return (
