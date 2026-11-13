@@ -10,7 +10,7 @@
 
 Поиску нужен доступ к интернету. Для публикации достаточно раздать содержимое `dist/` по HTTP, в том числе из подкаталога. Семь сериалов из макета используются в браузерных тестах для проверки страниц и фильтров.
 
-[Оболочка Season One](openspec/changes/design-app-shell/design.md) следует системной теме и возвращает пользователя в пустое поле поиска после сбоя рендера.
+[Оболочка Season One](openspec/changes/archive/2026-11-13-design-app-shell/design.md) следует системной теме и возвращает пользователя в пустое поле поиска после сбоя рендера.
 
 Общие элементы находятся в [Shared/components](src/Shared/components): `Brand`, `Icon`, `Button`, `SearchField`, `GenreChip`, `ShowCard` и `NotificationProvider`. Новый экран может вызвать `useNotify()` и передать событие, например `notify({ kind: 'warning' })`. Для собственного текста передай `messageKey` с ключом из обоих словарей. [Правила очереди, закрытия и фокуса](docs/design/system-components.md).
 
