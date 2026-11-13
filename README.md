@@ -18,6 +18,10 @@
 
 ## Запуск
 
+[Открыть Season One на GitHub Pages](https://kasumovemel.github.io/TV-Shows-Explorer/).
+
+Для публикации версии из `main` открой [Publish Season One](https://github.com/KasumovEmel/TV-Shows-Explorer/actions/workflows/pages.yml), выбери **Run workflow** и ветку `main`. Из терминала тот же процесс запускается отправкой нового тега вида `pages-*` на нужном коммите. GitHub собирает приложение и публикует его из ветки `gh-pages`.
+
 Потребуются Node.js 22.12 или новее и pnpm 12.18.0. Из корня проекта:
 
 ```sh

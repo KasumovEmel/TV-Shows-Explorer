@@ -1,0 +1,60 @@
+name: Publish Season One
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['pages-*']
+
+concurrency:
+  group: publish-season-one
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - uses: pnpm/action-setup@v6
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - uses: actions/upload-artifact@v7
+        with:
+          name: site
+          path: dist/
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: gh-pages
+          path: published
+      - uses: actions/download-artifact@v8
+        with:
+          name: site
+          path: dist
+      - name: Publish the build to gh-pages
+        run: |
+          rsync -a --delete --exclude=.git dist/ published/
+          cd published
+          touch .nojekyll
+          git add --all
+          if ! git diff --cached --quiet; then
+            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m "build(pages): publish ${GITHUB_SHA::7}"
+            git push origin HEAD:gh-pages
+          fi
+      - name: Request a GitHub Pages build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds"
