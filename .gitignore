@@ -1,4 +1,5 @@
 node_modules/
+/openspec/
 dist/
 test-results/
 .rsbuild/
