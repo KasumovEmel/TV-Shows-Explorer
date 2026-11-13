@@ -7,14 +7,17 @@ import type { BoundaryState, ErrorBoundaryProps } from './types';
 export class ErrorBoundary extends Component<ErrorBoundaryProps, BoundaryState> {
   state: BoundaryState = { failed: false, retrying: false, attempt: 0 };
   private locked = false;
+
   static getDerivedStateFromError() {
     return { failed: true, retrying: false };
   }
+
   componentDidUpdate() {
     if (!this.state.retrying) {
       this.locked = false;
     }
   }
+
   private restore = () => {
     if (this.locked || !this.state.failed) {
       return;
@@ -24,6 +27,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, BoundaryState> 
       this.setState(({ attempt }) => ({ failed: false, retrying: false, attempt: attempt + 1 }));
     });
   };
+
   render() {
     const { failed, retrying, attempt } = this.state;
     if (failed) {

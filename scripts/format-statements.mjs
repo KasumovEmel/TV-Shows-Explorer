@@ -1,5 +1,6 @@
 import { Visitor } from 'oxc-parser';
 
+import { separateClassMembers } from './format-class-members.mjs';
 import { hookName, unwrapExpression } from './hook-call.mjs';
 
 
@@ -97,6 +98,7 @@ export function separateStatements(code, parsed) {
     }
   }
   new Visitor({
+    ClassBody: ({ body }) => separateClassMembers(body, padAfter),
     Program: ({ body }) => visitStatements(body),
     BlockStatement: ({ body }) => visitStatements(body),
     TSModuleBlock: ({ body }) => visitStatements(body),
