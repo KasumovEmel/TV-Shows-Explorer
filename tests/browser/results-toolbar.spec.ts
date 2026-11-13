@@ -4,9 +4,7 @@ import { searchRoute } from './mockSearch';
 
 
 for (const width of [320, 1440]) {
-  test(`панели над карточками сохраняют высоту при разном числе жанров и страниц, ${width}px`, async ({
-    page,
-  }) => {
+  test(`отступы над карточками при разном числе жанров и страниц, ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 1000 });
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/');
@@ -14,7 +12,8 @@ for (const width of [320, 1440]) {
     await expect(field).toBeVisible();
     await page.evaluate(() => document.fonts.ready);
 
-    for (const total of [1, 30]) {
+    for (const total of [1, 2, 30]) {
+      const genres = total === 1 ? ['Drama', 'Romance'] : [];
       const request = page.waitForRequest(searchRoute);
       let release!: () => void;
       const pending = new Promise<void>((resolve) => {
@@ -29,7 +28,7 @@ for (const width of [320, 1440]) {
               show: {
                 id: i,
                 name: 'Show ' + i,
-                genres: total === 1 ? [] : ['Genre ' + i],
+                genres: total === 30 ? ['Genre ' + i] : genres,
                 premiered: null,
                 image: null,
               },
@@ -56,9 +55,15 @@ for (const width of [320, 1440]) {
       release();
       const firstCard = main.getByRole('listitem').first();
       await expect(firstCard).toBeVisible();
-      expect((await firstCard.boundingBox())!.y).toBe(before!.y);
+      const card = await firstCard.boundingBox();
+      if (width === 1440 || total === 30) {
+        expect(card!.y).toBe(before!.y);
+      } else {
+        const count = await main.getByRole('status').boundingBox();
+        expect(card!.y - count!.y - count!.height).toBeLessThanOrEqual(8);
+      }
       await expect(footer.getByRole('link', { name: 'Data from TVmaze' })).toBeVisible();
-      if (total > 1) {
+      if (total === 30) {
         await expect(footer.getByRole('status')).toContainText('Showing 3 of 30');
         expect((await footer.boundingBox())!.height).toBe(loadingFooter!.height);
         const last = main.getByRole('button', { name: 'Genre 29', exact: true });
@@ -67,8 +72,20 @@ for (const width of [320, 1440]) {
         await last.press('Space');
         await expect(last).toHaveAttribute('aria-pressed', 'true');
       } else {
-        await expect(main.getByRole('group')).toHaveCount(0);
         await expect(main.getByRole('navigation')).toHaveCount(0);
+        const chips = main.getByRole('group');
+        if (total === 2) {
+          await expect(chips).toHaveCount(0);
+          if (width === 320) {
+            const banner = await page.getByRole('banner').boundingBox();
+            const heading = await main.getByRole('heading', { level: 2 }).boundingBox();
+            expect(heading!.y - banner!.y - banner!.height).toBeLessThanOrEqual(12);
+          }
+        } else if (width === 320) {
+          const lastChip = await chips.getByRole('button').last().boundingBox();
+          const filter = await chips.locator('..').boundingBox();
+          expect(filter!.y + filter!.height - lastChip!.y - lastChip!.height).toBeCloseTo(13);
+        }
       }
     }
   });

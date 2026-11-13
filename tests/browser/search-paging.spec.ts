@@ -10,6 +10,22 @@ test.beforeEach(async ({ page }) => {
   await page.getByRole('searchbox').fill('night');
   await expect(page.getByRole('listitem')).toHaveCount(3);
 });
+test('в обычном окне прокрутка раскрывает следующую тройку только у края списка', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 700 });
+  const cards = page.getByRole('listitem');
+  await page.mouse.wheel(0, 80);
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+  await expect(cards).toHaveCount(3);
+  await page.mouse.wheel(0, 1000);
+  await expect(cards).toHaveCount(6);
+  await page.mouse.wheel(0, 1000);
+  await expect(cards).toHaveCount(7);
+  await page.mouse.wheel(0, -2000);
+  await expect(page.getByRole('link', { name: 'Page 1' })).toHaveAttribute('aria-current', 'page');
+  await expect(cards).toHaveCount(7);
+});
 test('граница раскрывает ровно одну группу, включая высокое окно', async ({ page }) => {
   const cards = page.getByRole('listitem');
   await page.setViewportSize({ width: 1440, height: 2200 });
@@ -94,10 +110,8 @@ test('короткий список: переход ко второй групп
   const group = page.getByRole('list', { name: 'Page 2' });
   await expect(group).toBeFocused();
   await expect(second).toHaveAttribute('aria-current', 'page');
-  const top = await nav.boundingBox(),
-    cards = await group.boundingBox();
-  expect(cards!.y - top!.y - top!.height).toBeLessThan(16);
-  expect(cards!.y).toBeGreaterThanOrEqual(top!.y + top!.height);
+  await expect(group).toBeInViewport({ ratio: 0.99 });
+  await expect(page.locator('footer')).toBeInViewport({ ratio: 1 });
   await expect(page.getByRole('listitem')).toHaveCount(6);
   await page.keyboard.press('PageDown');
   await expect(page.getByRole('listitem')).toHaveCount(7);

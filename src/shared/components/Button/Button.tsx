@@ -9,7 +9,7 @@ export function Button(props: ButtonProps) {
 
   return (
     <button type="button" {...button} className={className}>
-      {icon && <Icon name={icon} size={size} />}
+      {typeof icon === 'string' ? <Icon name={icon} size={size} /> : icon}
       {children}
     </button>
   );

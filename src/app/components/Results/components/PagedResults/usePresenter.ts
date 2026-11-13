@@ -3,6 +3,7 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { usePageScroll } from './usePageScroll';
+import { usePageViewport } from './usePageViewport';
 import { behavior } from '@shared/styles/tokens';
 
 import type { PagedResultsProps } from './types';
@@ -21,11 +22,7 @@ export function usePresenter({ cards, loading }: PagedResultsProps) {
   const list = useRef<HTMLDivElement>(null),
     bar = useRef<HTMLDivElement>(null);
 
-  const tail = useRef<HTMLDivElement>(null);
-
-  const jumpY = useRef<number | null>(null);
-
-  const [target, setTarget] = useState<{ page: number; keyboard: boolean } | null>(null);
+  const pendingJump = useRef<{ page: number; keyboard: boolean } | null>(null);
 
   const visible = Math.min(opened, pages);
   const groups = Array.from({ length: visible }, (_, i) => ({
@@ -35,46 +32,25 @@ export function usePresenter({ cards, loading }: PagedResultsProps) {
     cards: cards.slice(i * behavior.pageSize, (i + 1) * behavior.pageSize),
   }));
   function jump(page: number, keyboard: boolean) {
-    setOpened((n) => Math.max(n, page));
-    setTarget({ page, keyboard });
+    if (page <= visible) {
+      jumpToPage(page, keyboard);
+    } else {
+      pendingJump.current = { page, keyboard };
+      setOpened(page);
+    }
   }
 
-  usePageScroll(list, bar, jumpY, visible, pages, setOpened, setCurrent);
+  const { jumpY, jumpToPage } = usePageViewport(list, bar, visible, pages, setCurrent);
+
+  usePageScroll(list, jumpY, visible, pages, setOpened);
 
   useLayoutEffect(() => {
-    if (tail.current) {
-      tail.current.style.height = '0px';
+    const target = pendingJump.current;
+    if (target) {
+      pendingJump.current = null;
+      jumpToPage(target.page, target.keyboard);
     }
-  }, [visible]);
-
-  useLayoutEffect(() => {
-    if (!tail.current) {
-      return;
-    }
-    if (!target || !list.current || !bar.current) {
-      return;
-    }
-    tail.current.style.height = '0px';
-    const group = list.current.children[target.page - 1];
-    if (!(group instanceof HTMLElement)) {
-      return;
-    }
-    const top = bar.current.offsetHeight;
-    const y = window.scrollY + group.getBoundingClientRect().top - top;
-    // Give a short group enough room to reach the toolbar, without moving the footer.
-    tail.current.style.height =
-      Math.max(
-        0,
-        Math.ceil(y + innerHeight - (window.scrollY + tail.current.getBoundingClientRect().top)),
-      ) + 'px';
-    window.scrollTo(0, y);
-    jumpY.current = window.scrollY;
-    if (target.keyboard) {
-      group.focus({ preventScroll: true });
-    }
-    setCurrent(target.page);
-    setTarget(null);
-  }, [target, pages]);
+  }, [visible, jumpToPage]);
 
   return {
     loading,
@@ -83,7 +59,6 @@ export function usePresenter({ cards, loading }: PagedResultsProps) {
     pages,
     current,
     groups,
-    tail,
     jump,
     bar,
     list,

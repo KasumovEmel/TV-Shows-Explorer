@@ -12,7 +12,7 @@
 .button:disabled {
   opacity: 0.65;
 }
-.button:hover:enabled {
+.button:hover:enabled:not([aria-disabled='true']) {
   filter: brightness(0.96);
 }
 .primary {
@@ -30,6 +30,19 @@
 .icon:hover:enabled {
   background: color-mix(in srgb, currentColor 9%, transparent);
 }
+.framedIcon {
+  padding: 0;
+  width: var(--target);
+  height: var(--target);
+  color: var(--ink);
+  background: var(--surface);
+  border-color: var(--line);
+}
+.framedIcon:hover:enabled:not([aria-disabled='true']) {
+  background: var(--tint);
+  border-color: var(--accent);
+  filter: none;
+}
 .chip {
   max-width: 100%;
   overflow-wrap: anywhere;
@@ -44,4 +57,12 @@
   background: var(--selected-background);
   color: var(--selected-text);
   border-color: var(--selected-text);
+}
+.button.transparent {
+  background: transparent;
+  color: inherit;
+}
+.transparent:hover:enabled:not([aria-disabled='true']) {
+  background: color-mix(in srgb, currentColor 9%, transparent);
+  filter: none;
 }

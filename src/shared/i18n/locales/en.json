@@ -5,7 +5,7 @@
   },
   "theme": { "toLight": "Use light theme", "toDark": "Use dark theme" },
   "catalog": {
-    "heading": "What shall we watch?",
+    "heading": "What to watch?",
     "loading": "Searching for shows…",
     "error": "Couldn’t load the results",
     "retry": "Try again",

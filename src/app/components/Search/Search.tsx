@@ -20,7 +20,8 @@ export function Search(props: SearchProps) {
           <Brand />
           <div className={styles.settings}>
             <Button
-              variant="icon"
+              variant="framedIcon"
+              transparent
               icon={themeIcon}
               aria-label={themeLabel}
               title={themeLabel}

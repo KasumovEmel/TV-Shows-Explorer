@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 
+import { expectRows } from './expectRows';
 import { mockSearch, searchRoute } from './mockSearch';
 
 
@@ -38,6 +39,8 @@ for (const width of [1440, 390]) {
     const skeletons = page.getByRole('status').locator('li > [aria-hidden="true"]');
     await expect(skeletons).toHaveCount(3);
     const skeleton = await skeletons.first().boundingBox();
+    const container = page.locator('main > section');
+    await expectRows(skeletons.locator('..'), container);
     await expect(skeletons.first()).toHaveCSS('border-radius', '12px');
     await form.evaluate(async (el) => {
       await Promise.all(el.getAnimations().map((a) => a.finished));
@@ -55,24 +58,16 @@ for (const width of [1440, 390]) {
     await expect(page.getByRole('listitem')).toHaveCount(3);
     await expect(field).toBeFocused();
     const posters = page.locator('li img');
-    const first = await posters.nth(0).boundingBox(),
-      second = await posters.nth(1).boundingBox();
-    expect(first!.x).toBe(skeleton!.x);
-    expect(first!.y).toBe(skeleton!.y);
-    expect(first!.width).toBe(skeleton!.width);
-    expect(first!.height).toBe(skeleton!.height);
+    const first = await posters.first().boundingBox();
+    expect(first).toEqual(skeleton);
     const header = await page.locator('header > div').boundingBox();
-    const results = await page.locator('main > section').boundingBox();
+    const results = await container.boundingBox();
     expect(results!.x).toBe(header!.x);
     expect(results!.width).toBe(header!.width);
     expect(first!.height).toBeCloseTo((first!.width * 7) / 5, 1);
     await expect(posters.first()).toHaveCSS('object-fit', 'contain');
     await expect(posters.first().locator('..')).toHaveCSS('border-radius', '12px');
-    if (wide) {
-      expect(second!.x - first!.x).toBeCloseTo((results!.width + 24) / 3, 1);
-    } else {
-      expect(second!.y).toBeGreaterThanOrEqual(first!.y + first!.height);
-    }
+    await expectRows(page.getByRole('listitem'), container);
     await expect(form).toHaveCSS('height', wide ? '62px' : '52px');
     const clear = page.getByRole('button', { name: 'Очистить поиск' });
     await expect(clear).toHaveCSS('min-width', '44px');

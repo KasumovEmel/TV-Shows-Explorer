@@ -11,7 +11,7 @@ export function LoadingCards() {
   return (
     <div role="status">
       <span className={styles.srOnly}>{message}</span>
-      <ul className={`${tiles.grid} ${styles.skeletons}`} aria-hidden="true">
+      <ul className={tiles.list} aria-hidden="true">
         {Array.from({ length: skeletonCount }, (_, i) => (
           <ShowCardLayout
             key={i}
@@ -25,10 +25,6 @@ export function LoadingCards() {
             }
             summary={
               <span className={styles.summary}>
-                <span />
-                <span />
-                <span />
-                <span />
                 <span />
                 <span />
               </span>

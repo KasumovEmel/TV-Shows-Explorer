@@ -37,23 +37,9 @@
   border-radius: 18px;
   background: var(--skeleton);
 }
-.groups {
-  display: grid;
-  gap: var(--tile-gap);
-}
-.groups > ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-@media (max-width: 1023px) {
-  .groups {
-    gap: 0;
-  }
-}
 @media (max-width: 767px) {
   .heading {
-    margin-bottom: 8px;
+    margin-bottom: 4px;
   }
   .heading > :first-child {
     flex-direction: column;
@@ -80,6 +66,5 @@
 @media (max-width: 480px) {
   .heading {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto var(--target);
   }
 }

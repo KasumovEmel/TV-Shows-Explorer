@@ -5,6 +5,7 @@ import styles from './styles.module.css';
 
 export function usePresenter({
   variant = 'primary',
+  transparent = false,
   className = '',
   icon,
   children,
@@ -15,6 +16,8 @@ export function usePresenter({
     icon,
     children,
     size: variant === 'chip' ? 16 : 21,
-    className: [styles.button, styles[variant], className].join(' '),
+    className: [styles.button, styles[variant], transparent && styles.transparent, className]
+      .filter(Boolean)
+      .join(' '),
   };
 }

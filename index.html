@@ -4,6 +4,75 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#F8F5EF" />
+    <script>
+      try {
+        const theme = localStorage.getItem('tv-shows-explorer.theme');
+        if (theme === 'light' || theme === 'dark') {
+          document.documentElement.dataset.theme = theme;
+        }
+      } catch {
+        // The loader follows the system theme when storage is unavailable.
+      }
+    </script>
+    <style>
+      .startup {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-content: center;
+        justify-items: center;
+        gap: 18px;
+        color-scheme: light dark;
+        background: light-dark(#f8f5ef, #201d23);
+        color: light-dark(#47394f, #f1e5f0);
+        font:
+          600 14px/1.4 Menlo,
+          monospace;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+      [data-theme='light'] .startup {
+        color-scheme: light;
+      }
+      [data-theme='dark'] .startup {
+        color-scheme: dark;
+      }
+      .startup-mark {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        width: 80px;
+        height: 64px;
+        border-radius: 18px;
+        background: #d9cbe5;
+      }
+      .startup-mark::before,
+      .startup-mark::after {
+        content: '';
+        border-block: 15px solid transparent;
+        border-left: 20px solid #47394f;
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        .startup-mark::before,
+        .startup-mark::after {
+          animation: startup-signal 1.4s ease-in-out infinite;
+        }
+        .startup-mark::after {
+          animation-delay: 0.2s;
+        }
+      }
+      @keyframes startup-signal {
+        0%,
+        70%,
+        100% {
+          opacity: 1;
+        }
+        35% {
+          opacity: 0.35;
+        }
+      }
+    </style>
     <link rel="icon" href="./icons/favicon.ico" sizes="16x16 32x32 48x48" />
     <link rel="icon" href="./icons/app-icon.svg" type="image/svg+xml" sizes="any" />
     <link rel="apple-touch-icon" href="./icons/icon-192.png" />
@@ -11,6 +80,11 @@
     <title>Season One</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="startup" role="progressbar" aria-labelledby="startup-name">
+        <span class="startup-mark" aria-hidden="true"></span>
+        <span id="startup-name">Season One</span>
+      </div>
+    </div>
   </body>
 </html>

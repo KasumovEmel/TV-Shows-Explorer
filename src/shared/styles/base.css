@@ -4,14 +4,14 @@
   font-family: 'Unbounded';
   src: url('../../../docs/design/fonts/Unbounded.ttf') format('truetype');
   font-weight: 200 900;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
   font-family: 'Golos Text';
   src: url('../../../docs/design/fonts/GolosText.ttf') format('truetype');
   font-weight: 400 900;
-  font-display: swap;
+  font-display: optional;
 }
 
 :root {

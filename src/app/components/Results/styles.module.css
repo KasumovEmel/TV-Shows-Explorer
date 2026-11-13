@@ -1,5 +1,4 @@
 .results {
-  --tile-gap: 24px;
   width: var(--page-width);
   margin: auto;
   padding: 26px 0 44px;
@@ -46,10 +45,17 @@
   .genres {
     --chip-rows-height: calc(2 * var(--target) + 8px);
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: 1.45em var(--chip-rows-height);
+    grid-template-rows: auto;
     font-size: 15px;
-    padding-bottom: 18px;
-    margin-bottom: 17px;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+  }
+  .genres:empty {
+    display: none;
+  }
+  .chips {
+    height: auto;
+    max-height: calc(var(--chip-rows-height) + 8px);
   }
   .genres > span {
     font-size: 15px;

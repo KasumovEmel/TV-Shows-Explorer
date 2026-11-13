@@ -32,20 +32,6 @@
   gap: 6px;
   margin-inline-start: auto;
 }
-.settings button {
-  display: grid;
-  place-items: center;
-  background: var(--surface);
-  color: var(--ink);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  width: var(--target);
-  height: var(--target);
-  padding: 0;
-}
-.settings img {
-  border-radius: 2px;
-}
 .hero h1 {
   max-width: 15ch;
   font: 510 clamp(36px, 4.5vw, 65px)/1.15 var(--font-display);
@@ -102,7 +88,7 @@
     margin-bottom: 12px;
   }
   .hero h1 {
-    font-size: 32px;
+    font-size: clamp(28px, 9vw, 32px);
   }
   .search {
     width: 100%;

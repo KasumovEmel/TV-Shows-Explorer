@@ -5,12 +5,10 @@ import type { RefObject } from 'react';
 
 export function usePageScroll(
   list: RefObject<HTMLDivElement | null>,
-  bar: RefObject<HTMLDivElement | null>,
   jumpY: RefObject<number | null>,
   opened: number,
   pages: number,
   open: (page: number) => void,
-  select: (page: number) => void,
 ) {
   useEffect(() => {
     if (pages < 2) {
@@ -33,17 +31,6 @@ export function usePageScroll(
 
         return;
       }
-      jumpY.current = null;
-      const groups = Array.from(list.current?.children ?? []);
-      const top = bar.current?.offsetHeight ?? 0;
-      let active = 1;
-      groups.forEach((group, i) => {
-        if (group.getBoundingClientRect().top <= top + 1) {
-          active = i + 1;
-        }
-      });
-      const bottom = y > 0 && Math.ceil(y + innerHeight) >= document.documentElement.scrollHeight;
-      select(bottom ? opened : active);
       if (y > previous) {
         advance();
       }
@@ -93,5 +80,5 @@ export function usePageScroll(
       window.removeEventListener('touchmove', move);
       window.removeEventListener('keydown', key);
     };
-  }, [list, bar, jumpY, opened, pages, open, select]);
+  }, [list, jumpY, opened, pages, open]);
 }

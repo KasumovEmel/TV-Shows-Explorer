@@ -11,7 +11,7 @@ import tiles from '@shared/styles/tiles.module.css';
 
 
 export function PagedResults(props: PagedResultsProps) {
-  const { heading, count, pages, current, groups, tail, jump, bar, list, shown, total, loading } =
+  const { heading, count, pages, current, groups, jump, bar, list, shown, total, loading } =
     usePresenter(props);
 
   return (
@@ -34,9 +34,9 @@ export function PagedResults(props: PagedResultsProps) {
       {loading ? (
         <LoadingCards />
       ) : (
-        <div ref={list} className={styles.groups}>
+        <div ref={list}>
           {groups.map(({ page, cards, id, label }) => (
-            <ul key={page} id={id} tabIndex={-1} aria-label={label} className={tiles.grid}>
+            <ul key={page} id={id} tabIndex={-1} aria-label={label} className={tiles.list}>
               {cards.map((show) => (
                 <ShowCard key={show.id} show={show} />
               ))}
@@ -45,7 +45,6 @@ export function PagedResults(props: PagedResultsProps) {
         </div>
       )}
       <ListBoundary loading={loading} shown={shown} total={total} />
-      <div aria-hidden="true" ref={tail} />
     </>
   );
 }

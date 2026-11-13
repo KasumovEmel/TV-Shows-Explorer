@@ -6,11 +6,6 @@
   clip-path: inset(50%);
   white-space: nowrap;
 }
-.skeletons {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
 .title,
 .year,
 .rating > span,
@@ -23,7 +18,7 @@
   height: 0.8em;
 }
 .title {
-  width: 78%;
+  width: min(78%, 18ch);
 }
 .year {
   width: 11ch;
@@ -35,21 +30,13 @@
   width: 2.5ch;
 }
 .genres {
-  width: 64%;
+  width: min(64%, 24ch);
 }
 .summary {
   display: grid;
   grid-auto-rows: 1lh;
   align-items: center;
 }
-.summary > :nth-child(even) {
-  width: 91%;
-}
 .summary > :last-child {
   width: 62%;
-}
-@media (max-width: 1023px) {
-  .summary > :nth-child(n + 3):not(:last-child) {
-    display: none;
-  }
 }
