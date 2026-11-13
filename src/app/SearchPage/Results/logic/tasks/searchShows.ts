@@ -1,7 +1,6 @@
 import { fetchShows } from '../api/fetchShows';
 import { normalizeShow } from '../helpers/normalizeShow';
 import { readSummaryText } from '../readSummaryText';
-
 import type { Show } from '../show';
 
 

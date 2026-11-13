@@ -1,7 +1,6 @@
 import { Fragment } from 'react';
 
 import { usePresenter } from './usePresenter';
-
 import type { PageNavProps } from './types';
 
 import styles from './styles.module.css';

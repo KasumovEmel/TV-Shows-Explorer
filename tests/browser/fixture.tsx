@@ -4,7 +4,6 @@ import { createRoot } from 'react-dom/client';
 import { App } from '../../src/app';
 import { useNotify } from '../../src/app/notifications';
 import { initializeI18n } from '@/i18n';
-
 import type { NotificationEvent } from '../../src/app/notifications';
 
 

@@ -1,6 +1,5 @@
 import { Button } from '../../../../components/Button';
 import { usePresenter } from './usePresenter';
-
 import type { QueryFeedbackProps } from './types';
 
 import styles from './styles.module.css';

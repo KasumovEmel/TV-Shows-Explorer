@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { enqueueNotification } from './logic/enqueueNotification';
-
 import type { NotificationEvent } from '../types';
 import type { NotificationProviderProps, QueuedNotification } from './types';
 

@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { usePageScroll } from './logic/hooks/usePageScroll';
 import { usePageViewport } from './logic/hooks/usePageViewport';
 import { paginateShows } from './logic/paginateShows';
-
 import type { PagedResultsProps } from './types';
 
 

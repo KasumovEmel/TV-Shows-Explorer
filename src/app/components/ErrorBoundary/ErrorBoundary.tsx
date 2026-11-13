@@ -1,7 +1,6 @@
 import { Component } from 'react';
 
 import { RecoveryScreen } from './components/RecoveryScreen';
-
 import type { BoundaryState, ErrorBoundaryProps } from './types';
 
 

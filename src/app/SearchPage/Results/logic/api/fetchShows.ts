@@ -1,5 +1,4 @@
 import { request } from '@/app/utils/request';
-
 import type { TVmazeShow } from './types';
 
 

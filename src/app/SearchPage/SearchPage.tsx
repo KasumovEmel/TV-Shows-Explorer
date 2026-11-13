@@ -2,7 +2,6 @@ import { AppHeader } from './AppHeader';
 import { Results } from './Results';
 import { SearchIntro } from './SearchIntro';
 import { usePresenter } from './usePresenter';
-
 import type { SearchPageProps } from './types';
 
 import styles from './styles.module.css';

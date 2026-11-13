@@ -7,7 +7,6 @@ import { useNotify } from '../../notifications';
 import { showsSearchUrl } from './logic/api/fetchShows';
 import { filterShows } from './logic/tasks/filterShows';
 import { searchShows } from './logic/tasks/searchShows';
-
 import type { ResultsProps } from './types';
 
 

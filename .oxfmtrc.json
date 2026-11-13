@@ -7,15 +7,35 @@
         "groupName": "react-core",
         "modifiers": ["value"],
         "elementNamePattern": ["react", "react/**", "react-dom", "react-dom/**"]
+      },
+      {
+        "groupName": "react-core-type",
+        "modifiers": ["type"],
+        "elementNamePattern": ["react", "react/**", "react-dom", "react-dom/**"]
       }
     ],
     "internalPattern": ["@/"],
     "groups": [
       "react-core",
+      {
+        "newlinesBetween": false
+      },
+      "react-core-type",
       ["builtin", "external", "unknown"],
+      {
+        "newlinesBetween": false
+      },
+      ["type-builtin", "type-external"],
       ["internal", "subpath", "parent", "sibling", "index"],
-      "type",
-      ["style", "side_effect_style"]
+      {
+        "newlinesBetween": false
+      },
+      ["type-internal", "type-subpath", "type-parent", "type-sibling", "type-index"],
+      ["style", "side_effect_style"],
+      {
+        "newlinesBetween": false
+      },
+      "type-style"
     ],
     "order": "asc",
     "newlinesBetween": true,

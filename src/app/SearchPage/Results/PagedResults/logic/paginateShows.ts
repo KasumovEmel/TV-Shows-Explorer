@@ -1,5 +1,4 @@
 import { behavior } from '@/styles/tokens';
-
 import type { Show } from '../../logic/show';
 
 

@@ -1,7 +1,6 @@
 import { Button } from '../../../../components/Button';
 import { Icon } from '../../../../components/Icon';
 import { usePresenter } from './usePresenter';
-
 import type { NotificationProps } from './types';
 
 import styles from './styles.module.css';

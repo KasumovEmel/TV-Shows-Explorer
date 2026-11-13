@@ -1,11 +1,10 @@
 import { StrictMode } from 'react';
+import type { PropsWithChildren } from 'react';
 
 import { AppSWRConfig } from './components/AppSWRConfig';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { NotificationProvider } from './notifications';
 import { SearchPage } from './SearchPage';
-
-import type { PropsWithChildren } from 'react';
 
 import '@/styles/base.css';
 

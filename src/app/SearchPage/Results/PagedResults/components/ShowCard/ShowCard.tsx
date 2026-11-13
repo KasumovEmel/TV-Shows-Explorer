@@ -1,6 +1,5 @@
 import { ShowCardLayout } from '../ShowCardLayout';
 import { usePresenter } from './usePresenter';
-
 import type { ShowCardProps } from './types';
 
 

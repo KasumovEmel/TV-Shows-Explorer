@@ -2,7 +2,6 @@ import { GenreChip } from './components/GenreChip';
 import { QueryFeedback } from './components/QueryFeedback';
 import { PagedResults } from './PagedResults';
 import { usePresenter } from './usePresenter';
-
 import type { ResultsProps } from './types';
 
 import styles from './styles.module.css';

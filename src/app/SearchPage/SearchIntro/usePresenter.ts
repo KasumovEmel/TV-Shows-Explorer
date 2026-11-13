@@ -3,7 +3,6 @@ import { useId, useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useNotify } from '../../notifications';
-
 import type { SearchIntroProps } from './types';
 
 

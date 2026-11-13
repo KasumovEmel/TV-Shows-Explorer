@@ -1,6 +1,6 @@
-import nightShows from './night-shows.json' with { type: 'json' };
-
 import type { Page } from '@playwright/test';
+
+import nightShows from './night-shows.json' with { type: 'json' };
 
 
 export const searchRoute = 'https://api.tvmaze.com/search/shows?**';

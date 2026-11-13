@@ -3,7 +3,6 @@ import { LoadingCards } from './components/LoadingCards';
 import { PageNav } from './components/PageNav';
 import { ShowCard } from './components/ShowCard';
 import { usePresenter } from './usePresenter';
-
 import type { PagedResultsProps } from './types';
 
 import styles from './styles.module.css';

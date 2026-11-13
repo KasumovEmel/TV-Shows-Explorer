@@ -1,5 +1,6 @@
-import type { NotificationEvent } from '../types';
 import type { ReactNode } from 'react';
+
+import type { NotificationEvent } from '../types';
 
 
 export interface QueuedNotification extends NotificationEvent {

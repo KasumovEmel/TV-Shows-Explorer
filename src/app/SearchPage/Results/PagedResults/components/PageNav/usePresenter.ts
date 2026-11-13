@@ -1,7 +1,8 @@
+import type { MouseEvent } from 'react';
+
 import { useTranslation } from 'react-i18next';
 
 import type { PageNavProps } from './types';
-import type { MouseEvent } from 'react';
 
 
 export function usePresenter({ pages, current, jump, loading }: PageNavProps) {

@@ -1,8 +1,8 @@
+import type { PropsWithChildren } from 'react';
+
 import { SWRConfig } from 'swr';
 
 import { usePresenter } from './usePresenter';
-
-import type { PropsWithChildren } from 'react';
 
 
 export function AppSWRConfig({ children }: PropsWithChildren) {

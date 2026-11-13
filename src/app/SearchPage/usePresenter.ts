@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 import { useSearchQuery } from './logic/hooks/useSearchQuery';
 import { useSearchTransition } from './logic/hooks/useSearchTransition';
-
 import type { SearchPageProps } from './types';
 
 

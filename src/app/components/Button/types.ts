@@ -1,5 +1,6 @@
-import type { IconName } from '../Icon';
 import type { ComponentPropsWithRef, ReactElement } from 'react';
+
+import type { IconName } from '../Icon';
 
 
 type Native = Omit<ComponentPropsWithRef<'button'>, 'children'>;

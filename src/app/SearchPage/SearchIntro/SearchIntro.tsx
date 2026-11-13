@@ -1,6 +1,5 @@
 import { SearchField } from './components/SearchField';
 import { usePresenter } from './usePresenter';
-
 import type { SearchIntroProps } from './types';
 
 import styles from './styles.module.css';

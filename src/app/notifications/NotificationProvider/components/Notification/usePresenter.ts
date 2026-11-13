@@ -1,11 +1,10 @@
 import { useRef, useState } from 'react';
+import type { FocusEvent, MouseEvent } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
 import { useDismissTimer } from './logic/useDismissTimer';
-
 import type { NotificationProps } from './types';
-import type { FocusEvent, MouseEvent } from 'react';
 
 
 export function usePresenter({ kind, id, messageKey, onDismiss }: NotificationProps) {

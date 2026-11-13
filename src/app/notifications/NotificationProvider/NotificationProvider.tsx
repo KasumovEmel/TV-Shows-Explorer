@@ -1,7 +1,6 @@
 import { NotifyContext } from '../context';
 import { Notification } from './components/Notification';
 import { usePresenter } from './usePresenter';
-
 import type { NotificationProviderProps } from './types';
 
 import styles from './styles.module.css';

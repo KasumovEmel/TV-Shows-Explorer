@@ -1,5 +1,4 @@
 import { shortSummary } from './shortSummary';
-
 import type { TVmazeShow } from '../api/types';
 import type { Show } from '../show';
 

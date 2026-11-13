@@ -4,7 +4,6 @@ import palette from '../../docs/design/notification-tokens.json' with { type: 'j
 import en from '../../src/i18n/locales/en.json' with { type: 'json' };
 import ru from '../../src/i18n/locales/ru.json' with { type: 'json' };
 import { notify } from './notify';
-
 import type { NotificationKind } from '../../src/app/notifications';
 
 

@@ -1,5 +1,6 @@
-import type { SearchFieldProps } from './components/SearchField';
 import type { RefObject } from 'react';
+
+import type { SearchFieldProps } from './components/SearchField';
 
 
 export interface SearchIntroProps {

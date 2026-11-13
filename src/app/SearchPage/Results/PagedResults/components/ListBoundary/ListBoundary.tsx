@@ -1,5 +1,4 @@
 import { usePresenter } from './usePresenter';
-
 import type { ListBoundaryProps } from './types';
 
 import styles from './styles.module.css';
