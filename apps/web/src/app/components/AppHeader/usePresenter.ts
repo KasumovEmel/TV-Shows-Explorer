@@ -1,16 +1,7 @@
 import type { MouseEvent } from 'react';
 
-import { useTranslation } from 'react-i18next';
 
-import { useFavoritesCount } from '@/app/favorites';
-
-
-export function usePresenter(favoritesPage: boolean) {
-  const { t } = useTranslation();
-  const count = useFavoritesCount();
-  const favoritesLabel =
-    count === undefined ? t('favorites.title') : t('favorites.withCount', { count });
-
+export function usePresenter() {
   function navigate(e: MouseEvent<HTMLAnchorElement>) {
     if (e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
       return;
@@ -36,11 +27,5 @@ export function usePresenter(favoritesPage: boolean) {
     }
   }
 
-  return {
-    label: favoritesPage ? t('favorites.search') : favoritesLabel,
-    count: favoritesPage ? undefined : count,
-    href: favoritesPage ? '/' : '/favorites',
-    navigate,
-    icon: favoritesPage ? ('search' as const) : ('heart' as const),
-  };
+  return { navigate };
 }
