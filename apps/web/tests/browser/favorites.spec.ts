@@ -34,3 +34,22 @@ test('saved snapshot survives reload, failed changes can be retried', async ({ p
   await expect(add).toBeEnabled();
   await expect(add.locator('svg')).toHaveCSS('fill', 'none');
 });
+
+test('знак и название Season One возвращают к текущему поиску', async ({ page }) => {
+  await page.goto('/');
+  const field = page.getByRole('searchbox');
+  await field.fill('night');
+  const favorites = page.getByRole('link', { name: 'Favorites' });
+  const brand = page.getByRole('link', { name: 'Season One' });
+  await expect(favorites).toHaveAttribute('href', '/favorites');
+  await expect(brand).toHaveAttribute('href', '/');
+  await favorites.press('Enter');
+  await expect(page).toHaveURL(/\/favorites$/);
+  await brand.locator('svg').click();
+  await expect(field).toHaveValue('night');
+  await page.goBack();
+  await expect(page.getByRole('heading', { name: 'Favorites' })).toBeVisible();
+  await page.getByRole('banner').getByText('Season One', { exact: true }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(field).toHaveValue('night');
+});

@@ -9,6 +9,7 @@ const input = {
         './paths/shows.yaml',
         './paths/favorite.yaml',
         './paths/favorites.yaml',
+        './paths/favorites-count.yaml',
         './paths/health.yaml',
         './models.yaml',
         './errors.yaml',

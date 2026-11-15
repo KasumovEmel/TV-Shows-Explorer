@@ -9,10 +9,10 @@ export function usePresenter({
   className = '',
   icon,
   children,
-  ...button
+  ...control
 }: ButtonProps) {
   return {
-    button,
+    control,
     icon,
     children,
     size: variant === 'chip' ? 16 : 21,

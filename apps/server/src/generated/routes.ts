@@ -11,6 +11,7 @@ import {
 
 import { searchShowsHandlers } from './handlers/searchShows';
 import { listFavoritesHandlers } from './handlers/listFavorites';
+import { countFavoritesHandlers } from './handlers/countFavorites';
 import { addFavoriteHandlers } from './handlers/addFavorite';
 import { removeFavoriteHandlers } from './handlers/removeFavorite';
 import { healthHandlers } from './handlers/health';
@@ -21,6 +22,9 @@ const app = new Hono()
 
 
   .get('/api/favorites', ...listFavoritesHandlers)
+
+
+  .get('/api/favorites/count', ...countFavoritesHandlers)
 
 
   .put('/api/favorites/:showId', ...addFavoriteHandlers)

@@ -7,6 +7,8 @@ paths:
     $ref: './paths/shows.yaml'
   /api/favorites:
     $ref: './paths/favorites.yaml'
+  /api/favorites/count:
+    $ref: './paths/favorites-count.yaml'
   /api/favorites/{showId}:
     $ref: './paths/favorite.yaml'
   /api/health:
@@ -17,7 +19,7 @@ components:
       type: apiKey
       in: cookie
       name: season_one
-      description: Anonymous session created on first favorites request, valid for 30 days.
+      description: Anonymous session created when listing or changing favorites, valid for 30 days.
   schemas:
     Show:
       $ref: './models.yaml#/Show'

@@ -1,0 +1,14 @@
+get:
+  operationId: countFavorites
+  security: [{ session: [] }, {}]
+  responses:
+    '200':
+      description: Number of saved shows in the current session, or zero without an active session.
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [count]
+            properties:
+              count: { type: integer, minimum: 0 }
+    '500': { $ref: '../errors.yaml#/E500' }

@@ -8,15 +8,6 @@
   padding: 30px 0 19px;
   border-bottom: 1px solid var(--line);
 }
-.link {
-  display: grid;
-  place-items: center;
-  width: var(--target);
-  height: var(--target);
-  border: 1px solid currentColor;
-  border-radius: var(--radius);
-  color: inherit;
-}
 .settings {
   display: flex;
   gap: 6px;

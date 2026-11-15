@@ -1,5 +1,9 @@
+import { getCookie } from 'hono/cookie';
+
+import { sessionCookie } from './favorites/store';
 import type {
   AddFavoriteContext,
+  CountFavoritesContext,
   HealthContext,
   ListFavoritesContext,
   RemoveFavoriteContext,
@@ -26,11 +30,15 @@ export function health(c: HealthContext<Env>) {
 }
 
 export function listFavorites(c: ListFavoritesContext<Env>) {
-  return c.json({ items: c.var.store.list(c.var.sessionId) });
+  return c.json({ items: c.var.store.list(c.var.ensureSession()) });
+}
+
+export function countFavorites(c: CountFavoritesContext<Env>) {
+  return c.json({ count: c.var.store.count(getCookie(c, sessionCookie)) });
 }
 
 export async function addFavorite(c: AddFavoriteContext<Env>) {
-  await c.var.store.add(c.var.sessionId, c.req.valid('param').showId, (id) =>
+  await c.var.store.add(c.var.ensureSession(), c.req.valid('param').showId, (id) =>
     c.var.catalog.byId(id),
   );
 
@@ -38,7 +46,7 @@ export async function addFavorite(c: AddFavoriteContext<Env>) {
 }
 
 export function removeFavorite(c: RemoveFavoriteContext<Env>) {
-  c.var.store.remove(c.var.sessionId, c.req.valid('param').showId);
+  c.var.store.remove(c.var.ensureSession(), c.req.valid('param').showId);
 
   return c.body(null, 204);
 }

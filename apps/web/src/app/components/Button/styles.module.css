@@ -12,7 +12,7 @@
 .button:disabled {
   opacity: 0.65;
 }
-.button:hover:enabled:not([aria-disabled='true']) {
+.button:hover:not(:disabled, [aria-disabled='true']) {
   filter: brightness(0.96);
 }
 .primary {
@@ -27,7 +27,7 @@
   background: transparent;
   color: inherit;
 }
-.icon:hover:enabled {
+.icon:hover:not(:disabled, [aria-disabled='true']) {
   background: color-mix(in srgb, currentColor 9%, transparent);
 }
 .framedIcon {
@@ -38,7 +38,7 @@
   background: var(--surface);
   border-color: var(--line);
 }
-.framedIcon:hover:enabled:not([aria-disabled='true']) {
+.framedIcon:hover:not(:disabled, [aria-disabled='true']) {
   background: var(--tint);
   border-color: var(--accent);
   filter: none;
@@ -62,7 +62,7 @@
   background: transparent;
   color: inherit;
 }
-.transparent:hover:enabled:not([aria-disabled='true']) {
+.transparent:hover:not(:disabled, [aria-disabled='true']) {
   background: color-mix(in srgb, currentColor 9%, transparent);
   filter: none;
 }

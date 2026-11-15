@@ -35,6 +35,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
     const themeName = 'System theme. Use dark theme';
     const theme = page.getByRole('button', { name: themeName });
     const language = page.getByRole('button', { name: 'Switch to Russian' });
+    const favorites = page.getByRole('link', { name: 'Favorites' });
     await expect(theme).toHaveAttribute('title', themeName);
     await expect(language).toHaveAttribute('title', 'Switch to Russian');
     const background = 'rgba(0, 0, 0, 0)';
@@ -43,12 +44,13 @@ for (const colorScheme of ['light', 'dark'] as const) {
     await theme.hover();
     await expect(theme).toHaveCSS('background-color', /[,/]\s*0\.\d+\)$/);
     const hovered = await theme.evaluate((el) => getComputedStyle(el).backgroundColor);
-    await language.hover();
-    await expect(language).toHaveCSS('background-color', hovered);
-    await expect(theme).toHaveCSS('background-color', background);
-    await page.mouse.move(0, 0);
-    await expect(language).toHaveCSS('background-color', background);
-    for (const button of [theme, language]) {
+    for (const control of [language, favorites]) {
+      await control.hover();
+      await expect(control).toHaveCSS('background-color', hovered);
+      await page.mouse.move(0, 0);
+      await expect(control).toHaveCSS('background-color', background);
+    }
+    for (const button of [page.getByRole('link', { name: 'Season One' }), theme, language]) {
       await page.keyboard.press('Tab');
       await expect(button).toBeFocused();
       await expect(button).toHaveCSS('outline-style', 'solid');

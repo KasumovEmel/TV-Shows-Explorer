@@ -63,6 +63,15 @@ export const ListFavoritesResponse = zod.object({
 })
 
 
+export const countFavoritesResponseCountMin = 0;
+
+
+
+export const CountFavoritesResponse = zod.object({
+  "count": zod.int().min(countFavoritesResponseCountMin)
+})
+
+
 export const addFavoritePathShowIdRegExp = new RegExp('^[1-9][0-9]*$');
 
 

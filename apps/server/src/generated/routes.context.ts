@@ -12,6 +12,7 @@ SearchShowsParams
 
 export type SearchShowsContext<E extends Env = any> = Context<E, '/api/shows', { in: { query: SearchShowsParams, }, out: { query: SearchShowsParams, } }>
 export type ListFavoritesContext<E extends Env = any> = Context<E, '/api/favorites'>
+export type CountFavoritesContext<E extends Env = any> = Context<E, '/api/favorites/count'>
 export type AddFavoriteContext<E extends Env = any> = Context<E, '/api/favorites/:showId', { in: { param: {
  showId: string,
  }, }, out: { param: {

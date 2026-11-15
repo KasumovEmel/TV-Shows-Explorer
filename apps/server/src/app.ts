@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import { getCookie, setCookie } from 'hono/cookie';
 
 import { ApiFailure } from './errors';
-import { lifetime } from './favorites/store';
+import { lifetime, sessionCookie } from './favorites/store';
 import routes from './generated/routes';
 import type { Catalog } from './catalog/catalog';
 import type { FavoritesStore } from './favorites/store';
@@ -12,7 +12,7 @@ declare module 'hono' {
   interface ContextVariableMap {
     catalog: Catalog;
     store: FavoritesStore;
-    sessionId: string;
+    ensureSession: () => string;
   }
 }
 
@@ -33,17 +33,20 @@ export function createApp(catalog: Catalog, store: FavoritesStore, secure = fals
 
   app.use('/api/favorites/*', async (c, next) => {
     c.header('Cache-Control', 'private, no-store');
-    const { id, token } = store.session(getCookie(c, 'season_one'));
-    if (token) {
-      setCookie(c, 'season_one', token, {
-        path: '/',
-        httpOnly: true,
-        secure,
-        sameSite: 'Lax',
-        maxAge: lifetime,
-      });
-    }
-    c.set('sessionId', id);
+    c.set('ensureSession', () => {
+      const { id, token } = store.session(getCookie(c, sessionCookie));
+      if (token) {
+        setCookie(c, sessionCookie, token, {
+          path: '/',
+          httpOnly: true,
+          secure,
+          sameSite: 'Lax',
+          maxAge: lifetime,
+        });
+      }
+
+      return id;
+    });
     await next();
   });
 

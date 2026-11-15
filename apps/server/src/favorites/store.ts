@@ -5,6 +5,7 @@ import type { Show } from '../generated/routes.schemas';
 
 
 export const lifetime = 30 * 24 * 3600;
+export const sessionCookie = 'season_one';
 
 function hash(token: string) {
   return createHash('sha256').update(token).digest('hex');
@@ -63,6 +64,18 @@ export class FavoritesStore {
       )
       .all(id)
       .map((row) => JSON.parse(String(row.show_snapshot)) as Show);
+  }
+
+  count(cookie?: string) {
+    if (!cookie) {
+      return 0;
+    }
+    const row = this.db
+      .prepare(`SELECT COUNT(*) AS count FROM favorites JOIN sessions ON token_hash=session_id
+        WHERE session_id=? AND expires_at>?`)
+      .get(hash(cookie), this.now())!;
+
+    return Number(row.count);
   }
 
   async add(session: string, id: string, load: (id: string) => Promise<Show>) {

@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type {
+  CountFavorites200,
   Health200,
   ListFavorites200,
   SearchShows200,
@@ -32,6 +33,15 @@ export const listFavorites = (
  options?: SecondParameter<typeof request<ListFavorites200>>,) => {
       return request<ListFavorites200>(
       {url: `/api/favorites`, method: 'GET'
+    },
+      options);
+    }
+
+export const countFavorites = (
+
+ options?: SecondParameter<typeof request<CountFavorites200>>,) => {
+      return request<CountFavorites200>(
+      {url: `/api/favorites/count`, method: 'GET'
     },
       options);
     }
@@ -65,6 +75,7 @@ export const health = (
 
 export type SearchShowsResult = NonNullable<Awaited<ReturnType<typeof searchShows>>>
 export type ListFavoritesResult = NonNullable<Awaited<ReturnType<typeof listFavorites>>>
+export type CountFavoritesResult = NonNullable<Awaited<ReturnType<typeof countFavorites>>>
 export type AddFavoriteResult = NonNullable<Awaited<ReturnType<typeof addFavorite>>>
 export type RemoveFavoriteResult = NonNullable<Awaited<ReturnType<typeof removeFavorite>>>
 export type HealthResult = NonNullable<Awaited<ReturnType<typeof health>>>

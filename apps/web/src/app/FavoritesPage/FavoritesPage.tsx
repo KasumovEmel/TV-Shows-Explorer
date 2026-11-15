@@ -13,7 +13,7 @@ export function FavoritesPage() {
   return (
     <>
       <div className={styles.header}>
-        <AppHeader />
+        <AppHeader favoritesPage />
       </div>
       <main className={styles.page}>
         <h1>{title}</h1>

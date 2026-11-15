@@ -15,6 +15,8 @@ for (const width of [1440, 390]) {
     const intro = page.getByRole('region', { name: 'Что смотрим?' });
     const field = intro.getByRole('searchbox', { name: 'Поиск сериалов' });
     await page.keyboard.press('Tab');
+    await expect(banner.getByRole('link', { name: 'Season One' })).toBeFocused();
+    await page.keyboard.press('Tab');
     await expect(banner.getByRole('button', { name: 'Включить тёмную тему' })).toBeFocused();
     await page.keyboard.press('Tab');
     await expect(banner.getByRole('button', { name: 'Переключить на английский' })).toBeFocused();

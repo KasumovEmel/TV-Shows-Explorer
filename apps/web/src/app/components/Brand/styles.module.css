@@ -1,4 +1,6 @@
 .brand {
+  color: inherit;
+  text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 0.42em;

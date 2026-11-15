@@ -3,14 +3,16 @@ import type { ComponentPropsWithRef, ReactElement } from 'react';
 import type { IconName } from '../Icon';
 
 
-type Native = Omit<ComponentPropsWithRef<'button'>, 'children'>;
+type IconButton = {
+  variant: 'icon' | 'framedIcon';
+  icon: IconName | ReactElement;
+  'aria-label': string;
+  children?: never;
+};
 
-export type ButtonProps = Native & { transparent?: boolean } & (
-    | {
-        variant: 'icon' | 'framedIcon';
-        icon: IconName | ReactElement;
-        'aria-label': string;
-        children?: never;
-      }
-    | { variant?: 'primary' | 'chip'; icon?: IconName; children: string }
-  );
+type TextButton = { variant?: 'primary' | 'chip'; icon?: IconName; children: string };
+
+export type ButtonProps = { transparent?: boolean } & (
+  | (Omit<ComponentPropsWithRef<'button'>, 'children'> & (IconButton | TextButton))
+  | (Omit<ComponentPropsWithRef<'a'>, 'children'> & { href: string } & IconButton)
+);

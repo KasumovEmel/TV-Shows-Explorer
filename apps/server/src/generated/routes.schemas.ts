@@ -153,6 +153,16 @@ export type ListFavorites500 = {
   message: string;
 };
 
+export type CountFavorites200 = {
+  /** @minimum 0 */
+  count: number;
+};
+
+export type CountFavorites500 = {
+  code: string;
+  message: string;
+};
+
 export type AddFavorite400 = {
   code: string;
   message: string;
