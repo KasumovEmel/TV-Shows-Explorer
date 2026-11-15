@@ -1,0 +1,109 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["pnpm-workspace.yaml", "pnpm-lock.yaml"],
+  "globalEnv": ["CI_RUNTIME"],
+  "tasks": {
+    "//#api:check": {
+      "inputs": [
+        "packages/contracts/**",
+        "orval.config.ts",
+        "scripts/check-generated.mjs",
+        "apps/server/src/generated/**",
+        "apps/web/src/api/generated/**",
+        "apps/web/src/app/utils/request.ts",
+        "apps/*/tsconfig.json"
+      ]
+    },
+    "//#format:check": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "!**/src/generated/**",
+        "!**/api/generated/**",
+        "!.agents/skills/**"
+      ]
+    },
+    "//#lint": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "!**/*.md",
+        "!**/*.svg",
+        "!**/*.png",
+        "!**/*.pdf",
+        "!**/*.ttf",
+        "!.agents/skills/**"
+      ]
+    },
+    "//#test:formatter": {
+      "inputs": ["scripts/**", "tests/formatter*.test.mjs", ".oxfmtrc.json"]
+    },
+    "@season-one/web#typecheck": {
+      "inputs": [
+        "src/**",
+        "tests/**",
+        "tsconfig.json",
+        "*.config.ts",
+        "$TURBO_ROOT$/docs/design/*.json"
+      ]
+    },
+    "@season-one/server#typecheck": {
+      "inputs": [
+        "src/**",
+        "tests/**",
+        "tsconfig.json",
+        "*.config.ts",
+        "$TURBO_ROOT$/apps/web/tests/browser/night-shows.json"
+      ]
+    },
+    "@season-one/server#unit": {
+      "inputs": ["src/**", "tests/*.test.ts", "tsconfig.json"]
+    },
+    "@season-one/web#unit": {
+      "inputs": ["src/app/**/logic/tasks/**", "tests/*.test.ts", "tsconfig.json"]
+    },
+    "@season-one/server#build": {
+      "inputs": ["src/**", "tsconfig.json"],
+      "outputs": ["dist/**"]
+    },
+    "@season-one/web#build": {
+      "inputs": [
+        "src/**",
+        "public/**",
+        "index.html",
+        "rsbuild.config.ts",
+        "tsconfig.json",
+        "$TURBO_ROOT$/docs/design/fonts/**",
+        "$TURBO_ROOT$/docs/design/tokens.json"
+      ],
+      "outputs": ["dist/**"]
+    },
+    "@season-one/web#build:tested": {
+      "inputs": [
+        "src/**",
+        "public/**",
+        "index.html",
+        "rsbuild.config.ts",
+        "tsconfig.json",
+        "$TURBO_ROOT$/docs/design/fonts/**",
+        "$TURBO_ROOT$/docs/design/tokens.json",
+        "tests/rsbuild.config.ts",
+        "tests/browser/fixture.tsx",
+        "tests/public/**",
+        "$TURBO_ROOT$/scripts/export-tested-web.mjs"
+      ],
+      "outputs": [".rsbuild/browser-tests/**", "dist/**"]
+    },
+    "@season-one/web#browser": {
+      "dependsOn": ["build:tested"],
+      "inputs": [
+        "tests/browser/**",
+        "playwright.config.ts",
+        "$TURBO_ROOT$/apps/server/src/**",
+        "$TURBO_ROOT$/apps/server/tests/browser-server.ts",
+        "$TURBO_ROOT$/apps/server/tsconfig.json",
+        "$TURBO_ROOT$/docs/design/notification-tokens.json",
+        "$TURBO_ROOT$/scripts/browser-tests.mjs"
+      ],
+      "passThroughEnv": ["CI", "PLAYWRIGHT_BROWSERS_PATH", "HOME", "PATH"]
+    }
+  }
+}

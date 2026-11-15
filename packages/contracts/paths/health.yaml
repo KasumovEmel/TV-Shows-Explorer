@@ -1,0 +1,14 @@
+get:
+  operationId: health
+  responses:
+    '200':
+      description: API and SQLite ready
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [status]
+            properties:
+              status: { type: string, enum: [ok] }
+    '503': { $ref: '../errors.yaml#/E503' }
+    '500': { $ref: '../errors.yaml#/E500' }

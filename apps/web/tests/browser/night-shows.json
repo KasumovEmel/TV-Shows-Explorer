@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "en": "Night Flight",
+    "rating": 8.4,
+    "summary": "A night pilot & a dispatcher trace a signal from a flight that never landed.",
+    "ru": "Ночной рейс",
+    "genres": ["Thriller", "Drama"],
+    "poster": "/posters/night-flight.svg",
+    "year": 2024
+  },
+  {
+    "id": 2,
+    "en": "Night Radio",
+    "rating": 7.6,
+    "summary": "An overnight radio host begins receiving calls from a town that no longer exists.",
+    "ru": "Ночной эфир",
+    "genres": ["Mystery"],
+    "poster": "/posters/night-radio.svg",
+    "year": 2021
+  },
+  {
+    "id": 3,
+    "en": "Night Shift",
+    "rating": 7.9,
+    "summary": "Three colleagues keep a city hospital running until dawn.",
+    "ru": "Ночная смена",
+    "genres": ["Drama"],
+    "poster": "/posters/night-shift.svg",
+    "year": 2023
+  },
+  {
+    "id": 4,
+    "en": "Night Train",
+    "rating": 8.2,
+    "summary": "A conductor must find a missing passenger before the last stop.",
+    "ru": "Ночной поезд",
+    "genres": ["Thriller"],
+    "poster": "/posters/night-train.svg",
+    "year": 2022
+  },
+  {
+    "id": 5,
+    "en": "Night Lights",
+    "rating": null,
+    "summary": "After dark, neighbours meet on a rooftop to map the changing skyline.",
+    "ru": "Ночные огни",
+    "genres": ["Drama"],
+    "poster": "/posters/night-lights.svg",
+    "year": 2019
+  },
+  {
+    "id": 6,
+    "en": "Night Archive",
+    "rating": 7.7,
+    "summary": null,
+    "ru": "Ночной архив",
+    "genres": ["Mystery", "Thriller"],
+    "poster": "/posters/night-archive.svg",
+    "year": 2020
+  },
+  {
+    "id": 7,
+    "en": "Night Screening",
+    "rating": 7.1,
+    "summary": "Two friends reopen their neighbourhood cinema for one midnight screening.",
+    "ru": "Ночной сеанс",
+    "genres": ["Comedy"],
+    "poster": "/posters/night-screening.svg",
+    "year": 2025
+  }
+]

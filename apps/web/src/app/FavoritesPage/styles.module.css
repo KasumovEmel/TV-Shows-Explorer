@@ -1,0 +1,20 @@
+.header {
+  background: var(--masthead);
+  color: var(--masthead-text);
+}
+.page {
+  width: var(--page-width);
+  margin: 32px auto;
+}
+.page h1 {
+  font-family: var(--font-display);
+  margin-bottom: 1em;
+}
+.page ul {
+  list-style: none;
+  padding: 0;
+}
+.page p[role='status'] {
+  color: var(--muted);
+  margin: 1em 0;
+}

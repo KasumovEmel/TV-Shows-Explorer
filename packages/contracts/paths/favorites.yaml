@@ -1,0 +1,10 @@
+get:
+  operationId: listFavorites
+  security: [{ session: [] }, {}]
+  responses:
+    '200':
+      description: Saved snapshots in reverse order of addition.
+      content:
+        application/json:
+          schema: { $ref: '../models.yaml#/Favorites' }
+    '500': { $ref: '../errors.yaml#/E500' }

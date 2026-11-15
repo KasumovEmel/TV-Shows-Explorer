@@ -1,0 +1,80 @@
+name: Release
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [main]
+    tags: ['release-*']
+permissions:
+  contents: read
+env:
+  TURBO_TELEMETRY_DISABLED: '1'
+jobs:
+  verify:
+    concurrency:
+      group: season-one-check-${{ github.sha }}
+      cancel-in-progress: false
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24.22.2'
+          package-manager-cache: false
+      - uses: pnpm/action-setup@v6
+      - name: Identify runner and browser versions
+        id: runtime
+        run: |
+          echo "CI_RUNTIME=$RUNNER_OS-$RUNNER_ARCH-$ImageVersion-$(node -v)" >> "$GITHUB_ENV"
+          echo "browser=$(node -p 'require("./apps/web/package.json").devDependencies["@playwright/test"]')" >> "$GITHUB_OUTPUT"
+      - name: Restore installed workspace dependencies
+        id: deps
+        uses: actions/cache@v5
+        with:
+          path: |
+            node_modules
+            apps/*/node_modules
+          key: deps-${{ runner.os }}-${{ runner.arch }}-node24.22.2-${{ hashFiles('pnpm-lock.yaml', 'pnpm-workspace.yaml', '**/package.json') }}
+      - if: steps.deps.outputs.cache-hit != 'true'
+        run: pnpm install --frozen-lockfile
+      - uses: actions/cache@v5
+        with:
+          path: ~/.cache/ms-playwright
+          key: browser-${{ runner.os }}-${{ runner.arch }}-${{ steps.runtime.outputs.browser }}
+      - uses: actions/cache@v5
+        with:
+          path: .turbo/cache
+          key: tasks-${{ env.CI_RUNTIME }}-${{ github.sha }}
+          restore-keys: tasks-${{ env.CI_RUNTIME }}-
+      - name: Check, test and build
+        run: pnpm check unit @season-one/server#build browser
+      - if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/release-')
+        run: bash deploy/package.sh
+      - if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/release-')
+        uses: actions/upload-artifact@v7
+        with:
+          name: season-one-${{ github.sha }}
+          path: release/
+          compression-level: 0
+          if-no-files-found: error
+  deploy:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/release-')
+    needs: verify
+    runs-on: ubuntu-24.04
+    environment: production
+    concurrency:
+      group: season-one-vps
+      cancel-in-progress: false
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: season-one-${{ github.sha }}
+      - name: Activate tested release
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          SITE_URL: ${{ vars.SITE_URL }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+        run: bash upload.sh

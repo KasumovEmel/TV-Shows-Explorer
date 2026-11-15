@@ -1,3 +1,8 @@
+allowBuilds:
+  esbuild: true
+packages:
+  - 'apps/*'
+  - 'packages/*'
 minimumReleaseAgeExclude:
   - '@fission-ai/openspec@2.0.0'
   - '@oxlint-tsgolint/darwin-arm64@7.0.2007'
@@ -7,3 +12,18 @@ minimumReleaseAgeExclude:
   - '@oxlint-tsgolint/win32-arm64@7.0.2007'
   - '@oxlint-tsgolint/win32-x64@7.0.2007'
   - oxlint-tsgolint@7.0.2007
+  - '@orval/angular@8.48.0'
+  - '@orval/axios@8.48.0'
+  - '@orval/core@8.48.0'
+  - '@orval/effect@8.48.0'
+  - '@orval/fetch@8.48.0'
+  - '@orval/hono@8.48.0'
+  - '@orval/mcp@8.48.0'
+  - '@orval/mock@8.48.0'
+  - '@orval/pinia-colada@8.48.0'
+  - '@orval/query@8.48.0'
+  - '@orval/solid-start@8.48.0'
+  - '@orval/swr@8.48.0'
+  - '@orval/valibot@8.48.0'
+  - '@orval/zod@8.48.0'
+  - orval@8.48.0

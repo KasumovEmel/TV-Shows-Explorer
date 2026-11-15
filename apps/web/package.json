@@ -1,0 +1,32 @@
+{
+  "name": "@season-one/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "rsbuild dev",
+    "preview": "rsbuild preview",
+    "test": "playwright test",
+    "test:shell": "playwright test notification- recovery",
+    "build": "rsbuild build",
+    "typecheck": "tsc --noEmit",
+    "unit": "node --import tsx --test tests/*.test.ts",
+    "browser": "node ../../scripts/browser-tests.mjs",
+    "build:tested": "rsbuild build --config tests/rsbuild.config.ts && node ../../scripts/export-tested-web.mjs"
+  },
+  "dependencies": {
+    "axios": "1.21.1",
+    "i18next": "27.1.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-i18next": "18.0.1",
+    "swr": "2.5.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@rsbuild/core": "2.3.2",
+    "@rsbuild/plugin-react": "2.1.1",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0"
+  }
+}

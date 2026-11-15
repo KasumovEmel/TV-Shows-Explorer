@@ -4,7 +4,7 @@ import test from 'node:test';
 import { formatSource } from '../scripts/format-source.mjs';
 
 
-test('поля класса идут подряд, методы и стрелочные обработчики отделены', async () => {
+void test('поля класса идут подряд, методы и стрелочные обработчики отделены', async () => {
   const members = [
     '  state = false;\n  private locked = false;',
     '  static recover() {}',

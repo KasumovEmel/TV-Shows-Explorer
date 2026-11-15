@@ -41,5 +41,10 @@
     "newlinesBetween": true,
     "sortSideEffects": true
   },
-  "ignorePatterns": ["pnpm-lock.yaml", ".agents/skills/openspec-*/**"]
+  "ignorePatterns": [
+    "pnpm-lock.yaml",
+    "**/src/generated/**",
+    "**/api/generated/**",
+    ".agents/skills/openspec-*/**"
+  ]
 }

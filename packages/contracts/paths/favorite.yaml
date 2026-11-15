@@ -1,0 +1,28 @@
+put:
+  operationId: addFavorite
+  security: [{ session: [] }, {}]
+  parameters:
+    - name: showId
+      in: path
+      required: true
+      schema: { type: string, pattern: '^[1-9][0-9]*$' }
+  responses:
+    '204': { description: Favorite saved. }
+    '400': { $ref: '../errors.yaml#/E400' }
+    '404': { $ref: '../errors.yaml#/E404' }
+    '429': { $ref: '../errors.yaml#/E429' }
+    '500': { $ref: '../errors.yaml#/E500' }
+    '502': { $ref: '../errors.yaml#/E502' }
+    '504': { $ref: '../errors.yaml#/E504' }
+delete:
+  operationId: removeFavorite
+  security: [{ session: [] }, {}]
+  parameters:
+    - name: showId
+      in: path
+      required: true
+      schema: { type: string, pattern: '^[1-9][0-9]*$' }
+  responses:
+    '204': { description: Favorite removed. }
+    '400': { $ref: '../errors.yaml#/E400' }
+    '500': { $ref: '../errors.yaml#/E500' }

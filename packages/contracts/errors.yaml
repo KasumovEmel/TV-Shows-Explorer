@@ -1,0 +1,37 @@
+E400:
+  description: Invalid input
+  content:
+    application/json:
+      schema: { $ref: './models.yaml#/ApiError' }
+E404:
+  description: Resource not found
+  content:
+    application/json:
+      schema: { $ref: './models.yaml#/ApiError' }
+E429:
+  description: TVmaze rate limit
+  headers:
+    Retry-After: { schema: { type: string }, description: Delay provided by TVmaze }
+  content:
+    application/json:
+      schema: { $ref: './models.yaml#/ApiError' }
+E500:
+  description: Internal error
+  content:
+    application/json:
+      schema: { $ref: './models.yaml#/ApiError' }
+E502:
+  description: TVmaze unavailable or invalid response
+  content:
+    application/json:
+      schema: { $ref: './models.yaml#/ApiError' }
+E503:
+  description: Database unavailable
+  content:
+    application/json:
+      schema: { $ref: './models.yaml#/ApiError' }
+E504:
+  description: TVmaze timeout
+  content:
+    application/json:
+      schema: { $ref: './models.yaml#/ApiError' }

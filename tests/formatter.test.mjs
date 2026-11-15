@@ -4,7 +4,7 @@ import test from 'node:test';
 import { formatSource } from '../scripts/format-source.mjs';
 
 
-test('поля перевода и темы идут первыми, функции и эффекты отделены', async () => {
+void test('поля перевода и темы идут первыми, функции и эффекты отделены', async () => {
   const input = `export function usePresenter(field) {
   'use custom'; // directive
   const heading = useId();
@@ -43,7 +43,7 @@ test('поля перевода и темы идут первыми, функц�
   assert.equal(await formatSource('usePresenter.ts', expected), expected);
 });
 
-test('локальный аргумент остаётся до вызова хука во вложенной функции', async () => {
+void test('локальный аргумент остаётся до вызова хука во вложенной функции', async () => {
   const input = `const View = () => {
   const props = readProps();
   const theme = useTheme();
@@ -64,7 +64,7 @@ test('локальный аргумент остаётся до вызова х�
   assert.equal(await formatSource('View.tsx', formatted), formatted);
 });
 
-test('после блока импортов остаются ровно две пустые строки', async () => {
+void test('после блока импортов остаются ровно две пустые строки', async () => {
   const imports = "import './a';\nimport './b';";
   for (const tail of ['', ' // для импорта']) {
     const next = '// для функции\nexport function run() {}\n';
@@ -77,7 +77,7 @@ test('после блока импортов остаются ровно две 
   assert.equal(await formatSource('module.js', imports + '\nrun();'), imports + '\n\n\nrun();\n');
 });
 
-test('типы завершают свою группу импортов в алфавитном порядке', async () => {
+void test('типы завершают свою группу импортов в алфавитном порядке', async () => {
   const groups = [
     ["import { useState } from 'react';", "import type { ReactNode } from 'react';"],
     [
@@ -99,7 +99,7 @@ test('типы завершают свою группу импортов в ал
   assert.equal(await formatSource('imports.ts', input), expected);
 });
 
-test('между константами и функциями, включая экспортируемые, одна пустая строка', async () => {
+void test('между константами и функциями, включая экспортируемые, одна пустая строка', async () => {
   const groups = [
     'const size = 2;\nconst paths = { icon: size };',
     'export function usePresenter() {\n  return paths;\n}',
@@ -113,7 +113,7 @@ test('между константами и функциями, включая э
   }
 });
 
-test('соседние объявления типов отделены одной пустой строкой', async () => {
+void test('соседние объявления типов отделены одной пустой строкой', async () => {
   const types = 'export interface A {}|interface B {}|type C = B;|enum D {}|class E {}'.split('|');
   const expected = types.join('\n\n') + '\n';
   assert.equal(await formatSource('types.ts', types.join('\n')), expected);

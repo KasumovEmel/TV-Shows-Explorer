@@ -2,7 +2,10 @@ node_modules/
 /openspec/
 /AGENTS.md
 dist/
+apps/server/data/
 test-results/
 .rsbuild/
+.turbo/
+/release/
 .DS_Store
 *.log

@@ -1,0 +1,24 @@
+get:
+  operationId: searchShows
+  parameters:
+    - name: q
+      in: query
+      required: true
+      schema: { type: string, pattern: '\S' }
+    - name: genre
+      in: query
+      schema: { type: string }
+    - name: page
+      in: query
+      schema: { type: integer, minimum: 1, default: 1 }
+  responses:
+    '200':
+      description: Genres and counts cover the complete search result before pagination.
+      content:
+        application/json:
+          schema: { $ref: '../models.yaml#/SearchPage' }
+    '400': { $ref: '../errors.yaml#/E400' }
+    '429': { $ref: '../errors.yaml#/E429' }
+    '500': { $ref: '../errors.yaml#/E500' }
+    '502': { $ref: '../errors.yaml#/E502' }
+    '504': { $ref: '../errors.yaml#/E504' }

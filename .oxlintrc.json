@@ -2,7 +2,7 @@
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "plugins": ["typescript", "react", "import"],
   "jsPlugins": ["./scripts/oxlint/project-rules.mjs"],
-  "options": { "typeAware": true, "typeCheck": true },
+  "options": { "typeAware": true, "typeCheck": false },
   "rules": {
     "import/default": "off",
     "import/namespace": "off",
@@ -15,7 +15,7 @@
   },
   "overrides": [
     {
-      "files": ["src/**"],
+      "files": ["apps/web/src/**"],
       "rules": {
         "project/require-shared-request": "error",
         "project/require-request-catch": "off",
@@ -42,7 +42,7 @@
       }
     },
     {
-      "files": ["src/app/utils/request.ts"],
+      "files": ["apps/web/src/app/utils/request.ts"],
       "rules": {
         "no-restricted-imports": "off",
         "project/require-shared-request": "off",
@@ -50,5 +50,5 @@
       }
     }
   ],
-  "ignorePatterns": ["dist/"]
+  "ignorePatterns": ["**/dist/**", "**/.rsbuild/**", "**/src/generated/**", "**/api/generated/**"]
 }

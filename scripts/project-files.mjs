@@ -3,7 +3,13 @@ import { lstatSync } from 'node:fs';
 
 
 export function projectFiles() {
-  const paths = ['.', ':!pnpm-lock.yaml', ':!.agents/skills/openspec-*/**'];
+  const paths = [
+    '.',
+    ':!pnpm-lock.yaml',
+    ':!apps/server/src/generated/**',
+    ':!apps/web/src/api/generated/**',
+    ':!.agents/skills/openspec-*/**',
+  ];
 
   return execFileSync(
     'git',
