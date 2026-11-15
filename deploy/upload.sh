@@ -15,5 +15,9 @@ incoming=$(ssh "${opts[@]}" -p "$VPS_PORT" "$host" 'mktemp -d /srv/season-one/.u
 [[ $incoming =~ ^/srv/season-one/\.upload\.[a-zA-Z0-9]+$ ]]
 cleanup(){ ssh "${opts[@]}" -p "$VPS_PORT" "$host" "rm -rf -- '$incoming'"; rm -rf -- "$keys"; }
 trap cleanup EXIT
-scp "${opts[@]}" -P "$VPS_PORT" release.tar.gz activate.sh "$host:$incoming/"
+files=(activate.sh)
+if ! ssh "${opts[@]}" -p "$VPS_PORT" "$host" "test -d '/srv/season-one/releases/$GITHUB_SHA'"; then
+  files+=(release.tar.gz)
+fi
+scp "${opts[@]}" -P "$VPS_PORT" "${files[@]}" "$host:$incoming/"
 ssh "${opts[@]}" -p "$VPS_PORT" "$host" "bash '$incoming/activate.sh' '$GITHUB_SHA' '$origin' '$incoming/release.tar.gz'"

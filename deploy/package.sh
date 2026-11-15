@@ -8,5 +8,5 @@ cp -R apps/web/dist "$stage/web"
 cp apps/server/dist/index.js "$stage/server.mjs"
 printf '%s\n' "$GITHUB_SHA" > "$stage/web/revision.txt"
 mkdir -p release
-tar -czf release/release.tar.gz -C "$stage" web server.mjs
+COPYFILE_DISABLE=1 tar -czf release/release.tar.gz -C "$stage" web server.mjs
 cp deploy/{activate,upload}.sh release/

@@ -24,13 +24,14 @@
     },
     "//#lint": {
       "inputs": [
-        "$TURBO_DEFAULT$",
-        "!**/*.md",
-        "!**/*.svg",
-        "!**/*.png",
-        "!**/*.pdf",
-        "!**/*.ttf",
-        "!.agents/skills/**"
+        "apps/*/src/**/*.{ts,tsx,json}",
+        "apps/*/tests/**/*.{ts,tsx,json}",
+        "apps/*/*.{ts,json}",
+        "tests/*.mjs",
+        "scripts/**/*.mjs",
+        "orval.config.ts",
+        ".oxlintrc.json",
+        "docs/design/*.json"
       ]
     },
     "//#test:formatter": {
