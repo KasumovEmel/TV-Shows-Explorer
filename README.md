@@ -19,5 +19,3 @@ pnpm dev
 - `pnpm test:unit` — запустить модульные тесты клиента и сервера.
 - `pnpm test` — запустить браузерные тесты. Перед первым запуском установи Chromium: `pnpm --filter @season-one/web exec playwright install chromium`.
 - `pnpm build` — собрать клиент и сервер.
-
-[Инструкция по публикации](deploy/README.md)
