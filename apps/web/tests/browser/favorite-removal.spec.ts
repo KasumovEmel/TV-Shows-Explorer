@@ -1,8 +1,10 @@
 import { expect, test } from '@playwright/test';
 
+import { pauseRemoval, seekRemoval } from './removalMotion';
+
 
 test.beforeEach(async ({ page }) => {
-  const items = ['First', 'Second', 'Third', 'Fourth'].map((originalTitle, i) => ({
+  let items = ['First', 'Second', 'Third', 'Fourth'].map((originalTitle, i) => ({
     id: String(201 + i),
     originalTitle,
     genres: [],
@@ -13,10 +15,7 @@ test.beforeEach(async ({ page }) => {
   );
   await page.route(/\/api\/favorites\/\d+$/, (route) => {
     const id = route.request().url().split('/').at(-1);
-    const index = items.findIndex((item) => item.id === id);
-    if (index >= 0) {
-      items.splice(index, 1);
-    }
+    items = items.filter((item) => item.id !== id);
 
     return route.fulfill({ status: 204 });
   });
@@ -41,34 +40,16 @@ test('сердце и соседи движутся даже без View Transit
   await expect(page.locator('[data-kind="error"]')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Favorites (4)' })).toBeVisible();
   await expect(remove).toBeEnabled();
-  const motions = await rows.nth(1).evaluateHandle((row) => {
-    const observed: Animation[] = [];
-    const observer = new MutationObserver(() => {
-      const list = row.parentElement!;
-      for (const motion of list.getAnimations({ subtree: true })) {
-        motion.pause();
-        motion.currentTime = 45;
-        observed.push(motion);
-      }
-      observer.disconnect();
-    });
-    observer.observe(row, { attributes: true, attributeFilter: ['data-removing'] });
-
-    return observed;
-  });
+  const motions = await pauseRemoval(rows.nth(1));
   await remove.click();
-  await expect.poll(() => motions.evaluate((list) => list.length)).toBe(4);
+  await seekRemoval(motions, 45);
   const scale = await remove
     .locator('svg')
     .evaluate((svg) => new DOMMatrix(getComputedStyle(svg).transform).a);
   expect(scale).toBeGreaterThan(0);
   expect(scale).toBeLessThan(1);
   await expect(rows.nth(1)).toHaveCSS('opacity', '1');
-  await motions.evaluate((list) =>
-    list.forEach((motion) => {
-      motion.currentTime = 125;
-    }),
-  );
+  await seekRemoval(motions, 125);
   const middle = await positions();
   expect(middle[0]).toBe(start[0]);
   for (const index of [2, 3]) {
@@ -86,6 +67,30 @@ test('сердце и соседи движутся даже без View Transit
   await motions.evaluate((list) => list.forEach((motion) => motion.finish()));
   await expect(rows.getByRole('heading')).toHaveText(['First', 'Third', 'Fourth']);
   expect(await positions()).toEqual(start.slice(0, 3));
+});
+
+test('у нижнего края окна строки занимают место до завершения удаления', async ({ page }) => {
+  const rows = page.getByRole('listitem');
+  await expect(rows).toHaveCount(4);
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    window.scrollTo(0, document.documentElement.scrollHeight);
+  });
+
+  const top = () => rows.nth(2).evaluate((row) => row.getBoundingClientRect().top);
+
+  const start = await top();
+  const motions = await pauseRemoval(rows.last());
+  await rows.last().getByRole('button').click();
+  await seekRemoval(motions, 140);
+  const middle = await top();
+  expect(middle).toBeGreaterThan(start);
+  await seekRemoval(motions, 199);
+  const end = await top();
+  expect(end).toBeGreaterThan(middle);
+  await motions.evaluate((list) => list.forEach((motion) => motion.finish()));
+  await expect(rows).toHaveCount(3);
+  expect(Math.abs((await top()) - end)).toBeLessThanOrEqual(1);
 });
 
 test('два подтверждения подряд удаляют обе строки', async ({ page }) => {

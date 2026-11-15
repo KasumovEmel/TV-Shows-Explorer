@@ -21,7 +21,10 @@
 }
 @media (prefers-reduced-motion: no-preference) {
   .page li[data-removing] {
-    animation: fade-row 200ms ease-out both;
+    overflow: clip;
+    animation:
+      fade-row 200ms ease-out both,
+      collapse-row 120ms cubic-bezier(0.4, 0, 0.25, 1) 80ms both;
     pointer-events: none;
   }
   .page li[data-removing] button {
@@ -29,9 +32,6 @@
   }
   .page li[data-removing] button svg {
     animation: shrink-heart 90ms ease-out both;
-  }
-  .page li[data-removing] ~ li {
-    animation: rise 120ms cubic-bezier(0.4, 0, 0.25, 1) 80ms both;
   }
   .page ul:has(> li:only-child[data-removing])::after {
     content: attr(data-empty-label) / '';
@@ -59,12 +59,14 @@
     opacity: 0;
   }
 }
-@keyframes rise {
+@keyframes collapse-row {
   from {
-    transform: translateY(0);
+    height: var(--favorite-height);
   }
   to {
-    transform: translateY(var(--favorite-rise));
+    height: 0;
+    padding-block: 0;
+    border-bottom-width: 0;
   }
 }
 @keyframes fade-in {

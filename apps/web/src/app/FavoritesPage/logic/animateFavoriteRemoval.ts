@@ -16,23 +16,20 @@ export function animateFavoriteRemoval(button: HTMLButtonElement, update: () => 
     ) {
       return update();
     }
-    const next = row.nextElementSibling;
-    if (next) {
-      const distance = row.getBoundingClientRect().top - next.getBoundingClientRect().top;
-      list.style.setProperty('--favorite-rise', distance + 'px');
-    }
+    row.style.setProperty('--favorite-height', row.getBoundingClientRect().height + 'px');
     row.dataset.removing = '';
     try {
       // CSS keeps the final frame visible until React commits the confirmed removal.
       await Promise.allSettled(row.getAnimations().map((motion) => motion.finished));
       await update();
-    } finally {
+    } catch (error) {
       delete row.dataset.removing;
-      list.style.removeProperty('--favorite-rise');
+      row.style.removeProperty('--favorite-height');
+      throw error;
     }
   };
 
-  // Two responses can arrive together. Measure each row after the previous removal.
+  // Play confirmed removals in order when several responses arrive together.
   const previous = pending.get(list);
   const current = previous ? previous.then(remove, remove) : remove();
   pending.set(list, current);
