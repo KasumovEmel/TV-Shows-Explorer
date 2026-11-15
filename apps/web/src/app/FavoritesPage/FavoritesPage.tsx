@@ -1,6 +1,7 @@
 import { AppHeader } from '../components/AppHeader';
 import { Button } from '../components/Button';
 import { ShowCard } from '../components/ShowCard';
+import { animateFavoriteRemoval } from './logic/animateFavoriteRemoval';
 import { usePresenter } from './usePresenter';
 
 import styles from './styles.module.css';
@@ -17,9 +18,9 @@ export function FavoritesPage() {
       <main className={styles.page}>
         <h1>{title}</h1>
         {items?.length ? (
-          <ul>
+          <ul data-empty-label={message}>
             {items.map((show) => (
-              <ShowCard key={show.id} show={show} />
+              <ShowCard key={show.id} show={show} animateRemoval={animateFavoriteRemoval} />
             ))}
           </ul>
         ) : (

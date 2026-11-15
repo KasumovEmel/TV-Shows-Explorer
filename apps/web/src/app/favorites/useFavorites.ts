@@ -20,7 +20,10 @@ export function useFavorites() {
   const lock = useRef(false);
   const [pending, setPending] = useState(false);
 
-  async function toggle(show: Show) {
+  async function toggle(
+    show: Show,
+    animateRemoval?: (update: () => Promise<void>) => Promise<void>,
+  ) {
     if (lock.current) {
       return;
     }
@@ -38,14 +41,19 @@ export function useFavorites() {
       } else {
         await addFavorite(show.id, api.addFavorite);
       }
-      await mutate(
-        (current) => {
-          const rest = (current ?? []).filter((item) => item.id !== show.id);
 
-          return saved ? rest : [show, ...rest];
-        },
-        { revalidate: false },
-      );
+      async function update() {
+        await mutate(
+          (current) => {
+            const rest = (current ?? []).filter((item) => item.id !== show.id);
+
+            return saved ? rest : [show, ...rest];
+          },
+          { revalidate: false },
+        );
+      }
+
+      await (saved && animateRemoval ? animateRemoval(update) : update());
     } catch (error) {
       onError(error);
     } finally {

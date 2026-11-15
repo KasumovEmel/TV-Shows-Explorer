@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { MouseEvent } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
@@ -6,7 +7,7 @@ import { useFavorites } from '@/app/favorites';
 import type { ShowCardProps } from './types';
 
 
-export function usePresenter({ show }: ShowCardProps) {
+export function usePresenter({ show, animateRemoval }: ShowCardProps) {
   const { t, i18n } = useTranslation();
   const [broken, setBroken] = useState<string>();
   const title = t('titles.' + show.id, { defaultValue: show.originalTitle });
@@ -23,7 +24,8 @@ export function usePresenter({ show }: ShowCardProps) {
       saved,
       disabled: isLoading || pending || (!items && !error),
       label: t(action, { title }),
-      onClick: () => void toggle(show),
+      onClick: ({ currentTarget }: MouseEvent<HTMLButtonElement>) =>
+        void toggle(show, animateRemoval?.bind(null, currentTarget)),
     },
     title,
     year: show.year ? t('catalog.premiereYear', { year: show.year }) : t('catalog.noYear'),

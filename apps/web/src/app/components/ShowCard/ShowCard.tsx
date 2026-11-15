@@ -41,7 +41,7 @@ export function ShowCard(props: ShowCardProps) {
       action={
         <Button
           variant="icon"
-          icon="bookmark"
+          icon="heart"
           disabled={favorite.disabled}
           aria-label={favorite.label}
           title={favorite.label}

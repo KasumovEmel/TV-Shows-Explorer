@@ -2,7 +2,8 @@ import type { IconName, IconProps } from './types';
 
 
 const paths: Record<IconName, string> = {
-  bookmark: 'M6 3h12v18l-6-4-6 4Z',
+  heart:
+    'M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z',
   sun: 'M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M19 5l-1.5 1.5m-11 11L5 19',
   moon: 'M21 13a9 9 0 0 1-10-10 9 9 0 1 0 10 10Z',
   sunMoon:

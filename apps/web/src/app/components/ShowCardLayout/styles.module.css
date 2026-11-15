@@ -19,6 +19,7 @@
   grid-row: 1 / span 2;
 }
 .intro button[aria-pressed='true'] svg {
+  color: var(--favorite);
   fill: currentColor;
 }
 .intro h3 {

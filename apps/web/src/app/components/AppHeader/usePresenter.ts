@@ -22,6 +22,6 @@ export function usePresenter() {
     label: t(favorites ? 'favorites.search' : 'favorites.title'),
     href,
     navigate,
-    icon: favorites ? ('search' as const) : ('bookmark' as const),
+    icon: favorites ? ('search' as const) : ('heart' as const),
   };
 }

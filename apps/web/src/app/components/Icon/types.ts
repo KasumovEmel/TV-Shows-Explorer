@@ -1,5 +1,5 @@
 export type IconName =
-  | 'bookmark'
+  | 'heart'
   | 'restore'
   | 'close'
   | 'search'
