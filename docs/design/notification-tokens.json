@@ -57,10 +57,5 @@
     "closeTarget": 44,
     "radius": 14
   },
-  "dismissAfterMs": {
-    "error": null,
-    "warning": null,
-    "success": 6000,
-    "info": 6000
-  }
+  "dismissAfterMs": 3000
 }

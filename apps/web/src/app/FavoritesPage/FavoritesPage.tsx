@@ -1,3 +1,4 @@
+import { AnimatedCount } from '../components/AnimatedCount';
 import { AppHeader } from '../components/AppHeader';
 import { Button } from '../components/Button';
 import { ShowCard } from '../components/ShowCard';
@@ -8,7 +9,7 @@ import styles from './styles.module.css';
 
 
 export function FavoritesPage() {
-  const { title, items, error, retry, label, message } = usePresenter();
+  const { title, headingLabel, count, items, error, retry, label, message } = usePresenter();
 
   return (
     <>
@@ -16,7 +17,15 @@ export function FavoritesPage() {
         <AppHeader favoritesPage />
       </div>
       <main className={styles.page}>
-        <h1>{title}</h1>
+        <h1 aria-label={headingLabel}>
+          {title}
+          {count !== undefined && (
+            <>
+              {' '}
+              (<AnimatedCount value={count} />)
+            </>
+          )}
+        </h1>
         {items?.length ? (
           <ul data-empty-label={message}>
             {items.map((show) => (

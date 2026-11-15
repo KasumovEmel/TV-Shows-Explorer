@@ -1,0 +1,36 @@
+.window {
+  display: inline-block;
+  vertical-align: bottom;
+  overflow: hidden;
+  font-variant-numeric: tabular-nums;
+  mask-image: linear-gradient(transparent, black 14%, black 86%, transparent);
+}
+.track {
+  display: grid;
+  text-align: center;
+}
+.track > span,
+.track::before {
+  grid-area: 1 / 1;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .track[data-previous] {
+    --step: 100%;
+    animation: roll 280ms cubic-bezier(0.22, 0.8, 0.24, 1);
+  }
+  .track[data-direction='down'] {
+    --step: -100%;
+  }
+  .track[data-previous]::before {
+    content: attr(data-previous) / '';
+    transform: translateY(calc(-1 * var(--step)));
+  }
+}
+@keyframes roll {
+  from {
+    transform: translateY(var(--step));
+  }
+  to {
+    transform: translateY(0);
+  }
+}

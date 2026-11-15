@@ -1,38 +1,76 @@
-.toast[data-kind='error'] {
+.toast[data-kind='error'],
+.card[data-tone='error'] {
   --fill: var(--error-surface);
   --stroke: var(--error-border);
   --sign: var(--error-accent);
 }
-.toast[data-kind='warning'] {
+.toast[data-kind='warning'],
+.card[data-tone='warning'] {
   --fill: var(--warning-surface);
   --stroke: var(--warning-border);
   --sign: var(--warning-accent);
 }
-.toast[data-kind='success'] {
+.toast[data-kind='success'],
+.card[data-tone='success'] {
   --fill: var(--success-surface);
   --stroke: var(--success-border);
   --sign: var(--success-accent);
 }
-.toast[data-kind='info'] {
+.toast[data-kind='info'],
+.card[data-tone='info'] {
   --fill: var(--info-surface);
   --stroke: var(--info-border);
   --sign: var(--info-accent);
 }
 .toast {
+  position: relative;
   pointer-events: auto;
+  color: var(--sign);
+}
+.card {
+  position: relative;
   display: grid;
-  grid-template-columns: 24px minmax(0, 1fr) auto;
+  grid-template-columns: 24px minmax(0, 1fr);
   gap: 12px;
   align-items: start;
   min-height: 86px;
-  padding: 15px 4px 17px 16px;
+  max-height: calc(100dvh - var(--top) - 12px - env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+  padding: 15px 60px 17px 16px;
   border: 1.5px solid var(--stroke);
   border-radius: 14px;
   background: var(--fill);
   color: var(--sign);
+  transform-origin: top center;
 }
-.toast button {
-  margin-top: -14px;
+.card[aria-hidden='true'] {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.card[data-depth='1'],
+.card[data-depth='2'] {
+  transform: translateY(-5px) scale(0.975);
+  background: var(--surface);
+  border-color: var(--line);
+}
+.card[data-depth='2'] {
+  transform: translateY(-10px) scale(0.95);
+  background: color-mix(in srgb, var(--surface) 92%, var(--ink));
+}
+.card[data-depth='departing'] {
+  transform: translateY(12px) scale(1.015);
+  opacity: 0;
+}
+.card[data-depth='1'] > *,
+.card[data-depth='2'] > * {
+  opacity: 0;
+}
+.close {
+  position: absolute;
+  top: 2px;
+  inset-inline-end: 5px;
 }
 .copy {
   overflow-wrap: anywhere;
@@ -47,4 +85,22 @@
   color: var(--ink);
   font-size: 15px;
   line-height: 1.5;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .card {
+    transition:
+      transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 160ms ease-out,
+      background-color 180ms ease-out,
+      border-color 180ms ease-out;
+  }
+  .card > * {
+    transition: opacity 160ms ease-out;
+  }
+  @starting-style {
+    .card[data-depth='0'] {
+      transform: translateY(12px) scale(0.98);
+      opacity: 0;
+    }
+  }
 }

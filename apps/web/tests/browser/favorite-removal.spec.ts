@@ -8,7 +8,18 @@ test.beforeEach(async ({ page }) => {
     genres: [],
   }));
   await page.route('**/api/favorites', (route) => route.fulfill({ json: { items } }));
-  await page.route('**/api/favorites/*', (route) => route.fulfill({ status: 204 }));
+  await page.route('**/api/favorites/count', (route) =>
+    route.fulfill({ json: { count: items.length } }),
+  );
+  await page.route(/\/api\/favorites\/\d+$/, (route) => {
+    const id = route.request().url().split('/').at(-1);
+    const index = items.findIndex((item) => item.id === id);
+    if (index >= 0) {
+      items.splice(index, 1);
+    }
+
+    return route.fulfill({ status: 204 });
+  });
   await page.addInitScript(() => {
     Object.defineProperty(document, 'startViewTransition', { value: undefined });
   });
@@ -28,6 +39,7 @@ test('сердце и соседи движутся даже без View Transit
   await page.route('**/api/favorites/202', (r) => r.fulfill({ status: 500 }), { times: 1 });
   await remove.click();
   await expect(page.locator('[data-kind="error"]')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Favorites (4)' })).toBeVisible();
   await expect(remove).toBeEnabled();
   const motions = await rows.nth(1).evaluateHandle((row) => {
     const observed: Animation[] = [];
@@ -85,6 +97,7 @@ test('два подтверждения подряд удаляют обе ст�
     buttons[2].click();
   });
   await expect(rows.getByRole('heading')).toHaveText(['First', 'Fourth']);
+  await expect(page.getByRole('heading', { name: 'Favorites (2)' })).toBeVisible();
   await expect(rows.last()).toHaveCSS('transform', 'none');
 });
 

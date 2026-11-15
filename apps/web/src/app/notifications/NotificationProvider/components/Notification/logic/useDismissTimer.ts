@@ -1,24 +1,25 @@
 import { useEffect, useRef } from 'react';
 
+import { dismissAfterMs } from '@/styles/tokens';
 
-export function useDismissTimer(
-  auto: boolean,
-  paused: boolean,
-  id: number,
-  dismiss: (id: number) => void,
-) {
-  const remaining = useRef(6000);
+
+export function useDismissTimer(paused: boolean, id: number, expire: (id: number) => void) {
+  const remaining = useRef(dismissAfterMs);
 
   useEffect(() => {
-    if (!auto || paused) {
+    remaining.current = dismissAfterMs;
+  }, [id]);
+
+  useEffect(() => {
+    if (paused) {
       return;
     }
     const start = performance.now();
-    const timer = window.setTimeout(() => dismiss(id), remaining.current);
+    const timer = window.setTimeout(() => expire(id), remaining.current);
 
     return () => {
       window.clearTimeout(timer);
       remaining.current = Math.max(0, remaining.current - (performance.now() - start));
     };
-  }, [auto, paused, id, dismiss]);
+  }, [paused, id, expire]);
 }

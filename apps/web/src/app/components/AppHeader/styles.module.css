@@ -12,6 +12,22 @@
   display: flex;
   gap: 6px;
 }
+.navigation {
+  position: relative;
+}
+.count {
+  position: absolute;
+  top: -4px;
+  inset-inline-end: -4px;
+  min-width: 18px;
+  padding: 1px 4px;
+  border-radius: 12px;
+  background: var(--current-page-background);
+  color: var(--current-page-text);
+  font: 600 12px/16px var(--font-ui);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
 @media (max-width: 767px) {
   .toolbar {
     padding: 8px 0 5px;

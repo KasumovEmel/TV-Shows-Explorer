@@ -7,18 +7,21 @@ import styles from './styles.module.css';
 
 
 export function NotificationProvider(props: NotificationProviderProps) {
-  const { alert, status, children, notify, dismiss } = usePresenter(props);
+  const { cards, departing, children, notify, dismiss, expire, finishExit } = usePresenter(props);
 
   return (
     <NotifyContext.Provider value={notify}>
       {children}
-      <div className={styles.layer}>
-        <div role="alert" aria-atomic="true">
-          {alert && <Notification key={alert.id} {...alert} onDismiss={dismiss} />}
-        </div>
-        <div role="status" aria-atomic="true">
-          {status && <Notification key={status.id} {...status} onDismiss={dismiss} />}
-        </div>
+      <div className={styles.stack} aria-live="polite">
+        {cards.length > 0 && (
+          <Notification
+            cards={cards}
+            departing={departing}
+            onDismiss={dismiss}
+            onExpire={expire}
+            onExitEnd={finishExit}
+          />
+        )}
       </div>
     </NotifyContext.Provider>
   );

@@ -98,6 +98,9 @@
   },
   "favorites": {
     "title": "Favorites",
+    "withCount": "Favorites ({{count}})",
+    "added": "Added {{title}} to favorites.",
+    "removed": "Removed {{title}} from favorites.",
     "search": "Search shows",
     "add": "Save {{title}}",
     "remove": "Remove {{title}}",

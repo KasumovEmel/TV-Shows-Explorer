@@ -10,6 +10,7 @@ export function Button(props: ButtonProps) {
     return (
       <a {...control} className={className}>
         {glyph}
+        {children}
       </a>
     );
   }

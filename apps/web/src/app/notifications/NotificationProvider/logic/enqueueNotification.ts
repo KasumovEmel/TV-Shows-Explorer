@@ -2,9 +2,9 @@ import type { QueuedNotification } from '../types';
 
 
 export function enqueueNotification(queue: QueuedNotification[], item: QueuedNotification) {
-  const active = queue[0];
-  if (active?.kind === item.kind && active.messageKey === item.messageKey) {
-    return queue;
+  const front = queue.at(-1);
+  if (!item.show && front?.kind === item.kind && front.messageKey === item.messageKey) {
+    return [...queue.slice(0, -1), item];
   }
 
   return [...queue, item];

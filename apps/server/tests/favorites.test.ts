@@ -35,6 +35,16 @@ void test('anonymous sessions, snapshots, fixed expiry and durable idempotent mu
   const req = (cookie = '', path = '', method = 'GET') =>
     app.request('/api/favorites' + path, { method, headers: { cookie } });
 
+  const count = async (c = '') => {
+    const response = await req(c, '/count');
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get('cache-control'), 'private, no-store');
+    assert.equal(response.headers.get('set-cookie'), null);
+
+    return response.json();
+  };
+
+  assert.deepEqual(await count(), { count: 0 });
   const first = await req(),
     other = await req();
   const set = first.headers.get('set-cookie')!;
@@ -62,6 +72,8 @@ void test('anonymous sessions, snapshots, fixed expiry and durable idempotent mu
 
   assert.deepEqual(await ids(second), []);
   assert.deepEqual(await ids(cookie), ['2', '1']);
+  assert.deepEqual(await count(second), { count: 0 });
+  assert.deepEqual(await count(cookie), { count: 2 });
   store.close();
   now += 29 * 86400_000;
   offline = true;
@@ -74,8 +86,10 @@ void test('anonymous sessions, snapshots, fixed expiry and durable idempotent mu
     assert.equal((await req(cookie, '/2', 'DELETE')).status, 204);
   }
   assert.deepEqual(await ids(cookie), ['1']);
+  assert.deepEqual(await count(cookie), { count: 1 });
   assert.equal(calls, 3);
   now = lifetime * 1000;
+  assert.deepEqual(await count(cookie), { count: 0 });
   assert.deepEqual(await ids(cookie), []);
   assert.notEqual((await req(cookie)).headers.get('set-cookie')!.split(';')[0], cookie);
   assert.equal((await app.request('/api/health')).status, 200);

@@ -2,22 +2,37 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { enqueueNotification } from './logic/enqueueNotification';
 import type { NotificationEvent } from '../types';
-import type { NotificationProviderProps, QueuedNotification } from './types';
+import type { NotificationProviderProps, NotificationStack } from './types';
 
 
 export function usePresenter({ children }: NotificationProviderProps) {
-  const [queue, setQueue] = useState<QueuedNotification[]>([]);
+  const [stack, setStack] = useState<NotificationStack>({ queue: [] });
   const nextId = useRef(0);
 
   const notify = useCallback((event: NotificationEvent) => {
     const item = { ...event, id: ++nextId.current };
-    setQueue((items) => enqueueNotification(items, item));
+    setStack(({ queue }) => ({ queue: enqueueNotification(queue, item) }));
   }, []);
 
-  const dismiss = useCallback(
-    (id: number) => setQueue((items) => (items[0]?.id === id ? items.slice(1) : items)),
-    [],
-  );
+  const dismiss = useCallback((id: number) => {
+    setStack((current) => {
+      const front = current.queue.at(-1);
+      if (front?.id !== id) {
+        return current;
+      }
+      const queue = current.queue.slice(0, -1);
+
+      return { queue, departing: queue.length ? front : undefined };
+    });
+  }, []);
+
+  const expire = useCallback((id: number) => {
+    setStack((current) => (current.queue.at(-1)?.id === id ? { queue: [] } : current));
+  }, []);
+
+  const finishExit = useCallback((id: number) => {
+    setStack((current) => (current.departing?.id === id ? { queue: current.queue } : current));
+  }, []);
 
   useEffect(() => {
     const offline = () => notify({ kind: 'warning' });
@@ -27,13 +42,13 @@ export function usePresenter({ children }: NotificationProviderProps) {
     return () => window.removeEventListener('offline', offline);
   }, [notify]);
 
-  const active = queue[0];
-
   return {
     children,
-    alert: active?.kind === 'error' ? active : null,
-    status: active?.kind !== 'error' ? active : null,
+    cards: stack.queue.slice(-3),
+    departing: stack.departing,
     notify,
     dismiss,
+    expire,
+    finishExit,
   };
 }

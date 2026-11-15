@@ -1,12 +1,13 @@
 import { useRef, useState } from 'react';
 
-import useSWR from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
 
 import { addFavorite } from './logic/tasks/addFavorite';
 import { listFavorites } from './logic/tasks/listFavorites';
 import { removeFavorite } from './logic/tasks/removeFavorite';
+import { favoritesCountKey } from './useFavoritesCount';
 import * as api from '@/api/generated/catalog';
-import { useRequestError } from '@/app/notifications';
+import { useNotify, useRequestError } from '@/app/notifications';
 import type { Show } from '@/app/show';
 
 
@@ -17,6 +18,8 @@ export function useFavorites() {
     shouldRetryOnError: false,
   });
   const onError = useRequestError();
+  const notify = useNotify();
+  const { mutate: refresh } = useSWRConfig();
   const lock = useRef(false);
   const [pending, setPending] = useState(false);
 
@@ -41,6 +44,12 @@ export function useFavorites() {
       } else {
         await addFavorite(show.id, api.addFavorite);
       }
+      notify({
+        kind: 'success',
+        messageKey: saved ? 'favorites.removed' : 'favorites.added',
+        show,
+      });
+      void refresh(favoritesCountKey);
 
       async function update() {
         await mutate(

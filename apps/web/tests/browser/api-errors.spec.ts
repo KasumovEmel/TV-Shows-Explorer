@@ -33,13 +33,14 @@ test('при HTTP 429 во время обновления видны преду
   await field.fill('a');
   await field.press('Enter');
 
-  await expect(page.locator('[data-kind="warning"]')).toContainText(
+  await expect(cached).toBeVisible();
+  const info = page.locator('[data-kind="info"]');
+  await expect(info).toContainText('Показана сохранённая выдача.');
+  await info.getByRole('button').click();
+  const warning = page.locator('[data-kind="warning"]');
+  await expect(warning).toContainText(
     'Слишком много запросов. Подождите немного и попробуйте снова.',
   );
-  await expect(cached).toBeVisible();
-  const dismiss = page.getByRole('button', { name: 'Закрыть уведомление' });
-  await dismiss.click();
-  await expect(page.locator('[data-kind="info"]')).toContainText('Показана сохранённая выдача.');
-  await dismiss.click();
+  await warning.getByRole('button').click();
   await expect(page.locator('[data-kind]')).toHaveCount(0);
 });

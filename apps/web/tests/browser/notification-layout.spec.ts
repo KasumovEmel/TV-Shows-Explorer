@@ -28,18 +28,18 @@ for (const [locale, strings] of Object.entries({ en, ru })) {
           await notify(page, { kind });
           const note = page.locator(`[data-kind="${kind}"]`);
           const role = kind === 'error' ? 'alert' : 'status';
-          await expect(page.getByRole(role).filter({ has: note })).toContainText(
-            strings.notification[kind].message,
-          );
+          await expect(note).toHaveRole(role);
+          await expect(note).toContainText(strings.notification[kind].message);
           await expect(note.locator('strong')).toHaveText(strings.notification[kind].title);
           const { accent, surface, border } = palette.variant[kind][theme];
 
           const rgb = (hex: string) =>
             'rgb(' + [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16)).join(', ') + ')';
 
-          await expect(note).toHaveCSS('background-color', rgb(surface));
-          await expect(note).toHaveCSS('color', rgb(accent));
-          await expect(note).toHaveCSS('border-top-color', rgb(border));
+          const front = note.locator('[data-depth="0"]');
+          await expect(front).toHaveCSS('background-color', rgb(surface));
+          await expect(front).toHaveCSS('color', rgb(accent));
+          await expect(front).toHaveCSS('border-top-color', rgb(border));
           const close = note.getByRole('button', { name: strings.notification.dismiss });
           const box = await note.boundingBox(),
             target = await close.boundingBox();
