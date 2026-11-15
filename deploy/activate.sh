@@ -42,10 +42,17 @@ if [[ ! -d $release ]]; then
   mv "$stage/release" "$release"
 fi
 if [[ -f $base/data/catalog.sqlite ]]; then
-  mkdir -p "$base/backups"
-  backup="$base/backups/$(date -u +%Y%m%dT%H%M%SZ)-$sha.sqlite"
-  sqlite3 "$base/data/catalog.sqlite" ".timeout 10000" ".backup '$backup'"
-  [[ $(sqlite3 "$backup" 'PRAGMA quick_check;') == ok ]]
+  (
+    umask 077
+    backups="$base/backups"
+    pending="$backups/.next"
+    mkdir -p "$pending"
+    trap 'rm -f -- "$pending"/catalog.sqlite{,-wal,-shm,-journal}; rmdir -- "$pending"' EXIT
+    sqlite3 "$base/data/catalog.sqlite" ".timeout 10000" ".backup '$pending/catalog.sqlite'"
+    [[ $(sqlite3 "$pending/catalog.sqlite" 'PRAGMA quick_check;') == ok ]]
+    mv -fT -- "$pending/catalog.sqlite" "$backups/latest.sqlite"
+    find "$backups" -maxdepth 1 -type f -name '*.sqlite' ! -name latest.sqlite -delete
+  )
 fi
 switch_to "$release"
 if sudo -n systemctl restart "$unit"; then
