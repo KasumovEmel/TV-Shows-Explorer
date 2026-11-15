@@ -25,7 +25,7 @@ jobs:
       - name: Identify runner and browser versions
         id: runtime
         run: |
-          echo "CI_RUNTIME=$RUNNER_OS-$RUNNER_ARCH-$ImageVersion-$(node -v)" >> "$GITHUB_ENV"
+          echo "CI_RUNTIME=$ImageOS-$RUNNER_ARCH-$(node -v)" >> "$GITHUB_ENV"
           echo "browser=$(node -p 'require("./apps/web/package.json").devDependencies["@playwright/test"]')" >> "$GITHUB_OUTPUT"
       - name: Restore installed workspace dependencies
         id: deps
