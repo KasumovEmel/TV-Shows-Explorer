@@ -1,0 +1,25 @@
+[extend]
+useDefault = true
+
+[[rules]]
+id = "literal-server-setting"
+description = "Literal SSH or VPN connection setting"
+regex = '''(?im)\b(?:VPS|SSH|VPN|WIREGUARD|WG)[_-](?:HOST|HOSTNAME|USER|USERNAME|PORT|ENDPOINT)["']?[ \t]*[:=][ \t]*["']?([a-zA-Z0-9_:\[][a-zA-Z0-9_.:@/\[\]-]*)'''
+secretGroup = 1
+
+[[rules]]
+id = "literal-access-credential"
+description = "Literal password, bearer token or API secret"
+regex = '''(?im)(?:\b(?:password|passwd|api[_-]?key|access[_-]?token|client[_-]?secret|privatekey|presharedkey)["']?[ \t]*[:=][ \t]*["']([^"'$\r\n]{4,})["']|\bAuthorization:[ \t]*Bearer[ \t]+([A-Za-z0-9._~+/=-]{8,}))'''
+
+[[rules]]
+id = "unquoted-credential-setting"
+description = "Unquoted credential in an environment or service configuration"
+regex = '''(?im)^[ \t]*(?:export[ \t]+)?(?:[a-z0-9]+[_-])*(?:password|passwd|api[_-]?key|access[_-]?token|client[_-]?secret|privatekey|presharedkey)[ \t]*=[ \t]*([^\s"'$\x60<][^\s#]*)[ \t]*(?:#.*)?$'''
+secretGroup = 1
+
+[[rules]]
+id = "server-setting-shell-default"
+description = "Hardcoded fallback for an SSH or VPN connection setting"
+regex = '''(?i)\$\{(?:VPS|SSH|VPN|WIREGUARD|WG)_(?:HOST|HOSTNAME|USER|USERNAME|PORT|ENDPOINT):?[-=]([A-Za-z0-9_.:@/\[\]-]+)\}'''
+secretGroup = 1

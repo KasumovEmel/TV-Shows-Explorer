@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "prepare": "python3 .githooks/install.py",
     "dev": "pnpm --parallel --filter \"./apps/*\" run dev",
     "build": "turbo run build --filter=\"./apps/*\"",
     "preview": "pnpm --filter @season-one/web preview",
