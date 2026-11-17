@@ -1,5 +1,5 @@
-import { Icon } from '../Icon';
 import { usePresenter } from './usePresenter';
+import { Icon } from '@components/Icon';
 import type { ButtonProps } from './types';
 
 

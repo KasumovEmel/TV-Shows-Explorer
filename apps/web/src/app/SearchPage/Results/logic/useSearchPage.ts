@@ -1,14 +1,14 @@
 import useSWR from 'swr';
 
-import { fetchShows } from './api/fetchShows';
-import { searchShows } from './tasks/searchShows';
-import type { SearchCriteria } from '../../logic/criteria';
+import { loadSearchPage } from './tasks/loadSearchPage';
+import { searchShows } from '@/api/generated/catalog';
+import type { SearchPageRequest } from './types';
 
 
-export function useSearchPage(criteria: SearchCriteria | null, signal?: AbortSignal) {
+export function useSearchPage({ criteria, signal }: SearchPageRequest) {
   return useSWR(
     criteria && signal ? (['/api/shows', criteria] as const) : null,
-    ([, params]) => searchShows(params, signal!, fetchShows),
+    ([, params]) => loadSearchPage({ criteria: params, signal: signal!, requestPage: searchShows }),
     { shouldRetryOnError: false, isPaused: () => signal?.aborted === true },
   );
 }

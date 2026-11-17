@@ -2,9 +2,9 @@ import { StrictMode } from 'react';
 import type { PropsWithChildren } from 'react';
 
 import { AppRoutes } from './AppRoutes';
-import { AppSWRConfig } from './components/AppSWRConfig';
-import { ErrorBoundary } from './components/ErrorBoundary';
 import { NotificationProvider } from './notifications';
+import { AppSWRConfig } from '@components/AppSWRConfig';
+import { ErrorBoundary } from '@components/ErrorBoundary';
 
 import '@/styles/base.css';
 

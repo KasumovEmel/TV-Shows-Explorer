@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { behavior } from '@/styles/tokens';
+import type { SearchPhase } from '../../types';
 
 
 export function useSearchQuery() {
   const [value, setValue] = useState('');
   const [controller, setController] = useState<AbortController | null>(null);
-  const [phase, setPhase] = useState<'idle' | 'entering' | 'docked'>('idle');
+  const [phase, setPhase] = useState<SearchPhase>('idle');
 
   const finishEntrance = useCallback(() => {
     setPhase((current) => (current === 'entering' ? 'docked' : current));

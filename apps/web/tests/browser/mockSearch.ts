@@ -1,12 +1,12 @@
-import type { Page, Route } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
 import nightShows from './night-shows.json' with { type: 'json' };
-import type { Show } from '../../src/app/show';
+import type { PageResponseParams, RespondParams } from './types';
 
 
 export const searchRoute = '**/api/shows?**';
 
-export function pageResponse(items: Show[], url: string) {
+export function pageResponse({ items, url }: PageResponseParams) {
   const params = new URL(url).searchParams;
   const genre = params.get('genre');
   const page = Number(params.get('page') ?? 1);
@@ -22,17 +22,17 @@ export function pageResponse(items: Show[], url: string) {
   };
 }
 
-export function respond(route: Route, items: Show[]) {
-  return route.fulfill({ json: pageResponse(items, route.request().url()) });
+export function respond({ route, items }: RespondParams) {
+  return route.fulfill({ json: pageResponse({ items, url: route.request().url() }) });
 }
 
 export async function mockSearch(page: Page) {
   await page.route(searchRoute, (route) => {
     const q = new URL(route.request().url()).searchParams.get('q');
     if (q === 'night' || q === 'ноч') {
-      return respond(
+      return respond({
         route,
-        nightShows.map(({ id, en, ru, rating, genres, poster, year, summary }) => ({
+        items: nightShows.map(({ id, en, ru, rating, genres, poster, year, summary }) => ({
           id: String(id),
           originalTitle: q === 'ноч' ? ru : en,
           genres,
@@ -41,16 +41,16 @@ export async function mockSearch(page: Page) {
           rating: rating ?? undefined,
           summary: summary ?? undefined,
         })),
-      );
+      });
     }
     if (q === 'missing') {
-      return respond(route, []);
+      return respond({ route, items: [] });
     }
     const show =
       q === 'a'
         ? { id: '54198', originalTitle: 'The Bear', genres: ['Drama'] }
         : { id: '17861', originalTitle: 'Dark', genres: ['Science-Fiction'] };
 
-    return respond(route, [show]);
+    return respond({ route, items: [show] });
   });
 }

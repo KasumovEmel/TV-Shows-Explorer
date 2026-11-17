@@ -2,10 +2,11 @@ import { expect, test } from '@playwright/test';
 
 import { expectRows } from './expectRows';
 import { mockSearch, respond, searchRoute } from './mockSearch';
+import type { ReleaseRequest } from './types';
 
 
 for (const width of [1440, 390]) {
-  test('макет поиска: ' + width + ' px', async ({ page }, info) => {
+  test('макет поиска: ' + width + ' px', async ({ page }) => {
     await mockSearch(page);
     const wide = width === 1440;
     await page.setViewportSize({ width, height: wide ? 1000 : 844 });
@@ -33,7 +34,7 @@ for (const width of [1440, 390]) {
     const top = await intro.boundingBox();
     expect(initial!.y).toBeGreaterThan(top!.y + top!.height);
     expect(initial!.width).toBe(wide ? 640 : 350);
-    let release!: () => void;
+    let release!: ReleaseRequest;
     const pending = new Promise<void>((resolve) => {
       release = resolve;
     });
@@ -46,7 +47,7 @@ for (const width of [1440, 390]) {
     await expect(skeletons).toHaveCount(3);
     const skeleton = await skeletons.first().boundingBox();
     const container = page.locator('main > section');
-    await expectRows(skeletons.locator('..'), container);
+    await expectRows({ rows: skeletons.locator('..'), container });
     await expect(skeletons.first()).toHaveCSS('border-radius', '12px');
     await form.evaluate(async (el) => {
       await Promise.all(el.getAnimations().map((a) => a.finished));
@@ -59,7 +60,7 @@ for (const width of [1440, 390]) {
     }
     await expect(skeletons).toHaveCount(3);
     await expect(page.getByRole('main')).toHaveCSS('opacity', '1');
-    await page.screenshot({ path: info.outputPath('loading.png') });
+    await page.screenshot({ path: test.info().outputPath('loading.png') });
     release();
     await expect(page.getByRole('listitem')).toHaveCount(3);
     await expect(field).toBeFocused();
@@ -73,11 +74,11 @@ for (const width of [1440, 390]) {
     expect(first!.height).toBeCloseTo((first!.width * 7) / 5, 1);
     await expect(posters.first()).toHaveCSS('object-fit', 'contain');
     await expect(posters.first().locator('..')).toHaveCSS('border-radius', '12px');
-    await expectRows(page.getByRole('listitem'), container);
+    await expectRows({ rows: page.getByRole('listitem'), container });
     await expect(form).toHaveCSS('height', wide ? '62px' : '52px');
     const clear = page.getByRole('button', { name: 'Очистить поиск' });
     await expect(clear).toHaveCSS('min-width', '44px');
-    await page.screenshot({ path: info.outputPath('results.png') });
+    await page.screenshot({ path: test.info().outputPath('results.png') });
     const last = page.getByRole('link', { name: 'Страница 3' });
     await last.focus();
     await last.press('Enter');
@@ -93,15 +94,15 @@ test('320 px: длинные слова, отсутствующие метада
     genre = 'longGenre'.repeat(8);
   await page.setViewportSize({ width: 320, height: 720 });
   await page.route(searchRoute, (route) =>
-    respond(
+    respond({
       route,
-      Array.from({ length: 28 }, (_, i) => ({
+      items: Array.from({ length: 28 }, (_, i) => ({
         id: String(i + 1),
         originalTitle: title,
         genres: i ? [] : [genre],
         poster: '/missing-poster.png',
       })),
-    ),
+    }),
   );
   await page.goto('/');
   await page.getByRole('searchbox').fill('long');

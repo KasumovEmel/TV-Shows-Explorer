@@ -8,3 +8,14 @@ export interface NotificationProps {
   onExpire: (id: number) => void;
   onExitEnd: (id: number) => void;
 }
+
+export interface DismissTimerParams {
+  paused: boolean;
+  id: number;
+  expire: (id: number) => void;
+}
+
+export interface NotificationLayerParams {
+  item: QueuedNotification;
+  depth: number | 'departing';
+}

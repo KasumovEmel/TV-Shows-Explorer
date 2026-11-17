@@ -1,3 +1,6 @@
-export function addFavorite(id: string, save: (id: string) => Promise<void>) {
-  return save(id);
+import type { FavoriteMutationParams } from '../../types';
+
+
+export function addFavorite({ id, request }: FavoriteMutationParams) {
+  return request(id);
 }

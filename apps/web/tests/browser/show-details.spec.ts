@@ -29,10 +29,13 @@ test('описание сокращается по словам, а пропус
   const first = 'One signal. Another signal.';
   const summaryText = first + ' again'.repeat(21) + '…';
   await page.route(searchRoute, (route) =>
-    respond(route, [
-      { id: '1', originalTitle: 'Signal', genres: [], summary: summaryText, rating: 0 },
-      { id: '2', originalTitle: 'Quiet', genres: [] },
-    ]),
+    respond({
+      route,
+      items: [
+        { id: '1', originalTitle: 'Signal', genres: [], summary: summaryText, rating: 0 },
+        { id: '2', originalTitle: 'Quiet', genres: [] },
+      ],
+    }),
   );
   await page.goto('/');
   await page.getByRole('searchbox').fill('test');

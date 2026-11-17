@@ -13,18 +13,23 @@ async function openFixture(page: Page) {
 
 test('только последний Toast виден и вся стопка исчезает через три секунды после него', async ({
   page,
-}, info) => {
+}) => {
   await page.setViewportSize({ width: 390, height: 720 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await openFixture(page);
-  await notify(page, { kind: 'error' }, { kind: 'warning' });
+  await notify({ page, events: [{ kind: 'error' }, { kind: 'warning' }] });
   const card = page.locator('[data-kind]');
   await expect(card).toHaveAttribute('data-kind', 'warning');
   await page.clock.fastForward(2500);
-  await notify(page, {
-    kind: 'success',
-    messageKey: 'favorites.added',
-    show: { id: '1', originalTitle: 'Night Flight' },
+  await notify({
+    page,
+    events: [
+      {
+        kind: 'success',
+        messageKey: 'favorites.added',
+        show: { id: '1', originalTitle: 'Night Flight' },
+      },
+    ],
   });
   await expect(card).toHaveCount(1);
   await expect(card).toContainText('Added Night Flight to favorites.');
@@ -38,7 +43,7 @@ test('только последний Toast виден и вся стопка и
   expect(edges[1].top).toBeLessThan(edges[2].top);
   expect(edges[1].left).toBeGreaterThan(edges[2].left);
   await page.screenshot({
-    path: info.outputPath('toast-stack.png'),
+    path: test.info().outputPath('toast-stack.png'),
     clip: { x: 0, y: 0, width: 390, height: 118 },
   });
   await page.clock.fastForward(2999);
@@ -52,13 +57,13 @@ test('крестик открывает предыдущие карточки п
 }) => {
   await openFixture(page);
   const card = page.locator('[data-kind]');
-  await notify(page, { kind: 'error' });
+  await notify({ page, events: [{ kind: 'error' }] });
   await expect(card).toHaveAttribute('data-kind', 'error');
   await page.clock.fastForward(2200);
-  await notify(page, { kind: 'warning' });
+  await notify({ page, events: [{ kind: 'warning' }] });
   await expect(card).toHaveAttribute('data-kind', 'warning');
   await page.clock.fastForward(2200);
-  await notify(page, { kind: 'info' });
+  await notify({ page, events: [{ kind: 'info' }] });
   await expect(card).toHaveAttribute('data-kind', 'info');
   const close = card.getByRole('button');
   await close.click();
@@ -79,11 +84,11 @@ test('фокус и наведение удерживают стопку при 
   page,
 }) => {
   await openFixture(page);
-  await notify(page, { kind: 'info' });
+  await notify({ page, events: [{ kind: 'info' }] });
   const card = page.locator('[data-kind]');
   const close = card.getByRole('button');
   await close.focus();
-  await notify(page, { kind: 'warning' });
+  await notify({ page, events: [{ kind: 'warning' }] });
   await expect(card).toHaveAttribute('data-kind', 'warning');
   await expect(close).toBeFocused();
   await page.clock.fastForward(10000);

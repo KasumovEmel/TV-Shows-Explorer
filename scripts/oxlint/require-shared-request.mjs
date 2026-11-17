@@ -23,14 +23,17 @@ export const requireSharedRequest = {
         checkSource(node.source);
       },
       CallExpression(node) {
-        if (node.callee.name === 'require' && !binding(context.sourceCode, node.callee)) {
+        if (
+          node.callee.name === 'require' &&
+          !binding({ source: context.sourceCode, identifier: node.callee })
+        ) {
           checkSource(node.arguments[0]);
-        } else if (requestTarget(context.sourceCode, node.callee) === 'fetch') {
+        } else if (requestTarget({ source: context.sourceCode, node: node.callee }) === 'fetch') {
           context.report({ node, message });
         }
       },
       NewExpression(node) {
-        if (requestTarget(context.sourceCode, node.callee) === 'XMLHttpRequest') {
+        if (requestTarget({ source: context.sourceCode, node: node.callee }) === 'XMLHttpRequest') {
           context.report({ node, message });
         }
       },

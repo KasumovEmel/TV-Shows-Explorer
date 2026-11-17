@@ -37,7 +37,7 @@ test('при добавлении и закрытии обе карточки д
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/fixture.html');
   await page.getByRole('searchbox').focus();
-  await notify(page, { kind: 'info' });
+  await notify({ page, events: [{ kind: 'info' }] });
   const stack = page.locator('[data-kind]');
   const previous = stack.locator('[data-tone="info"]');
   const latest = stack.locator('[data-tone="warning"]');
@@ -45,7 +45,7 @@ test('при добавлении и закрытии обе карточки д
     Promise.all(el.getAnimations().map((m) => m.finished)).then(() => {}),
   );
   const push = await pauseNextMove(stack);
-  await notify(page, { kind: 'warning' });
+  await notify({ page, events: [{ kind: 'warning' }] });
   await expect.poll(() => push.evaluate((moves) => moves.length)).toBe(2);
   const receding = await translation(previous);
   expect(receding).toBeGreaterThan(-5);
@@ -64,7 +64,7 @@ test('при добавлении и закрытии обе карточки д
   await expect(stack.getByRole('button')).toHaveCount(1);
 
   // A new event interrupts the still-paused exit.
-  await notify(page, { kind: 'success' });
+  await notify({ page, events: [{ kind: 'success' }] });
   await expect(stack).toHaveAttribute('data-kind', 'success');
   await expect(latest).toHaveCount(0);
   await stack.getByRole('button').press('Enter');
@@ -76,7 +76,7 @@ test('при уменьшенном движении смена слоя про�
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/fixture.html');
   await page.getByRole('searchbox').focus();
-  await notify(page, { kind: 'error' }, { kind: 'success' });
+  await notify({ page, events: [{ kind: 'error' }, { kind: 'success' }] });
   const stack = page.locator('[data-kind]');
 
   const motions = () => stack.evaluate((el) => el.getAnimations({ subtree: true }).length);

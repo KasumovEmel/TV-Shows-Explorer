@@ -42,14 +42,14 @@ test('сердце и соседи движутся даже без View Transit
   await expect(remove).toBeEnabled();
   const motions = await pauseRemoval(rows.nth(1));
   await remove.click();
-  await seekRemoval(motions, 45);
+  await seekRemoval({ motions, time: 45 });
   const scale = await remove
     .locator('svg')
     .evaluate((svg) => new DOMMatrix(getComputedStyle(svg).transform).a);
   expect(scale).toBeGreaterThan(0);
   expect(scale).toBeLessThan(1);
   await expect(rows.nth(1)).toHaveCSS('opacity', '1');
-  await seekRemoval(motions, 125);
+  await seekRemoval({ motions, time: 125 });
   const middle = await positions();
   expect(middle[0]).toBe(start[0]);
   for (const index of [2, 3]) {
@@ -82,10 +82,10 @@ test('у нижнего края окна строки занимают мест
   const start = await top();
   const motions = await pauseRemoval(rows.last());
   await rows.last().getByRole('button').click();
-  await seekRemoval(motions, 140);
+  await seekRemoval({ motions, time: 140 });
   const middle = await top();
   expect(middle).toBeGreaterThan(start);
-  await seekRemoval(motions, 199);
+  await seekRemoval({ motions, time: 199 });
   const end = await top();
   expect(end).toBeGreaterThan(middle);
   await motions.evaluate((list) => list.forEach((motion) => motion.finish()));

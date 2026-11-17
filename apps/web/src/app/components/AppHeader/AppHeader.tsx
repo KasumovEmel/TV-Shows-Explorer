@@ -2,12 +2,13 @@ import { LanguageSelector } from './LanguageSelector';
 import { PageSwitcher } from './PageSwitcher';
 import { ThemeSelector } from './ThemeSelector';
 import { usePresenter } from './usePresenter';
-import { Brand } from '@/app/components/Brand';
+import { Brand } from '@components/Brand';
+import type { AppHeaderProps } from './types';
 
 import styles from './styles.module.css';
 
 
-export function AppHeader({ favoritesPage = false }: { favoritesPage?: boolean }) {
+export function AppHeader({ favoritesPage = false }: AppHeaderProps) {
   const { navigate } = usePresenter();
 
   return (

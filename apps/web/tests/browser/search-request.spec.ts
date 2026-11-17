@@ -1,11 +1,12 @@
 import { expect, test } from '@playwright/test';
 
 import { respond, searchRoute } from './mockSearch';
+import type { ReleaseRequest } from './types';
 
 
 test('пустой старт, задержка, Enter и прерывание неактуального запроса', async ({ page }) => {
   const requests: string[] = [];
-  let release!: () => void;
+  let release!: ReleaseRequest;
   const old = new Promise<void>((resolve) => {
     release = resolve;
   });
@@ -15,7 +16,7 @@ test('пустой старт, задержка, Enter и прерывание �
     if (q === 'old') {
       await old;
     }
-    await respond(route, [{ id: '1', originalTitle: q, genres: [] }]);
+    await respond({ route, items: [{ id: '1', originalTitle: q, genres: [] }] });
   });
   await page.goto('/');
   const intro = page.getByRole('region', { name: 'What to watch?' });
@@ -65,7 +66,7 @@ test('очистка прерывает загрузку и позволяет �
     if (++attempts === 1) {
       return;
     }
-    await respond(route, [{ id: '1', originalTitle: 'Again', genres: [] }]);
+    await respond({ route, items: [{ id: '1', originalTitle: 'Again', genres: [] }] });
   });
   await page.goto('/');
   const field = page.getByRole('searchbox');
@@ -90,7 +91,7 @@ test('ожидание, ошибка, повтор того же запроса 
     if (qs.length === 1) {
       await route.fulfill({ status: 503, body: '' });
     } else {
-      await respond(route, []);
+      await respond({ route, items: [] });
     }
   });
   await page.goto('/');

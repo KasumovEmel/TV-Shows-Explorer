@@ -30,11 +30,6 @@
   overflow: auto;
   scrollbar-width: thin;
 }
-.chipSkeleton {
-  height: var(--target);
-  border-radius: 22px;
-  background: var(--skeleton);
-}
 .chips[aria-hidden='true'] {
   overflow: hidden;
 }
@@ -60,4 +55,12 @@
   .genres > span {
     font-size: 15px;
   }
+}
+
+.notice {
+  padding: 30px 0;
+}
+.notice > p {
+  margin: 10px 0 20px;
+  color: var(--muted);
 }

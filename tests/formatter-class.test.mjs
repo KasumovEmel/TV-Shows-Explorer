@@ -14,6 +14,6 @@ void test('поля класса идут подряд, методы и стре
   ];
   const expected = 'class Boundary {\n' + members.join('\n\n') + '\n}\n';
   const input = expected.replaceAll('\n\n', '\n').replace('  private locked', '\n  private locked');
-  assert.equal(await formatSource('Boundary.tsx', input), expected);
-  assert.equal(await formatSource('Boundary.tsx', expected), expected);
+  assert.equal(await formatSource({ filename: 'Boundary.tsx', input }), expected);
+  assert.equal(await formatSource({ filename: 'Boundary.tsx', input: expected }), expected);
 });

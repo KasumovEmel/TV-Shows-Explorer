@@ -1,11 +1,7 @@
-import type { Language } from '@/i18n/preferences';
+import type { ChangeLanguageParams } from '../types';
 
 
-export async function changeLanguage(
-  language: Language,
-  apply: (value: Language) => Promise<boolean>,
-  remember: (value: Language) => void,
-) {
+export async function changeLanguage({ language, apply, remember }: ChangeLanguageParams) {
   const applied = await apply(language);
   if (applied) {
     remember(language);

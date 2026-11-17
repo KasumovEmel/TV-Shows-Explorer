@@ -1,6 +1,6 @@
-import { Button } from '../Button';
-import { ShowCardLayout } from '../ShowCardLayout';
 import { usePresenter } from './usePresenter';
+import { Button } from '@components/Button';
+import { ShowCardLayout } from '@components/ShowCardLayout';
 import type { ShowCardProps } from './types';
 
 

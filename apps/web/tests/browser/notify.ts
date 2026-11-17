@@ -1,9 +1,7 @@
-import type { Page } from '@playwright/test';
-
-import type { NotificationEvent } from '../../src/app/notifications';
+import type { NotifyParams } from './types';
 
 
-export async function notify(page: Page, ...events: NotificationEvent[]) {
+export async function notify({ page, events }: NotifyParams) {
   await page.evaluate((items) => {
     for (const detail of items) {
       window.dispatchEvent(new CustomEvent('fixture:notify', { detail }));

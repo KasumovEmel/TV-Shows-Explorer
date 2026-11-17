@@ -1,5 +1,5 @@
 import { usePresenter } from './usePresenter';
-import { Button } from '@/app/components/Button';
+import { Button } from '@components/Button';
 
 
 export function ThemeSelector() {

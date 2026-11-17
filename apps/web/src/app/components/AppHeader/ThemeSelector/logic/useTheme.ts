@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { cycleTheme } from './cycleTheme';
-import type { ThemeMode } from './cycleTheme';
+import type { ThemeMode } from '../types';
 
 
 const darkToolbarMedia = { system: '(prefers-color-scheme: dark)', dark: 'all', light: 'not all' };

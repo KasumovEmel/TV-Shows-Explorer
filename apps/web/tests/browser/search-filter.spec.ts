@@ -29,7 +29,7 @@ test('жанр сохраняется между поисками, в пусто
     'Night Lights',
   ]);
   await field.fill('missing');
-  await expect(page.getByRole('heading', { name: 'No shows found' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'No shows match this genre' })).toBeVisible();
   await expect(drama).toHaveAttribute('aria-pressed', 'true');
   await expect(all).toBeVisible();
   await page.getByRole('button', { name: 'Clear search' }).click();

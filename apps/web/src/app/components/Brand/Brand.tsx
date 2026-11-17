@@ -1,11 +1,10 @@
-import type { MouseEventHandler } from 'react';
-
 import { usePresenter } from './usePresenter';
+import type { BrandProps } from './types';
 
 import styles from './styles.module.css';
 
 
-export function Brand({ onClick }: { onClick?: MouseEventHandler<HTMLAnchorElement> }) {
+export function Brand({ onClick }: BrandProps) {
   const { name } = usePresenter();
 
   return (

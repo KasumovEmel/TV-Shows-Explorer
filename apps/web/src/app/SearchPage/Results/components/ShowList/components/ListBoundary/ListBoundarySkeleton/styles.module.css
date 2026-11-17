@@ -1,0 +1,6 @@
+.placeholder {
+  color: transparent;
+  background: linear-gradient(var(--skeleton), var(--skeleton)) center / 100% 0.75em no-repeat;
+  box-decoration-break: clone;
+  user-select: none;
+}

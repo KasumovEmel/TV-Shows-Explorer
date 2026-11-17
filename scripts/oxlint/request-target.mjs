@@ -17,7 +17,7 @@ export function propertyName(node) {
   return node.computed ? node.property.value : node.property.name;
 }
 
-export function binding(source, identifier) {
+export function binding({ source, identifier }) {
   for (let scope = source.getScope(identifier); scope; scope = scope.upper) {
     if (scope.set.has(identifier.name)) {
       return scope.set.get(identifier.name).defs[0];
@@ -26,31 +26,31 @@ export function binding(source, identifier) {
 }
 
 // Resolve imports and local aliases so unrelated methods such as Map#get stay valid.
-export function requestTarget(source, node, seen = new Set()) {
+export function requestTarget({ source, node, seen = new Set() }) {
   if (!node || seen.has(node)) {
     return;
   }
   seen.add(node);
   if (node.type === 'Identifier') {
-    const def = binding(source, node);
+    const def = binding({ source, identifier: node });
     if (!def) {
       if (globals.has(node.name)) {
         return 'global';
       }
 
-      return memberTarget('global', node.name);
+      return memberTarget({ origin: 'global', name: node.name });
     } else if (def.parent?.source?.value === 'axios') {
       if (def.node.type === 'ImportSpecifier') {
-        return memberTarget('client', def.node.imported.name);
+        return memberTarget({ origin: 'client', name: def.node.imported.name });
       }
 
       return 'client';
     } else if (def.node.type === 'VariableDeclarator') {
-      const origin = requestTarget(source, def.node.init, seen);
+      const origin = requestTarget({ source, node: def.node.init, seen });
       if (def.node.id.type === 'ObjectPattern') {
         const property = def.node.id.properties.find((item) => item.value?.name === node.name);
 
-        return memberTarget(origin, property?.key.name);
+        return memberTarget({ origin, name: property?.key.name });
       }
 
       return origin;
@@ -60,18 +60,21 @@ export function requestTarget(source, node, seen = new Set()) {
       node.type,
     )
   ) {
-    return requestTarget(source, node.expression, seen);
+    return requestTarget({ source, node: node.expression, seen });
   } else if (node.type === 'MemberExpression') {
-    return memberTarget(requestTarget(source, node.object, seen), propertyName(node));
+    return memberTarget({
+      origin: requestTarget({ source, node: node.object, seen }),
+      name: propertyName(node),
+    });
   } else if (
     node.type === 'CallExpression' &&
-    requestTarget(source, node.callee, seen) === 'factory'
+    requestTarget({ source, node: node.callee, seen }) === 'factory'
   ) {
     return 'client';
   }
 }
 
-function memberTarget(origin, name) {
+function memberTarget({ origin, name }) {
   if (origin === 'global' && (name === 'fetch' || name === 'XMLHttpRequest')) {
     return name;
   }

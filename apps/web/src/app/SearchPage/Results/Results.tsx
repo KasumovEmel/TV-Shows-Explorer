@@ -1,24 +1,47 @@
+import { ChipSkeleton } from './components/ChipSkeleton';
 import { GenreChip } from './components/GenreChip';
-import { QueryFeedback } from './components/QueryFeedback';
-import { PagedResults } from './PagedResults';
+import { ShowList } from './components/ShowList';
 import { usePresenter } from './usePresenter';
-import type { ResultsProps } from './types';
+import { Button } from '@components/Button';
+import type { ResultsProps, RetrySearch } from './types';
 
 import styles from './styles.module.css';
 
 
-const chipWidths = [54, 84, 118, 91, 70, 104, 78, 92];
-
 export function Results(props: ResultsProps) {
-  const { data, chips, feedback, retry, genreLabel } = usePresenter(props);
-  const loading = feedback === 'loading';
-  const loadingChips = loading && !chips.length;
+  const {
+    data,
+    genreOptions,
+    hasGenres,
+    selectedGenre,
+    isLoading,
+    loadError,
+    isEmpty,
+    showGenreSection,
+    genreLabel,
+    emptyCopy,
+    errorCopy,
+    retry,
+  } = usePresenter(props);
+  const loadingChips = isLoading && !hasGenres;
+
+  function renderError(onRetry: RetrySearch) {
+    return (
+      <div className={styles.notice} role="alert">
+        <h2>{errorCopy.title}</h2>
+        <p>{errorCopy.hint}</p>
+        <Button icon="restore" onClick={onRetry}>
+          {errorCopy.retry}
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <section className={styles.results}>
-      {(loading || !feedback || (feedback !== 'error' && chips.length > 0)) && (
-        <div className={styles.genres} aria-hidden={loadingChips || !chips.length}>
-          {(loading || !!chips.length) && (
+      {showGenreSection && (
+        <div className={styles.genres} aria-hidden={!hasGenres}>
+          {(isLoading || hasGenres) && (
             <>
               <span>{genreLabel}</span>
               <div
@@ -28,25 +51,38 @@ export function Results(props: ResultsProps) {
                 role={loadingChips ? undefined : 'group'}
                 aria-label={loadingChips ? undefined : genreLabel}
               >
-                {loadingChips
-                  ? chipWidths.map((width) => (
-                      <i key={width} className={styles.chipSkeleton} style={{ width }} />
-                    ))
-                  : chips.map((chip) => <GenreChip key={chip.value} {...chip} />)}
+                {loadingChips ? (
+                  <ChipSkeleton />
+                ) : (
+                  genreOptions.map((genre) => (
+                    <GenreChip
+                      key={genre}
+                      value={genre}
+                      selected={genre === selectedGenre}
+                      select={() => props.selectGenre(genre)}
+                    />
+                  ))
+                )}
               </div>
             </>
           )}
         </div>
       )}
-      {feedback && !loading ? (
-        <QueryFeedback state={feedback} retry={retry} />
-      ) : (
-        <PagedResults
+      {loadError && renderError(retry)}
+      {isEmpty && (
+        <div className={styles.notice} role="status">
+          <h2>{emptyCopy.title}</h2>
+          <p>{emptyCopy.hint}</p>
+        </div>
+      )}
+      {!loadError && !isEmpty && (
+        <ShowList
           key={props.revision}
           first={data}
           criteria={props.criteria}
           signal={props.search?.signal}
-          loading={loading}
+          loading={isLoading}
+          renderPageError={renderError}
         />
       )}
     </section>

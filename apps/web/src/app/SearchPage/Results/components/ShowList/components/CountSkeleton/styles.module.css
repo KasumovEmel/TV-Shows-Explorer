@@ -1,0 +1,14 @@
+.count {
+  width: 86px;
+  height: 30px;
+  border-radius: 18px;
+  background: var(--skeleton);
+}
+@media (max-width: 767px) {
+  .count {
+    width: 60px;
+    height: 1lh;
+    font: 400 14px/normal var(--font-ui);
+    background: linear-gradient(var(--skeleton), var(--skeleton)) left center / 100% 0.7em no-repeat;
+  }
+}

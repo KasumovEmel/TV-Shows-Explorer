@@ -4,6 +4,7 @@ import type { AxiosRequestConfig } from 'axios';
 
 const client = axios.create({ timeout: 10_000 });
 
+// oxlint-disable-next-line project/object-parameters -- Orval вызывает mutator с конфигурацией и настройками Axios.
 export async function request<T>(
   config: AxiosRequestConfig,
   options?: AxiosRequestConfig,

@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { respond, searchRoute } from './mockSearch';
+import type { ReleaseRequest } from './types';
 
 
 for (const width of [320, 1440]) {
@@ -15,20 +16,20 @@ for (const width of [320, 1440]) {
     for (const total of [1, 2, 30]) {
       const genres = total === 1 ? ['Drama', 'Romance'] : [];
       const request = page.waitForRequest(searchRoute);
-      let release!: () => void;
+      let release!: ReleaseRequest;
       const pending = new Promise<void>((resolve) => {
         release = resolve;
       });
       await page.route(searchRoute, async (route) => {
         await pending;
-        await respond(
+        await respond({
           route,
-          Array.from({ length: total }, (_, i) => ({
+          items: Array.from({ length: total }, (_, i) => ({
             id: String(i + 1),
             originalTitle: 'Show ' + i,
             genres: total === 30 ? ['Genre ' + i] : genres,
           })),
-        );
+        });
       });
       await field.fill(String(total));
       await field.press('Enter');

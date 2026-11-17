@@ -25,7 +25,11 @@ export function usePresenter({ show, animateRemoval }: ShowCardProps) {
       disabled: isLoading || pending || (!items && !error),
       label: t(action, { title }),
       onClick: ({ currentTarget }: MouseEvent<HTMLButtonElement>) =>
-        void toggle(show, animateRemoval?.bind(null, currentTarget)),
+        void toggle({
+          show,
+          animateRemoval:
+            animateRemoval && ((update) => animateRemoval({ button: currentTarget, update })),
+        }),
     },
     title,
     year: show.year ? t('catalog.premiereYear', { year: show.year }) : t('catalog.noYear'),

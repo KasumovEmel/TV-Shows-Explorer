@@ -39,11 +39,11 @@ function isFunctionStatement(statement) {
   return Boolean(hookName(statement.expression));
 }
 
-export function separateStatements(code, parsed) {
+export function separateStatements({ code, parsed }) {
   const edits = new Map();
   const newline = code.includes('\r\n') ? '\r\n' : '\n';
 
-  function padAfter(statement, limit, blankLines) {
+  function padAfter({ statement, limit, blankLines }) {
     // Keep trailing comments with this statement and leading comments with the next.
     let end = statement.end;
     for (const comment of parsed.comments) {
@@ -84,9 +84,9 @@ export function separateStatements(code, parsed) {
         isFunctionStatement(next) ||
         (isTypeDeclaration(previous) && isTypeDeclaration(next))
       ) {
-        padAfter(previous, next.start, 1);
+        padAfter({ statement: previous, limit: next.start, blankLines: 1 });
       } else if (previous.type === 'VariableDeclaration' && next.type === 'VariableDeclaration') {
-        padAfter(previous, next.start, 0);
+        padAfter({ statement: previous, limit: next.start, blankLines: 0 });
       }
     }
   }
@@ -94,11 +94,11 @@ export function separateStatements(code, parsed) {
   for (const [index, statement] of parsed.program.body.entries()) {
     const next = parsed.program.body[index + 1];
     if (statement.type === 'ImportDeclaration' && next?.type !== 'ImportDeclaration') {
-      padAfter(statement, next?.start ?? code.length, 2);
+      padAfter({ statement, limit: next?.start ?? code.length, blankLines: 2 });
     }
   }
   new Visitor({
-    ClassBody: ({ body }) => separateClassMembers(body, padAfter),
+    ClassBody: ({ body }) => separateClassMembers({ members: body, padAfter }),
     Program: ({ body }) => visitStatements(body),
     BlockStatement: ({ body }) => visitStatements(body),
     TSModuleBlock: ({ body }) => visitStatements(body),

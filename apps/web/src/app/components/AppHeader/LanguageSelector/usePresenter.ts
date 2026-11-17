@@ -21,7 +21,9 @@ export function usePresenter() {
     }
     setPending(true);
     try {
-      if (!(await changeLanguage(next, setLanguage, rememberLanguage))) {
+      if (
+        !(await changeLanguage({ language: next, apply: setLanguage, remember: rememberLanguage }))
+      ) {
         notify({ kind: 'error', messageKey: 'language.loadError' });
       }
     } catch {

@@ -1,4 +1,5 @@
-export type ThemeMode = 'system' | 'dark' | 'light';
+import type { ThemeMode } from '../types';
+
 
 const nextMode: Record<ThemeMode, ThemeMode> = { system: 'dark', dark: 'light', light: 'system' };
 

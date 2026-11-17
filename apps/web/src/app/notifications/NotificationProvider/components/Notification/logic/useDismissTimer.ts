@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react';
 
 import { dismissAfterMs } from '@/styles/tokens';
+import type { DismissTimerParams } from '../types';
 
 
-export function useDismissTimer(paused: boolean, id: number, expire: (id: number) => void) {
+export function useDismissTimer({ paused, id, expire }: DismissTimerParams) {
   const remaining = useRef(dismissAfterMs);
 
   useEffect(() => {

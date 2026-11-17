@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "jsPlugins": ["./scripts/oxlint/project-rules.mjs"],
+  "categories": {
+    "correctness": "off"
+  },
+  "rules": {
+    "project/object-parameters": "error",
+    "project/type-files": "error"
+  },
+  "ignorePatterns": ["**/dist/**", "**/.rsbuild/**", "**/src/generated/**", "**/api/generated/**"]
+}

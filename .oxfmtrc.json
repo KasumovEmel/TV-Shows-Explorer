@@ -14,7 +14,7 @@
         "elementNamePattern": ["react", "react/**", "react-dom", "react-dom/**"]
       }
     ],
-    "internalPattern": ["@/"],
+    "internalPattern": ["@/", "@components/"],
     "groups": [
       "react-core",
       {

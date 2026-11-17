@@ -1,11 +1,13 @@
+import type { Language, LanguagePreferences } from './types';
+
+
 export const languageNames = { en: 'English', ru: 'Русский' } as const;
-export type Language = keyof typeof languageNames;
 
 function isLanguage(value: string | null): value is Language {
   return value !== null && Object.hasOwn(languageNames, value);
 }
 
-export function preferredLanguage(stored: string | null, languages: readonly string[]): Language {
+export function preferredLanguage({ stored, languages }: LanguagePreferences): Language {
   if (isLanguage(stored)) {
     return stored;
   }

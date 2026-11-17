@@ -1,7 +1,7 @@
-import { Brand } from '../../../Brand';
-import { Button } from '../../../Button';
 import television from './television.svg';
 import { usePresenter } from './usePresenter';
+import { Brand } from '@components/Brand';
+import { Button } from '@components/Button';
 import type { RecoveryScreenProps } from './types';
 
 import styles from './styles.module.css';

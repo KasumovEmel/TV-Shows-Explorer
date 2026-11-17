@@ -1,9 +1,9 @@
-import { AnimatedCount } from '../components/AnimatedCount';
-import { AppHeader } from '../components/AppHeader';
-import { Button } from '../components/Button';
-import { ShowCard } from '../components/ShowCard';
 import { animateFavoriteRemoval } from './logic/animateFavoriteRemoval';
 import { usePresenter } from './usePresenter';
+import { AnimatedCount } from '@components/AnimatedCount';
+import { AppHeader } from '@components/AppHeader';
+import { Button } from '@components/Button';
+import { ShowCard } from '@components/ShowCard';
 
 import styles from './styles.module.css';
 

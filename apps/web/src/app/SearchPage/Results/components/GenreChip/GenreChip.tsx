@@ -1,5 +1,5 @@
-import { Button } from '../../../../components/Button';
 import { usePresenter } from './usePresenter';
+import { Button } from '@components/Button';
 import type { GenreChipProps } from './types';
 
 

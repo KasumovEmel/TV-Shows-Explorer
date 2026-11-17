@@ -3,15 +3,15 @@ import { mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 
 import { createApp } from './app';
-import { Catalog } from './catalog/catalog';
-import { FavoritesStore } from './favorites/store';
+import { ShowCatalog } from './catalog';
+import { FavoritesStore } from './favorites';
 
 
 const file = process.env.SQLITE_PATH ?? 'data/catalog.sqlite';
 mkdirSync(dirname(file), { recursive: true });
-const store = new FavoritesStore(file);
-const catalog = new Catalog();
-const app = createApp(catalog, store, process.env.NODE_ENV === 'production');
+const store = new FavoritesStore({ path: file });
+const catalog = new ShowCatalog();
+const app = createApp({ catalog, favorites: store, secure: process.env.NODE_ENV === 'production' });
 const timer = setInterval(() => {
   catalog.prune();
   store.prune();

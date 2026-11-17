@@ -1,8 +1,9 @@
 import { expect } from '@playwright/test';
-import type { Locator } from '@playwright/test';
+
+import type { ExpectRowsParams } from './types';
 
 
-export async function expectRows(rows: Locator, container: Locator) {
+export async function expectRows({ rows, container }: ExpectRowsParams) {
   const bounds = await container.boundingBox();
   let bottom = 0;
   await expect(rows).toHaveCount(3);

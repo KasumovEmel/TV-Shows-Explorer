@@ -8,7 +8,7 @@ import { removeFavorite } from './logic/tasks/removeFavorite';
 import { favoritesCountKey } from './useFavoritesCount';
 import * as api from '@/api/generated/catalog';
 import { useNotify, useRequestError } from '@/app/notifications';
-import type { Show } from '@/app/show';
+import type { ToggleFavoriteParams } from './types';
 
 
 const load = () => listFavorites(api.listFavorites);
@@ -23,10 +23,7 @@ export function useFavorites() {
   const lock = useRef(false);
   const [pending, setPending] = useState(false);
 
-  async function toggle(
-    show: Show,
-    animateRemoval?: (update: () => Promise<void>) => Promise<void>,
-  ) {
+  async function toggle({ show, animateRemoval }: ToggleFavoriteParams) {
     if (lock.current) {
       return;
     }
@@ -40,9 +37,9 @@ export function useFavorites() {
       }
       const saved = data.some((item) => item.id === show.id);
       if (saved) {
-        await removeFavorite(show.id, api.removeFavorite);
+        await removeFavorite({ id: show.id, request: api.removeFavorite });
       } else {
-        await addFavorite(show.id, api.addFavorite);
+        await addFavorite({ id: show.id, request: api.addFavorite });
       }
       notify({
         kind: 'success',

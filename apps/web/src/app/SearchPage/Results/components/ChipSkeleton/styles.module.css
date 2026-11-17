@@ -1,0 +1,12 @@
+.chip {
+  width: 10ch;
+  height: var(--target);
+  border-radius: 22px;
+  background: var(--skeleton);
+}
+.chip:nth-child(3n + 1) {
+  width: 7ch;
+}
+.chip:nth-child(3n) {
+  width: 14ch;
+}

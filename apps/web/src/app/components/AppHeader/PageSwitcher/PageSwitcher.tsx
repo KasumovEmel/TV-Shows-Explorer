@@ -1,15 +1,12 @@
-import type { MouseEventHandler } from 'react';
-
 import { usePresenter } from './usePresenter';
-import { AnimatedCount } from '@/app/components/AnimatedCount';
-import { Button } from '@/app/components/Button';
+import { AnimatedCount } from '@components/AnimatedCount';
+import { Button } from '@components/Button';
+import type { PageSwitcherProps } from './types';
 
 import styles from './styles.module.css';
 
 
-type Props = { favoritesPage: boolean; onClick: MouseEventHandler<HTMLAnchorElement> };
-
-export function PageSwitcher({ favoritesPage, onClick }: Props) {
+export function PageSwitcher({ favoritesPage, onClick }: PageSwitcherProps) {
   const { href, icon, label, count } = usePresenter(favoritesPage);
 
   return (

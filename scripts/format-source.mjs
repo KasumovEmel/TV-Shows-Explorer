@@ -24,7 +24,7 @@ biome.applyConfiguration(projectKey, {
   },
 });
 
-export async function formatSource(filename, input) {
+export async function formatSource({ filename, input }) {
   input = biome.lintContent(projectKey, input, {
     filePath: filename,
     fixFileMode: 'safeFixes',
@@ -35,20 +35,25 @@ export async function formatSource(filename, input) {
   }
 
   const parsed = parseSync(filename, code);
-  const ordered = orderHookFields(code, parsed);
+  const ordered = orderHookFields({ code, parsed });
 
-  return separateStatements(ordered, ordered === code ? parsed : parseSync(filename, ordered));
+  return separateStatements({
+    code: ordered,
+    parsed: ordered === code ? parsed : parseSync(filename, ordered),
+  });
 }
 
 export async function formatSources(files) {
   const formatted = [];
   for (const { filename, input } of files) {
-    formatted.push(await formatSource(filename, input));
+    formatted.push(await formatSource({ filename, input }));
   }
 
   return formatted;
 }
 
 if (process.argv[2] === '--stdin') {
-  process.stdout.write(await formatSource(process.argv[3], readFileSync(0, 'utf8')));
+  process.stdout.write(
+    await formatSource({ filename: process.argv[3], input: readFileSync(0, 'utf8') }),
+  );
 }

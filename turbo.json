@@ -31,11 +31,17 @@
         "scripts/**/*.mjs",
         "orval.config.ts",
         ".oxlintrc.json",
+        ".oxlint-conventions.json",
         "docs/design/*.json"
       ]
     },
     "//#test:formatter": {
-      "inputs": ["scripts/**", "tests/formatter*.test.mjs", ".oxfmtrc.json"]
+      "inputs": [
+        "scripts/**",
+        "tests/formatter*.test.mjs",
+        ".oxfmtrc.json",
+        ".oxlint-conventions.json"
+      ]
     },
     "@season-one/web#typecheck": {
       "inputs": [

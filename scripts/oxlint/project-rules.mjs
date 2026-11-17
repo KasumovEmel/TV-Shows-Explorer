@@ -1,5 +1,7 @@
+import { objectParameters } from './object-parameters.mjs';
 import { requireRequestCatch } from './require-request-catch.mjs';
 import { requireSharedRequest } from './require-shared-request.mjs';
+import { typeFiles } from './type-files.mjs';
 
 
 const noNestedTernary = {
@@ -23,6 +25,8 @@ const noNestedTernary = {
 export default {
   meta: { name: 'project' },
   rules: {
+    'object-parameters': objectParameters,
+    'type-files': typeFiles,
     'require-shared-request': requireSharedRequest,
     'no-nested-ternary': noNestedTernary,
     'require-request-catch': requireRequestCatch,

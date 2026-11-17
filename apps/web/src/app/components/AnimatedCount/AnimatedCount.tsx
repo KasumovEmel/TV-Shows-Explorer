@@ -1,9 +1,10 @@
 import { usePresenter } from './usePresenter';
+import type { AnimatedCountProps } from './types';
 
 import styles from './styles.module.css';
 
 
-export function AnimatedCount({ value }: { value: number }) {
+export function AnimatedCount({ value }: AnimatedCountProps) {
   const track = usePresenter(value);
 
   return (

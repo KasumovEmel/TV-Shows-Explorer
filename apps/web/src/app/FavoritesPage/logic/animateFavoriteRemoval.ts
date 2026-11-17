@@ -1,6 +1,9 @@
+import type { FavoriteRemovalParams } from '../../favorites/types';
+
+
 const pending = new WeakMap<HTMLElement, Promise<void>>();
 
-export function animateFavoriteRemoval(button: HTMLButtonElement, update: () => Promise<void>) {
+export function animateFavoriteRemoval({ button, update }: FavoriteRemovalParams) {
   const row = button.closest('li');
   const list = row?.parentElement;
   if (!row || !list) {

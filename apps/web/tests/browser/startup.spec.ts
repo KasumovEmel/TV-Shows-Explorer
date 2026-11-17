@@ -1,10 +1,11 @@
 import { expect, test } from '@playwright/test';
-import type { Page } from '@playwright/test';
+
+import type { HoldRequestsParams, ReleaseRequest } from './types';
 
 
-async function holdRequests(page: Page, pattern: RegExp) {
+async function holdRequests({ page, pattern }: HoldRequestsParams) {
   const requested = page.waitForRequest(pattern);
-  let release!: () => void;
+  let release!: ReleaseRequest;
   const pending = new Promise<void>((resolve) => {
     release = resolve;
   });
@@ -22,9 +23,9 @@ test('индикатор виден до скриптов, стилей и ру�
     localStorage.setItem('tv-shows-explorer.theme', 'dark');
   });
   await page.emulateMedia({ colorScheme: 'light', reducedMotion: 'reduce' });
-  const scripts = await holdRequests(page, /\/index\.[^/]+\.js$/);
-  const styles = await holdRequests(page, /\.css$/);
-  const locale = await holdRequests(page, /\/locale-ru\.[^/]+\.js$/);
+  const scripts = await holdRequests({ page, pattern: /\/index\.[^/]+\.js$/ });
+  const styles = await holdRequests({ page, pattern: /\.css$/ });
+  const locale = await holdRequests({ page, pattern: /\/locale-ru\.[^/]+\.js$/ });
   await page.goto('/', { waitUntil: 'commit' });
   const loader = page.getByRole('progressbar', { name: 'Season One' });
   await scripts.requested;
@@ -60,7 +61,7 @@ for (const locale of ['ru', 'en']) {
         (language) => localStorage.setItem('tv-shows-explorer.language', language),
         locale,
       );
-      const fonts = await holdRequests(page, /\.(ttf|woff2?)$/);
+      const fonts = await holdRequests({ page, pattern: /\.(ttf|woff2?)$/ });
       await page.goto('/', { waitUntil: 'domcontentloaded' });
       const field = page.getByRole('searchbox');
       await expect(field).toBeVisible();

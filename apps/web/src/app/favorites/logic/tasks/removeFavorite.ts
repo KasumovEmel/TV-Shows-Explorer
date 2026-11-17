@@ -1,3 +1,6 @@
-export function removeFavorite(id: string, remove: (id: string) => Promise<void>) {
-  return remove(id);
+import type { FavoriteMutationParams } from '../../types';
+
+
+export function removeFavorite({ id, request }: FavoriteMutationParams) {
+  return request(id);
 }

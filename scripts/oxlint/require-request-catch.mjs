@@ -52,7 +52,7 @@ export const requireRequestCatch = {
   create(context) {
     return {
       CallExpression(node) {
-        const target = requestTarget(context.sourceCode, node.callee);
+        const target = requestTarget({ source: context.sourceCode, node: node.callee });
         if (target !== 'client' && target !== 'request' && target !== 'fetch') {
           return;
         }

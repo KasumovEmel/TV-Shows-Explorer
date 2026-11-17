@@ -1,4 +1,4 @@
-import type { SearchCriteria } from '../logic/criteria';
+import type { SearchCriteria } from '../logic/criteria.types';
 
 
 export interface ResultsProps {
@@ -8,3 +8,5 @@ export interface ResultsProps {
   revision: number;
   selectGenre: (value: string) => void;
 }
+
+export type RetrySearch = () => void;

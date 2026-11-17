@@ -11,14 +11,14 @@ for (const viewport of [
     await page.setViewportSize(viewport);
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.route(searchRoute, (route) =>
-      respond(
+      respond({
         route,
-        Array.from({ length: 10 }, (_, i) => ({
+        items: Array.from({ length: 10 }, (_, i) => ({
           id: String(i + 1),
           originalTitle: 'Show ' + (i + 1),
           genres: [],
         })),
-      ),
+      }),
     );
     await page.goto('/');
     await page.getByRole('searchbox').fill('test');

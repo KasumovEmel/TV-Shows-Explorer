@@ -8,7 +8,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 for (const width of [320, 390, 1440]) {
-  test(`восстановление с клавиатуры при ширине ${width}`, async ({ page }, info) => {
+  test(`восстановление с клавиатуры при ширине ${width}`, async ({ page }) => {
     await page.setViewportSize({ width, height: width === 1440 ? 1000 : 844 });
     await page.emulateMedia({ colorScheme: 'light' });
     await page.addInitScript(() => {
@@ -25,11 +25,11 @@ for (const width of [320, 390, 1440]) {
     await expect(heading).toBeFocused();
     await expect(restore).toBeEnabled();
     await page.evaluate(() => document.fonts.ready);
-    await page.screenshot({ path: info.outputPath('light.png') });
+    await page.screenshot({ path: test.info().outputPath('light.png') });
     await page.emulateMedia({ colorScheme: 'dark' });
     await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(32, 29, 35)');
     await expect(heading).toBeFocused();
-    await page.screenshot({ path: info.outputPath('dark.png') });
+    await page.screenshot({ path: test.info().outputPath('dark.png') });
     const art = await page.locator('main img').boundingBox(),
       title = await heading.boundingBox();
     if (!art || !title) {

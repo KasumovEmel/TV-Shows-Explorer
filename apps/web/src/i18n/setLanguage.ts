@@ -1,6 +1,6 @@
 import i18next from 'i18next';
 
-import type { Language } from './preferences';
+import type { Language } from './types';
 
 
 export async function setLanguage(language: Language) {

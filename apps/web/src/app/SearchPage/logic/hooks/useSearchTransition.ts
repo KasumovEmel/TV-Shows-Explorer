@@ -1,9 +1,11 @@
 import { useLayoutEffect, useRef } from 'react';
 
+import type { SearchTransitionParams } from '../../types';
+
 
 const duration = 560;
 
-export function useSearchTransition(docked: boolean, finishEntrance: () => void) {
+export function useSearchTransition({ docked, finishEntrance }: SearchTransitionParams) {
   const introRef = useRef<HTMLElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const resultsRef = useRef<HTMLElement>(null);

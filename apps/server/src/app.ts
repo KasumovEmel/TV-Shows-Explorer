@@ -1,57 +1,32 @@
 import { Hono } from 'hono';
-import { getCookie, setCookie } from 'hono/cookie';
 
 import { ApiFailure } from './errors';
-import { lifetime, sessionCookie } from './favorites/store';
+import { favoriteSession } from './favorites';
 import routes from './generated/routes';
-import type { Catalog } from './catalog/catalog';
-import type { FavoritesStore } from './favorites/store';
+import type { AppOptions, ServerEnv } from './types';
 
 
-declare module 'hono' {
-  interface ContextVariableMap {
-    catalog: Catalog;
-    store: FavoritesStore;
-    ensureSession: () => string;
-  }
-}
+export function createApp({ catalog, favorites, secure = false }: AppOptions) {
+  const app = new Hono<ServerEnv>();
 
-export function createApp(catalog: Catalog, store: FavoritesStore, secure = false) {
-  const app = new Hono();
-
+  // oxlint-disable-next-line project/object-parameters -- Hono передаёт контекст и next отдельно.
   app.use('/api/*', async (c, next) => {
     if (process.env.RELEASE_SHA) {
       c.header('X-Release-Revision', process.env.RELEASE_SHA);
     }
     c.set('catalog', catalog);
-    c.set('store', store);
+    c.set('favorites', favorites);
     await next();
     if (c.res.status === 400) {
       c.res = c.json({ code: 'invalid_input', message: 'Invalid request parameters' }, 400);
     }
   });
 
-  app.use('/api/favorites/*', async (c, next) => {
-    c.header('Cache-Control', 'private, no-store');
-    c.set('ensureSession', () => {
-      const { id, token } = store.session(getCookie(c, sessionCookie));
-      if (token) {
-        setCookie(c, sessionCookie, token, {
-          path: '/',
-          httpOnly: true,
-          secure,
-          sameSite: 'Lax',
-          maxAge: lifetime,
-        });
-      }
-
-      return id;
-    });
-    await next();
-  });
+  app.use('/api/favorites/*', favoriteSession(secure));
 
   app.route('/', routes);
   app.notFound((c) => c.json({ code: 'not_found', message: 'Unknown API route' }, 404));
+  // oxlint-disable-next-line project/object-parameters -- Hono передаёт ошибку и контекст отдельно.
   app.onError((err, c) => {
     if (err instanceof ApiFailure) {
       if (err.retryAfter) {

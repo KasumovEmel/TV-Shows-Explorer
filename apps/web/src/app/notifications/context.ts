@@ -1,9 +1,9 @@
 import { createContext, useContext } from 'react';
 
-import type { NotificationEvent } from './types';
+import type { Notify } from './types';
 
 
-export const NotifyContext = createContext<((event: NotificationEvent) => void) | null>(null);
+export const NotifyContext = createContext<Notify | null>(null);
 
 export function useNotify() {
   const notify = useContext(NotifyContext);

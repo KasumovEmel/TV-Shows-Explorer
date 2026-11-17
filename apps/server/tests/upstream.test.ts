@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import { createApp } from '../src/app';
-import { Catalog } from '../src/catalog/catalog';
-import { FavoritesStore } from '../src/favorites/store';
+import { ShowCatalog, TvMazeClient } from '../src/catalog';
+import { FavoritesStore } from '../src/favorites';
 
 
 void test('TVmaze errors, timeout and malformed records have safe envelopes', async () => {
@@ -11,7 +11,8 @@ void test('TVmaze errors, timeout and malformed records have safe envelopes', as
     [async () => new Response(null, { status: 429, headers: { 'Retry-After': '12' } }), 429],
     [async () => Response.json([{ show: { name: 'no id' } }]), 502],
     [
-      async (_: RequestInfo | URL, opts?: RequestInit) =>
+      // oxlint-disable-next-line project/object-parameters -- Подставной транспорт реализует сигнатуру fetch.
+      async (_: Parameters<typeof fetch>[0], opts?: RequestInit) =>
         new Promise<Response>((_, reject) =>
           opts?.signal?.addEventListener('abort', () => reject(new Error('timeout'))),
         ),
@@ -21,7 +22,10 @@ void test('TVmaze errors, timeout and malformed records have safe envelopes', as
   const keepAlive = setTimeout(() => {}, 1000);
   try {
     for (const [transport, status] of cases) {
-      const app = createApp(new Catalog(transport, Date.now, 5), new FavoritesStore(':memory:'));
+      const app = createApp({
+        catalog: new ShowCatalog({ api: new TvMazeClient({ transport, timeout: 5 }) }),
+        favorites: new FavoritesStore({ path: ':memory:' }),
+      });
       const r = await app.request('/api/shows?q=night');
       assert.equal(r.status, status);
       assert.deepEqual(Object.keys(await r.json()).sort(), ['code', 'message']);
@@ -34,20 +38,23 @@ void test('TVmaze errors, timeout and malformed records have safe envelopes', as
   }
 });
 void test('normalizes TVmaze HTML, missing metadata and zero rating', async () => {
-  const catalog = new Catalog(async () =>
-    Response.json([
-      {
-        show: {
-          id: 1,
-          name: ' Signal ',
-          genres: [' Drama', 'Drama'],
-          rating: { average: 0 },
-          summary: '<p>A &amp; B</p><script>skip()</script><p>' + 'again '.repeat(55) + '</p>',
-        },
-      },
-      { show: { id: 2, name: 'Quiet', genres: [] } },
-    ]),
-  );
+  const catalog = new ShowCatalog({
+    api: new TvMazeClient({
+      transport: async () =>
+        Response.json([
+          {
+            show: {
+              id: 1,
+              name: ' Signal ',
+              genres: [' Drama', 'Drama'],
+              rating: { average: 0 },
+              summary: '<p>A &amp; B</p><script>skip()</script><p>' + 'again '.repeat(55) + '</p>',
+            },
+          },
+          { show: { id: 2, name: 'Quiet', genres: [] } },
+        ]),
+    }),
+  });
   const { items } = await catalog.search({ q: 'signal' });
   assert.equal(items[0].rating, 0);
   assert.deepEqual(items[0].genres, ['Drama']);

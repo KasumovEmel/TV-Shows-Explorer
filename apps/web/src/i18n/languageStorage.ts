@@ -1,4 +1,4 @@
-import type { Language } from './preferences';
+import type { Language } from './types';
 
 
 const key = 'tv-shows-explorer.language';

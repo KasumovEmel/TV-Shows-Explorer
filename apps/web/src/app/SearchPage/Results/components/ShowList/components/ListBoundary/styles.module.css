@@ -1,0 +1,15 @@
+.end {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 20px;
+  color: var(--muted);
+}
+
+.end > :last-child {
+  margin-inline-start: auto;
+  color: inherit;
+  font-size: 14px;
+}

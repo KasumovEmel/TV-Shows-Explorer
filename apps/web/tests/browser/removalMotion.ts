@@ -1,5 +1,7 @@
 import { expect } from '@playwright/test';
-import type { JSHandle, Locator } from '@playwright/test';
+import type { Locator } from '@playwright/test';
+
+import type { SeekRemovalParams } from './types';
 
 
 export function pauseRemoval(row: Locator) {
@@ -18,8 +20,9 @@ export function pauseRemoval(row: Locator) {
   });
 }
 
-export async function seekRemoval(motions: JSHandle<Animation[]>, time: number) {
+export async function seekRemoval({ motions, time }: SeekRemovalParams) {
   await expect.poll(() => motions.evaluate((list) => list.length)).toBeGreaterThan(0);
+  // oxlint-disable-next-line project/object-parameters -- Playwright передаёт объект JSHandle и аргумент evaluate отдельно.
   await motions.evaluate((list, ms) => {
     for (const motion of list) {
       motion.currentTime = ms;

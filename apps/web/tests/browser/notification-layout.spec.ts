@@ -10,7 +10,7 @@ import type { NotificationKind } from '../../src/app/notifications';
 for (const [locale, strings] of Object.entries({ en, ru })) {
   for (const theme of ['light', 'dark'] as const) {
     for (const width of [320, 1440]) {
-      test(`уведомления: ${locale}, ${theme}, ${width}px`, async ({ page }, info) => {
+      test(`уведомления: ${locale}, ${theme}, ${width}px`, async ({ page }) => {
         await page.setViewportSize({ width, height: width === 320 ? 720 : 1000 });
         await page.emulateMedia({ colorScheme: theme });
         await page.addInitScript(
@@ -25,7 +25,7 @@ for (const [locale, strings] of Object.entries({ en, ru })) {
           await session.send('Emulation.setSafeAreaInsetsOverride', { insets: { top: 30 } });
         }
         for (const kind of Object.keys(palette.variant) as NotificationKind[]) {
-          await notify(page, { kind });
+          await notify({ page, events: [{ kind }] });
           const note = page.locator(`[data-kind="${kind}"]`);
           const role = kind === 'error' ? 'alert' : 'status';
           await expect(note).toHaveRole(role);
@@ -53,7 +53,7 @@ for (const [locale, strings] of Object.entries({ en, ru })) {
           expect(target.height).toBeGreaterThanOrEqual(44);
           expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
           if (kind === 'warning') {
-            await page.screenshot({ path: info.outputPath('notification.png') });
+            await page.screenshot({ path: test.info().outputPath('notification.png') });
           }
           await close.click();
           await expect(note).toHaveCount(0);

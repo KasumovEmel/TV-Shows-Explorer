@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { mockSearch, searchRoute } from './mockSearch';
+import type { ReleaseRequest } from './types';
 
 
 for (const reducedMotion of ['reduce', 'no-preference'] as const) {
@@ -9,7 +10,7 @@ for (const reducedMotion of ['reduce', 'no-preference'] as const) {
   }) => {
     await page.emulateMedia({ reducedMotion });
     await mockSearch(page);
-    let release!: () => void;
+    let release!: ReleaseRequest;
     const pending = new Promise<void>((resolve) => {
       release = resolve;
     });

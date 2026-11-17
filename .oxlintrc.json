@@ -1,19 +1,69 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "plugins": ["typescript", "react", "import"],
-  "jsPlugins": ["./scripts/oxlint/project-rules.mjs"],
-  "options": { "typeAware": true, "typeCheck": false },
+  "options": {
+    "typeAware": true,
+    "typeCheck": false
+  },
   "rules": {
     "import/default": "off",
     "import/namespace": "off",
-    "max-lines": ["error", { "max": 120, "skipBlankLines": false, "skipComments": false }],
+    "max-lines": [
+      "error",
+      {
+        "max": 120,
+        "skipBlankLines": false,
+        "skipComments": false
+      }
+    ],
     "curly": ["error", "all"],
     "project/no-nested-ternary": "error",
     "project/require-request-catch": "error",
-    "typescript/no-floating-promises": ["error", { "ignoreVoid": true, "checkThenables": true }],
+    "typescript/no-floating-promises": [
+      "error",
+      {
+        "ignoreVoid": true,
+        "checkThenables": true
+      }
+    ],
     "typescript/no-misused-promises": "error"
   },
   "overrides": [
+    {
+      "files": ["apps/server/src/**"],
+      "rules": {
+        "no-restricted-globals": [
+          "error",
+          {
+            "name": "fetch",
+            "message": "\u0414\u043b\u044f \u0434\u043e\u0441\u0442\u0443\u043f\u0430 \u043a TVmaze \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u0439 \u0430\u0434\u0430\u043f\u0442\u0435\u0440 \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0430."
+          }
+        ],
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "node:sqlite",
+                "message": "\u041e\u0431\u0440\u0430\u0449\u0430\u0439\u0441\u044f \u043a SQLite \u0447\u0435\u0440\u0435\u0437 FavoritesStore."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["apps/server/src/catalog/logic/api/TvMazeClient.ts"],
+      "rules": {
+        "no-restricted-globals": "off"
+      }
+    },
+    {
+      "files": ["apps/server/src/favorites/FavoritesStore.ts"],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    },
     {
       "files": ["apps/web/src/**"],
       "rules": {
@@ -27,14 +77,14 @@
                 "name": "axios",
                 "importNames": ["default", "Axios", "create", "getAdapter"],
                 "allowTypeImports": true,
-                "message": "Для запросов используй request() из @/app/utils/request."
+                "message": "\u0414\u043b\u044f \u0437\u0430\u043f\u0440\u043e\u0441\u043e\u0432 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u0439 request() \u0438\u0437 @/app/utils/request."
               }
             ],
             "patterns": [
               {
                 "group": ["axios/**"],
                 "allowTypeImports": true,
-                "message": "Для запросов используй request() из @/app/utils/request."
+                "message": "\u0414\u043b\u044f \u0437\u0430\u043f\u0440\u043e\u0441\u043e\u0432 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u0439 request() \u0438\u0437 @/app/utils/request."
               }
             ]
           }
@@ -50,5 +100,9 @@
       }
     }
   ],
+  "extends": ["./.oxlint-conventions.json"],
+  "categories": {
+    "correctness": "warn"
+  },
   "ignorePatterns": ["**/dist/**", "**/.rsbuild/**", "**/src/generated/**", "**/api/generated/**"]
 }

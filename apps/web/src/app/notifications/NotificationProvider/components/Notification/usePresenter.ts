@@ -4,8 +4,7 @@ import type { FocusEvent, MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useDismissTimer } from './logic/useDismissTimer';
-import type { QueuedNotification } from '../../types';
-import type { NotificationProps } from './types';
+import type { NotificationLayerParams, NotificationProps } from './types';
 
 
 export function usePresenter({
@@ -22,9 +21,9 @@ export function usePresenter({
   const [hover, setHover] = useState(false);
   const [focus, setFocus] = useState(false);
 
-  useDismissTimer(hover || focus, id, onExpire);
+  useDismissTimer({ paused: hover || focus, id, expire: onExpire });
 
-  function present(item: QueuedNotification, depth: number | 'departing') {
+  function present({ item, depth }: NotificationLayerParams) {
     const { show } = item;
 
     return {
@@ -38,9 +37,9 @@ export function usePresenter({
     };
   }
 
-  const layers = cards.map((item, index) => present(item, cards.length - 1 - index));
+  const layers = cards.map((item, index) => present({ item, depth: cards.length - 1 - index }));
   if (departing) {
-    layers.push(present(departing, 'departing'));
+    layers.push(present({ item: departing, depth: 'departing' }));
   }
 
   useLayoutEffect(() => {

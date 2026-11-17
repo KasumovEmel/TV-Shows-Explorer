@@ -1,6 +1,6 @@
-import type { Show } from '../../../show';
+import type { ReadFavorites } from '../../types';
 
 
-export async function listFavorites(load: () => Promise<{ items: Show[] }>) {
+export async function listFavorites(load: ReadFavorites) {
   return (await load()).items;
 }

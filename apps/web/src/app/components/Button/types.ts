@@ -1,6 +1,6 @@
 import type { ComponentPropsWithRef, ReactElement } from 'react';
 
-import type { IconName } from '../Icon';
+import type { IconName } from '@components/Icon';
 
 
 type IconButton = {

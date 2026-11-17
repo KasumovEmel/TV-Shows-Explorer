@@ -11,7 +11,7 @@ export function usePresenter({ children }: NotificationProviderProps) {
 
   const notify = useCallback((event: NotificationEvent) => {
     const item = { ...event, id: ++nextId.current };
-    setStack(({ queue }) => ({ queue: enqueueNotification(queue, item) }));
+    setStack(({ queue }) => ({ queue: enqueueNotification({ queue, item }) }));
   }, []);
 
   const dismiss = useCallback((id: number) => {

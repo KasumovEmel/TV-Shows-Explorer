@@ -10,11 +10,11 @@ function isDataField(member) {
   return value?.type !== 'ArrowFunctionExpression' && value?.type !== 'FunctionExpression';
 }
 
-export function separateClassMembers(members, padAfter) {
+export function separateClassMembers({ members, padAfter }) {
   for (let i = 1; i < members.length; i++) {
     const previous = members[i - 1];
     const next = members[i];
     const blankLines = isDataField(previous) && isDataField(next) ? 0 : 1;
-    padAfter(previous, next.start, blankLines);
+    padAfter({ statement: previous, limit: next.start, blankLines });
   }
 }

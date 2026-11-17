@@ -15,10 +15,10 @@ export async function initializeI18n() {
     resources: { en: { translation: en } },
     interpolation: { escapeValue: false },
   });
-  const language = preferredLanguage(
-    storedLanguage(),
-    navigator.languages.length ? navigator.languages : [navigator.language],
-  );
+  const language = preferredLanguage({
+    stored: storedLanguage(),
+    languages: navigator.languages.length ? navigator.languages : [navigator.language],
+  });
   if (language !== 'en') {
     await setLanguage(language);
   }

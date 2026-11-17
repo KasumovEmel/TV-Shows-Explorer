@@ -1,9 +1,10 @@
 import { FavoritesPage } from '../FavoritesPage';
 import { SearchPage } from '../SearchPage';
 import { usePresenter } from './usePresenter';
+import type { AppRoutesProps } from './types';
 
 
-export function AppRoutes({ restored }: { restored: boolean }) {
+export function AppRoutes({ restored }: AppRoutesProps) {
   const { favorites } = usePresenter();
 
   return (

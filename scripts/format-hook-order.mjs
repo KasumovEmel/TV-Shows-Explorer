@@ -17,23 +17,23 @@ function hookRank(statement) {
   return priorities.length;
 }
 
-function identifiers(node, names = new Set()) {
+function identifiers({ node, names = new Set() }) {
   if (node?.type === 'Identifier') {
     names.add(node.name);
   }
   for (const key of visitorKeys[node?.type] ?? []) {
     const child = node[key];
     if (Array.isArray(child)) {
-      child.forEach((item) => identifiers(item, names));
+      child.forEach((item) => identifiers({ node: item, names }));
     } else {
-      identifiers(child, names);
+      identifiers({ node: child, names });
     }
   }
 
   return names;
 }
 
-export function orderHookFields(code, parsed) {
+export function orderHookFields({ code, parsed }) {
   function order({ body }) {
     if (
       body?.type !== 'BlockStatement' ||
@@ -72,11 +72,13 @@ export function orderHookFields(code, parsed) {
     for (const entry of entries) {
       let i = sorted.length;
       if (entry.rank < priorities.length) {
-        const uses = identifiers(entry.statement);
+        const uses = identifiers({ node: entry.statement });
         while (i > 0 && sorted[i - 1].rank > entry.rank) {
           const earlier = sorted[i - 1].statement;
           const bindings = earlier.declarations?.map(({ id }) => id) ?? [earlier.id];
-          if (bindings.some((id) => [...identifiers(id)].some((name) => uses.has(name)))) {
+          if (
+            bindings.some((id) => [...identifiers({ node: id })].some((name) => uses.has(name)))
+          ) {
             break;
           }
           i--;
