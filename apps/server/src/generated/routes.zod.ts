@@ -89,7 +89,22 @@ export const RemoveFavoriteParams = zod.object({
   "showId": zod.string().regex(removeFavoritePathShowIdRegExp)
 })
 
-export const RemoveFavoriteResponse = zod.void()
+export const removeFavoriteResponseItemsItemIdRegExp = new RegExp('^[1-9][0-9]*$');
+export const removeFavoriteResponseItemsItemSummaryMax = 160;
+
+
+
+export const RemoveFavoriteResponse = zod.object({
+  "items": zod.array(zod.object({
+  "id": zod.string().regex(removeFavoriteResponseItemsItemIdRegExp),
+  "originalTitle": zod.string(),
+  "genres": zod.array(zod.string()),
+  "year": zod.int().optional(),
+  "summary": zod.string().max(removeFavoriteResponseItemsItemSummaryMax).optional(),
+  "rating": zod.number().optional(),
+  "poster": zod.string().optional()
+}))
+})
 
 
 export const HealthResponse = zod.object({

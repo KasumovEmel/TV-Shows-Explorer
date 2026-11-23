@@ -1,4 +1,4 @@
-import type { Show } from '../show.types';
+import type { Show } from '../types/show.types';
 
 
 export type NotificationKind = 'error' | 'warning' | 'success' | 'info';

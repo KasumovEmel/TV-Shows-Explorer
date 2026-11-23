@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { addFavorite } from '../src/app/favorites/logic/tasks/addFavorite';
-import { listFavorites } from '../src/app/favorites/logic/tasks/listFavorites';
-import { removeFavorite } from '../src/app/favorites/logic/tasks/removeFavorite';
-import { loadSearchPage } from '../src/app/SearchPage/search/logic/tasks/loadSearchPage';
-import { selectGenre } from '../src/app/SearchPage/search/logic/tasks/selectGenre';
+import { addFavorite } from '../src/app/logic/favorites/tasks/addFavorite';
+import { listFavorites } from '../src/app/logic/favorites/tasks/listFavorites';
+import { removeFavorite } from '../src/app/logic/favorites/tasks/removeFavorite';
+import { loadSearchPage } from '../src/app/pages/SearchPage/search/logic/tasks/loadSearchPage';
+import { selectGenre } from '../src/app/pages/SearchPage/search/logic/tasks/selectGenre';
 
 
 void test('search and genre tasks operate on plain criteria', async () => {
@@ -45,13 +45,18 @@ void test('favorites tasks read, write and propagate failures', async () => {
   };
 
   await assert.rejects(listFavorites(fail), /offline/);
-  for (const op of [addFavorite, removeFavorite]) {
-    await op({
+  await addFavorite({ id: '7', request: async (id) => assert.equal(id, '7') });
+  assert.equal(
+    await removeFavorite({
       id: '7',
       request: async (id) => {
         assert.equal(id, '7');
+
+        return { items: cards };
       },
-    });
-    await assert.rejects(op({ id: '7', request: fail }), /offline/);
-  }
+    }),
+    cards,
+  );
+  await assert.rejects(addFavorite({ id: '7', request: fail }), /offline/);
+  await assert.rejects(removeFavorite({ id: '7', request: fail }), /offline/);
 });

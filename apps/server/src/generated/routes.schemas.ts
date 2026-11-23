@@ -193,6 +193,22 @@ export type AddFavorite504 = {
   message: string;
 };
 
+export type RemoveFavorite200ItemsItem = {
+  /** @pattern ^[1-9][0-9]*$ */
+  id: string;
+  originalTitle: string;
+  genres: string[];
+  year?: number;
+  /** @maxLength 160 */
+  summary?: string;
+  rating?: number;
+  poster?: string;
+};
+
+export type RemoveFavorite200 = {
+  items: RemoveFavorite200ItemsItem[];
+};
+
 export type RemoveFavorite400 = {
   code: string;
   message: string;

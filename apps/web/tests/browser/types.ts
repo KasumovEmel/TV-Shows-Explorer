@@ -1,7 +1,7 @@
 import type { JSHandle, Locator, Page, Route } from '@playwright/test';
 
 import type { NotificationEvent } from '../../src/app/notifications';
-import type { Show } from '../../src/app/show.types';
+import type { Show } from '../../src/app/types/show.types';
 
 
 export type ReleaseRequest = () => void;

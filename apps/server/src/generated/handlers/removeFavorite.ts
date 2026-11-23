@@ -9,12 +9,14 @@ import { createFactory } from 'hono/factory';
 import { zValidator } from '../routes.validator';
 import type { RemoveFavoriteContext } from '../routes.context';
 import {
-RemoveFavoriteParams
-} from '../routes.zod'
+  RemoveFavoriteParams,
+  RemoveFavoriteResponse
+} from '../routes.zod';
 
 const factory = createFactory();
 export const removeFavoriteHandlers = factory.createHandlers(
 zValidator('param', RemoveFavoriteParams),
+  zValidator('response', RemoveFavoriteResponse),
 async (c: RemoveFavoriteContext) => {
     return removeFavorite(c);
   },

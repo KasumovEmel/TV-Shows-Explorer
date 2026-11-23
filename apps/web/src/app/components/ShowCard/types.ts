@@ -1,8 +1,10 @@
-import type { FavoriteRemovalParams } from '@/app/favorites';
-import type { Show } from '@/app/show.types';
+import type { Show } from '@/app/types/show.types';
 
 
 export interface ShowCardProps {
   show: Show;
-  animateRemoval?: (params: FavoriteRemovalParams) => Promise<void>;
+  isSaved: boolean;
+  isLoading?: boolean;
+  isFailed?: boolean;
+  onAction: (button: HTMLButtonElement) => void | Promise<unknown>;
 }

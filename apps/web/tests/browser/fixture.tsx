@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { createRoot } from 'react-dom/client';
 
 import { App } from '../../src/app';
 import { useNotify } from '../../src/app/notifications';
@@ -26,10 +25,4 @@ function FixtureEvents() {
 }
 
 const root = document.getElementById('root')!;
-void initializeI18n().then(() =>
-  createRoot(root).render(
-    <App>
-      <FixtureEvents />
-    </App>,
-  ),
-);
+void initializeI18n().then(() => App({ root, children: <FixtureEvents /> }));

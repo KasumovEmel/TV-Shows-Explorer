@@ -17,7 +17,7 @@ test.beforeEach(async ({ page }) => {
     const id = route.request().url().split('/').at(-1);
     items = items.filter((item) => item.id !== id);
 
-    return route.fulfill({ status: 204 });
+    return route.fulfill({ json: { items } });
   });
   await page.addInitScript(() => {
     Object.defineProperty(document, 'startViewTransition', { value: undefined });

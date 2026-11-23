@@ -38,6 +38,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, BoundaryState> 
       return <RecoveryScreen key={attempt} isRetrying={isRetrying} onRestore={this.restore} />;
     }
 
-    return this.props.children(attempt > 0);
+    const Screen = this.props.children;
+
+    return <Screen isRestored={attempt > 0} />;
   }
 }

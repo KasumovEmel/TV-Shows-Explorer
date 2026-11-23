@@ -77,18 +77,30 @@ test('два сохранения и удаление в поиске обнов
   await expect(favorites).toHaveText('1');
 });
 
-test('знак и название Season One возвращают к текущему поиску', async ({ page }) => {
+test('ссылки и история браузера сохраняют запрос, жанр и выдачу', async ({ page }) => {
   await page.goto('/');
   const field = page.getByRole('searchbox');
   await field.fill('night');
+  const genre = page.getByRole('button', { name: 'Comedy', exact: true });
+  const result = page.getByRole('heading', { name: 'Night Screening' });
+  await genre.click();
+  await expect(result).toBeVisible();
   const favorites = page.getByRole('link', { name: 'Favorites' });
   const brand = page.getByRole('link', { name: 'Season One' });
   await expect(favorites).toHaveAttribute('href', '/favorites');
   await expect(brand).toHaveAttribute('href', '/');
   await favorites.press('Enter');
   await expect(page).toHaveURL(/\/favorites$/);
+  await page.goBack();
+  await expect(field).toHaveValue('night');
+  await expect(genre).toHaveAttribute('aria-pressed', 'true');
+  await expect(result).toBeVisible();
+  await page.goForward();
+  await expect(page.getByRole('heading', { name: 'Favorites' })).toBeVisible();
   await brand.locator('svg').click();
   await expect(field).toHaveValue('night');
+  await expect(genre).toHaveAttribute('aria-pressed', 'true');
+  await expect(result).toBeVisible();
   await page.goBack();
   await expect(page.getByRole('heading', { name: 'Favorites' })).toBeVisible();
   await page.getByRole('banner').getByText('Season One', { exact: true }).click();

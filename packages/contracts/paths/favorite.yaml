@@ -23,6 +23,10 @@ delete:
       required: true
       schema: { type: string, pattern: '^[1-9][0-9]*$' }
   responses:
-    '204': { description: Favorite removed. }
+    '200':
+      description: Remaining saved snapshots in reverse order of addition.
+      content:
+        application/json:
+          schema: { $ref: '../models.yaml#/Favorites' }
     '400': { $ref: '../errors.yaml#/E400' }
     '500': { $ref: '../errors.yaml#/E500' }

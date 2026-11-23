@@ -90,7 +90,9 @@ void test('anonymous sessions, snapshots, fixed expiry and idempotent mutations'
   assert.equal((await put()).status, 204);
   assert.equal((await req({ cookie })).headers.get('set-cookie'), null);
   for (let i = 0; i < 2; i++) {
-    assert.equal((await req({ cookie, path: '/2', method: 'DELETE' })).status, 204);
+    const removed = await req({ cookie, path: '/2', method: 'DELETE' });
+    assert.equal(removed.status, 200);
+    assert.deepEqual(await removed.json(), await (await req({ cookie })).json());
   }
   assert.deepEqual(await ids(cookie), ['1']);
   assert.deepEqual(await count(cookie), { count: 1 });

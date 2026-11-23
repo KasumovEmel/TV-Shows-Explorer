@@ -3,7 +3,8 @@ import type { ServerEnv } from '../../types';
 
 
 export function removeFavorite(c: RemoveFavoriteContext<ServerEnv>) {
-  c.var.favorites.remove({ session: c.var.ensureSession(), id: c.req.valid('param').showId });
+  const session = c.var.ensureSession();
+  c.var.favorites.remove({ session, id: c.req.valid('param').showId });
 
-  return c.body(null, 204);
+  return c.json({ items: c.var.favorites.list(session) });
 }

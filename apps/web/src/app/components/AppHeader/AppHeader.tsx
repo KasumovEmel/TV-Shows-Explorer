@@ -8,7 +8,7 @@ import type { AppHeaderProps } from './types';
 import styles from './styles.module.css';
 
 
-export function AppHeader({ isFavoritesPage = false }: AppHeaderProps) {
+export function AppHeader({ isFavoritesPage = false, count }: AppHeaderProps) {
   const { navigate } = usePresenter();
 
   return (
@@ -17,7 +17,7 @@ export function AppHeader({ isFavoritesPage = false }: AppHeaderProps) {
       <div className={styles.settings}>
         <ThemeSelector />
         <LanguageSelector />
-        <PageSwitcher isFavoritesPage={isFavoritesPage} onClick={navigate} />
+        <PageSwitcher count={count} isFavoritesPage={isFavoritesPage} onClick={navigate} />
       </div>
     </header>
   );

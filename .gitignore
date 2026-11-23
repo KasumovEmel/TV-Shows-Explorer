@@ -1,6 +1,5 @@
 node_modules/
 /openspec/
-/AGENTS.md
 dist/
 apps/server/data/
 test-results/

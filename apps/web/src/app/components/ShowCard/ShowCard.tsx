@@ -3,6 +3,8 @@ import { Button } from '@components/Button';
 import { ShowCardLayout } from '@components/ShowCardLayout';
 import type { ShowCardProps } from './types';
 
+import styles from './styles.module.css';
+
 
 export function ShowCard(props: ShowCardProps) {
   const {
@@ -42,6 +44,8 @@ export function ShowCard(props: ShowCardProps) {
         <Button
           variant="icon"
           icon="heart"
+          className={favorite.isLoading ? styles.loading : undefined}
+          aria-busy={favorite.isLoading || undefined}
           disabled={favorite.isDisabled}
           aria-label={favorite.label}
           title={favorite.label}

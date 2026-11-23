@@ -8,6 +8,7 @@ import type {
   CountFavorites200,
   Health200,
   ListFavorites200,
+  RemoveFavorite200,
   SearchShows200,
   SearchShowsParams
 } from './catalog.schemas';
@@ -57,8 +58,8 @@ export const addFavorite = (
 
 export const removeFavorite = (
     showId: string,
- options?: SecondParameter<typeof request<void>>,) => {
-      return request<void>(
+ options?: SecondParameter<typeof request<RemoveFavorite200>>,) => {
+      return request<RemoveFavorite200>(
       {url: `/api/favorites/${showId}`, method: 'DELETE'
     },
       options);

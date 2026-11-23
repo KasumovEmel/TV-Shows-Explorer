@@ -1,11 +1,10 @@
 import { useTranslation } from 'react-i18next';
 
-import { useFavoritesState } from '@/app/favorites';
+import type { PageSwitcherProps } from './types';
 
 
-export function usePresenter(isFavoritesPage: boolean) {
+export function usePresenter({ isFavoritesPage, count }: PageSwitcherProps) {
   const { t } = useTranslation();
-  const { count } = useFavoritesState();
 
   if (isFavoritesPage) {
     return { href: '/', icon: 'search' as const, label: t('favorites.search') };

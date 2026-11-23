@@ -1,5 +1,3 @@
-import { createRoot } from 'react-dom/client';
-
 import { initializeI18n } from '@/i18n';
 
 
@@ -10,5 +8,5 @@ if (!root) {
 }
 
 void Promise.all([import(/* webpackChunkName: "catalog" */ './app'), initializeI18n()]).then(
-  ([{ App }]) => createRoot(root).render(<App />),
+  ([{ App }]) => App({ root }),
 );

@@ -1,8 +1,12 @@
-import type { ReactNode } from 'react';
+import type { ComponentType } from 'react';
 
+
+export interface ScreenProps {
+  isRestored: boolean;
+}
 
 export interface ErrorBoundaryProps {
-  children: (isRestored: boolean) => ReactNode;
+  children: ComponentType<ScreenProps>;
 }
 
 export interface BoundaryState {

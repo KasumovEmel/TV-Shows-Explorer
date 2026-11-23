@@ -2,17 +2,17 @@
 
 Эти правила относятся к React-клиенту в `apps/web`. Для размещения кода и импортов действует [архитектура проекта](../../.agents/rules/architecture.md), для TypeScript, локализации, HTTP и проверок — [правила проекта](../../.agents/rules/project.md).
 
-| Что меняешь                             | Где это живёт                                  | Правило                                 |
-| --------------------------------------- | ---------------------------------------------- | --------------------------------------- |
-| Разметка и доступность                  | `Name/Name.tsx`                                | [View](rules/sa-view.md)                |
-| События, эффекты и состояние интерфейса | `Name/usePresenter.ts` и хуки в `logic/hooks/` | [Presenter](rules/sa-presenter.md)      |
-| Пользовательский сценарий               | Обычная функция в `logic/tasks/` владельца     | [Interactor / Tasks](rules/sa-tasks.md) |
-| Предметные и общие клиентские данные    | Типы и при необходимости Store у владельца     | [Entity / Store](rules/sa-store.md)     |
-| Выбор экрана                            | Presenter, папки экранов и `AppRoutes`         | [Router](rules/sa-router.md)            |
-| Новые файлы и публичные экспорты        | Папка компонента или общего владельца          | [Структура](rules/sa-structure.md)      |
-| Имена Task и булевых переменных         | Глагол в camelCase, флаги с префиксом `is`     | [Именование](rules/sa-naming.md)        |
-| Импорты и контракты                     | Граница между потребителем и реализацией       | [Зависимости](rules/sa-dependencies.md) |
-| Стили                                   | `styles.module.css` рядом с View               | [CSS Modules](rules/sa-css.md)          |
+| Что меняешь                             | Где это живёт                                  | Правило                                                  |
+| --------------------------------------- | ---------------------------------------------- | -------------------------------------------------------- |
+| Разметка и доступность                  | `Name/Name.tsx`                                | [View](../../.agents/rules/sa/sa-view.md)                |
+| События, эффекты и состояние интерфейса | `Name/usePresenter.ts` и хуки в `logic/hooks/` | [Presenter](../../.agents/rules/sa/sa-presenter.md)      |
+| Пользовательский сценарий               | Обычная функция в `logic/tasks/` владельца     | [Interactor / Tasks](../../.agents/rules/sa/sa-tasks.md) |
+| Предметные и общие клиентские данные    | Типы и при необходимости Store у владельца     | [Entity / Store](../../.agents/rules/sa/sa-store.md)     |
+| Выбор экрана                            | `router/Router.tsx` и `router/usePresenter.ts` | [Router](../../.agents/rules/sa/sa-router.md)            |
+| Новые файлы и публичные экспорты        | Папка компонента или общего владельца          | [Структура](../../.agents/rules/sa/sa-structure.md)      |
+| Имена Task и булевых переменных         | Глагол в camelCase, флаги с префиксом `is`     | [Именование](../../.agents/rules/sa/sa-naming.md)        |
+| Импорты и контракты                     | Граница между потребителем и реализацией       | [Зависимости](../../.agents/rules/sa/sa-dependencies.md) |
+| Стили                                   | `styles.module.css` рядом с View               | [CSS Modules](../../.agents/rules/sa/sa-css.md)          |
 
 ## Вызов и контракт
 

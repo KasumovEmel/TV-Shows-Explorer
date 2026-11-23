@@ -6,8 +6,8 @@ import type { PageSwitcherProps } from './types';
 import styles from './styles.module.css';
 
 
-export function PageSwitcher({ isFavoritesPage, onClick }: PageSwitcherProps) {
-  const { href, icon, label, count } = usePresenter(isFavoritesPage);
+export function PageSwitcher(props: PageSwitcherProps) {
+  const { href, icon, label, count } = usePresenter(props);
 
   return (
     <Button
@@ -18,7 +18,7 @@ export function PageSwitcher({ isFavoritesPage, onClick }: PageSwitcherProps) {
       className={styles.navigation}
       aria-label={label}
       title={label}
-      onClick={onClick}
+      onClick={props.onClick}
     >
       {count !== undefined && (
         <span className={styles.count}>
