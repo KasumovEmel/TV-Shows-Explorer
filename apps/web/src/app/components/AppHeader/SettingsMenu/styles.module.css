@@ -1,0 +1,60 @@
+.menu {
+  position: relative;
+  flex: none;
+}
+.menu > button[aria-expanded='true'] {
+  background: var(--surface);
+  border-color: var(--accent);
+  color: var(--ink);
+}
+.panel {
+  position: absolute;
+  z-index: 5;
+  inset-inline-end: 0;
+  inset-block-start: calc(100% + 8px);
+  width: min(250px, calc(100vw - 2 * var(--gutter)));
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 6px;
+  background: var(--surface);
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--ink) 14%, transparent);
+  color: var(--ink);
+}
+.panel button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: var(--target);
+  border: 0;
+  border-radius: 10px;
+  padding: 8px 12px;
+  background: transparent;
+  color: inherit;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-align: start;
+}
+.panel button:hover,
+.panel button:focus-visible {
+  background: color-mix(in srgb, currentColor 7%, transparent);
+}
+.panel button:focus-visible {
+  outline-offset: -2px;
+}
+.panel button > small {
+  margin-inline-start: auto;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+.panel button > svg,
+.panel button > img {
+  flex: none;
+  width: 20px;
+}
+.footer {
+  border-top: 1px solid var(--line);
+  margin-top: 4px;
+  padding-top: 4px;
+}

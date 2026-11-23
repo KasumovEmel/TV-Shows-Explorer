@@ -2,6 +2,8 @@ import type { IconName, IconProps } from './types';
 
 
 const paths: Record<IconName, string> = {
+  more: 'M5.8 12a.8.8 0 1 1-1.6 0 .8.8 0 1 1 1.6 0Zm7 0a.8.8 0 1 1-1.6 0 .8.8 0 1 1 1.6 0Zm7 0a.8.8 0 1 1-1.6 0 .8.8 0 1 1 1.6 0Z',
+  logout: 'M10 4H5v16h5m4-13 5 5-5 5m-5-5h10',
   heart:
     'M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z',
   sun: 'M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M19 5l-1.5 1.5m-11 11L5 19',

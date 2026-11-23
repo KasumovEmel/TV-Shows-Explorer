@@ -1,19 +1,21 @@
 import { FavoritesPage } from '../pages/FavoritesPage';
+import { LoginPage } from '../pages/LoginPage';
 import { SearchPage } from '../pages/SearchPage';
 import { usePresenter } from './usePresenter';
 import type { RouterProps } from './types';
 
 
 export function Router({ children, isRestored }: RouterProps) {
-  const { isFavoritesPage, favorites } = usePresenter();
+  const { isSearchPage, isFavoritesPage, isLoginPage, favorites, account, login } = usePresenter();
 
   return (
     <>
       {children}
-      <div hidden={isFavoritesPage}>
-        <SearchPage isRestored={isRestored} favorites={favorites} />
+      <div hidden={!isSearchPage}>
+        <SearchPage isRestored={isRestored} favorites={favorites} account={account} />
       </div>
-      {isFavoritesPage && <FavoritesPage favorites={favorites} />}
+      {isLoginPage && <LoginPage account={account} login={login} />}
+      {isFavoritesPage && <FavoritesPage favorites={favorites} account={account} />}
     </>
   );
 }

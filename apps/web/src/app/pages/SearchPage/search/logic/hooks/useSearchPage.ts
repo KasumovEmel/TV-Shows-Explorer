@@ -6,7 +6,7 @@ import { useRequestError } from '@/app/notifications';
 import type { SearchPageRequest, SearchPageResponse } from '../types/SearchPageRequest';
 
 
-export function useSearchPage({ criteria, signal, onCards }: SearchPageRequest) {
+export function useSearchPage({ criteria, signal }: SearchPageRequest) {
   const { q, genre, page } = criteria ?? {};
   const request = useMemo(
     () => (q && page && signal ? { criteria: { q, genre, page }, signal } : undefined),
@@ -26,9 +26,6 @@ export function useSearchPage({ criteria, signal, onCards }: SearchPageRequest) 
       .then((data) => {
         if (!signal.aborted) {
           setResponse({ request, data });
-          if (data.items.length) {
-            onCards?.();
-          }
         }
       })
       .catch((error: unknown) => {
@@ -39,7 +36,7 @@ export function useSearchPage({ criteria, signal, onCards }: SearchPageRequest) 
       });
 
     return () => controller.abort();
-  }, [request, attempt, onError, onCards]);
+  }, [request, attempt, onError]);
 
   function retry() {
     setResponse(undefined);

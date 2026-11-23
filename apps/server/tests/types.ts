@@ -1,3 +1,6 @@
+import type { createApp } from '../src/app';
+
+
 export interface FavoriteRequest {
   cookie?: string;
   path?: string;
@@ -11,4 +14,9 @@ export interface ShowId {
 export interface CatalogRequest {
   suffix: string;
   profile?: string;
+}
+
+export interface LoginRequest {
+  app: ReturnType<typeof createApp>;
+  email?: string;
 }

@@ -4,6 +4,7 @@ import test from 'node:test';
 import { createApp } from '../src/app';
 import { ShowCatalog, TvMazeClient } from '../src/catalog';
 import { FavoritesStore } from '../src/favorites';
+import { requestLogin } from './requestLogin';
 import type { CatalogRequest, ShowId } from './types';
 
 
@@ -70,7 +71,9 @@ void test('all genres before paging, validation, cancellation and shared request
     assert.equal(page.items.length, items);
     assert.deepEqual(page.genres, ['Drama', 'Comedy']);
   }
-  const saved = await app.request('/api/favorites/7', { method: 'PUT' });
+  const login = await requestLogin({ app, email: 'catalog@example.test' });
+  const cookie = login.headers.get('set-cookie')!.split(';')[0];
+  const saved = await app.request('/api/favorites/7', { method: 'PUT', headers: { cookie } });
   assert.equal(saved.status, 204);
   assert.equal(calls, 1);
 });

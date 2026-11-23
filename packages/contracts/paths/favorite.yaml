@@ -1,12 +1,13 @@
 put:
   operationId: addFavorite
-  security: [{ session: [] }, {}]
+  security: [{ session: [] }]
   parameters:
     - name: showId
       in: path
       required: true
       schema: { type: string, pattern: '^[1-9][0-9]*$' }
   responses:
+    '401': { $ref: '../errors.yaml#/E401' }
     '204': { description: Favorite saved. }
     '400': { $ref: '../errors.yaml#/E400' }
     '404': { $ref: '../errors.yaml#/E404' }
@@ -16,13 +17,14 @@ put:
     '504': { $ref: '../errors.yaml#/E504' }
 delete:
   operationId: removeFavorite
-  security: [{ session: [] }, {}]
+  security: [{ session: [] }]
   parameters:
     - name: showId
       in: path
       required: true
       schema: { type: string, pattern: '^[1-9][0-9]*$' }
   responses:
+    '401': { $ref: '../errors.yaml#/E401' }
     '200':
       description: Remaining saved snapshots in reverse order of addition.
       content:

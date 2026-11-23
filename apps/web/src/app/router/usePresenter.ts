@@ -1,6 +1,8 @@
-import { useSyncExternalStore } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
 
+import { useAuth } from '../logic/auth';
 import { useFavoriteChanges, useFavoriteList } from '../logic/favorites';
+import { navigateTo } from '../utils/navigateTo';
 import type { OnLocationChange } from './types';
 
 
@@ -13,9 +15,26 @@ function subscribe(update: OnLocationChange) {
 const pathname = () => location.pathname;
 
 export function usePresenter() {
-  const isFavoritesPage = useSyncExternalStore(subscribe, pathname) === '/favorites';
-  const { commit, ...list } = useFavoriteList(isFavoritesPage);
-  const setSaved = useFavoriteChanges(commit);
+  const path = useSyncExternalStore(subscribe, pathname);
+  const { session, isPending, login, logout, onFavoriteError } = useAuth();
+  const access = { signal: session?.scope.signal, onError: onFavoriteError };
+  const { commit, ...list } = useFavoriteList(access);
+  const setSaved = useFavoriteChanges({ ...access, commit });
 
-  return { isFavoritesPage, favorites: { ...list, setSaved } };
+  useEffect(() => {
+    if (path === '/favorites' && session === null) {
+      navigateTo({ path: '/login', replace: true });
+    } else if (path === '/login' && session) {
+      navigateTo({ path: '/', replace: true });
+    }
+  }, [path, session]);
+
+  return {
+    isSearchPage: path !== '/favorites' && path !== '/login',
+    isLoginPage: path === '/login',
+    isFavoritesPage: path === '/favorites' && !!session,
+    account: { email: session === null ? null : session?.email, isPending, logout },
+    login,
+    favorites: { ...list, setSaved },
+  };
 }

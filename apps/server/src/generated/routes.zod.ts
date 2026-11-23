@@ -45,6 +45,23 @@ export const SearchShowsResponse = zod.object({
 })
 
 
+export const LoginBody = zod.object({
+  "email": zod.string().describe('Email address with optional surrounding whitespace.')
+})
+
+export const LoginResponse = zod.object({
+  "email": zod.email()
+})
+
+
+export const GetSessionResponse = zod.object({
+  "email": zod.email().nullable()
+})
+
+
+export const LogoutResponse = zod.void()
+
+
 export const listFavoritesResponseItemsItemIdRegExp = new RegExp('^[1-9][0-9]*$');
 export const listFavoritesResponseItemsItemSummaryMax = 160;
 

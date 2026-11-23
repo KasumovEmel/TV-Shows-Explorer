@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './authenticatedTest';
 
 
 test('saved snapshot survives reload, failed changes can be retried', async ({ page }) => {
@@ -51,7 +51,7 @@ test('saved snapshot survives reload, failed changes can be retried', async ({ p
   await expect(page.getByText('Removed Night Flight from favorites.')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Favorites (0)' })).toBeVisible();
   await expect(page.getByText('No saved shows yet.')).toBeVisible();
-  await page.getByRole('link', { name: 'Search shows' }).click();
+  await page.getByRole('link', { name: 'Season One' }).click();
   await expect(favorites).toHaveText('0');
   await page.getByRole('searchbox').fill('night');
   await expect(add).toBeEnabled();

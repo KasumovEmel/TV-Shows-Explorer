@@ -15,7 +15,7 @@ export function FavoritesPage(props: FavoritesPageProps) {
   return (
     <>
       <div className={styles.header}>
-        <AppHeader isFavoritesPage />
+        <AppHeader account={props.account} count={count} isFavoritesPage />
       </div>
       <main className={styles.page}>
         <h1 aria-label={headingLabel}>

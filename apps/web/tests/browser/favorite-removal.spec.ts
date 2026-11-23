@@ -1,5 +1,4 @@
-import { expect, test } from '@playwright/test';
-
+import { expect, test } from './authenticatedTest';
 import { pauseRemoval, seekRemoval } from './removalMotion';
 
 

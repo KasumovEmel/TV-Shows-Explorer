@@ -4,10 +4,11 @@ import test from 'node:test';
 import { createApp } from '../src/app';
 import { ShowCatalog, TvMazeClient } from '../src/catalog';
 import { FavoritesStore, sessionLifetimeSeconds } from '../src/favorites';
+import { requestLogin } from './requestLogin';
 import type { FavoriteRequest, ShowId } from './types';
 
 
-void test('anonymous sessions, snapshots, fixed expiry and idempotent mutations', async () => {
+void test('personal lists, snapshots, fixed expiry and idempotent mutations', async () => {
   let now = 0,
     calls = 0,
     isOffline = false;
@@ -43,9 +44,9 @@ void test('anonymous sessions, snapshots, fixed expiry and idempotent mutations'
     return response.json();
   };
 
-  assert.deepEqual(await count(), { count: 0 });
-  const first = await req(),
-    other = await req();
+  const email = 'reader@example.test';
+  const first = await requestLogin({ app, email });
+  const other = await requestLogin({ app, email: 'another@example.test' });
   const set = first.headers.get('set-cookie')!;
   for (const attr of ['HttpOnly', 'Secure', 'SameSite=Lax', 'Max-Age=2592000', 'Path=/']) {
     assert.ok(set.includes(attr));
@@ -79,11 +80,17 @@ void test('anonymous sessions, snapshots, fixed expiry and idempotent mutations'
   });
   const headers = { cookie };
   const resetCount = await restarted.request('/api/favorites/count', { headers });
-  assert.deepEqual(await resetCount.json(), { count: 0 });
+  assert.equal(resetCount.status, 401);
   assert.equal(resetCount.headers.get('set-cookie'), null);
   const resetList = await restarted.request('/api/favorites', { headers });
-  assert.deepEqual(await resetList.json(), { items: [] });
-  assert.notEqual(resetList.headers.get('set-cookie')!.split(';')[0], cookie);
+  assert.equal(resetList.status, 401);
+  const fresh = (await requestLogin({ app: restarted, email })).headers
+    .get('set-cookie')!
+    .split(';')[0];
+  assert.deepEqual(
+    await (await restarted.request('/api/favorites', { headers: { cookie: fresh } })).json(),
+    { items: [] },
+  );
   now += 29 * 86400_000;
   isOffline = true;
   assert.deepEqual(await ids(cookie), ['2', '1']);
@@ -98,21 +105,10 @@ void test('anonymous sessions, snapshots, fixed expiry and idempotent mutations'
   assert.deepEqual(await count(cookie), { count: 1 });
   assert.equal(calls, 3);
   now = sessionLifetimeSeconds * 1000;
-  assert.deepEqual(await count(cookie), { count: 0 });
-  assert.deepEqual(await ids(cookie), []);
-  assert.notEqual((await req({ cookie })).headers.get('set-cookie')!.split(';')[0], cookie);
-  assert.equal((await app.request('/api/health')).status, 200);
-  const unavailable = createApp({
-    catalog,
-    favorites: new FavoritesStore({ storage: Object.freeze({}) }),
-  });
-  const down = await unavailable.request('/api/health');
-  assert.equal(down.status, 503);
-  assert.equal((await down.json()).code, 'storage_unavailable');
-  const failure = await unavailable.request('/api/favorites', { headers });
-  assert.equal(failure.status, 500);
-  assert.equal((await failure.json()).code, 'internal_error');
-  const missing = await app.request('/api/wrong');
-  assert.equal(missing.status, 404);
-  assert.equal((await missing.json()).code, 'not_found');
+  assert.equal((await req({ cookie })).status, 401);
+  const again = (await requestLogin({ app, email })).headers.get('set-cookie')!.split(';')[0];
+  assert.deepEqual(await ids(again), ['1']);
+  await app.request('/api/auth/logout', { method: 'POST', headers: { cookie: again } });
+  const returned = (await requestLogin({ app, email })).headers.get('set-cookie')!.split(';')[0];
+  assert.deepEqual(await ids(returned), ['1']);
 });

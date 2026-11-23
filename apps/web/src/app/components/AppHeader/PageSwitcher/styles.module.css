@@ -1,5 +1,10 @@
 .navigation {
   position: relative;
+  flex: none;
+}
+.navigation[aria-current='page'] svg {
+  fill: var(--favorite);
+  color: var(--favorite);
 }
 .count {
   position: absolute;

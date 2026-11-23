@@ -3,6 +3,8 @@
     "switch": "Switch to Russian",
     "loadError": "Couldn’t load Russian. Please try again."
   },
+  "settings": { "menu": "More options", "language": "Language", "theme": "Theme" },
+  "themeMode": { "dark": "Dark", "light": "Light", "system": "System" },
   "theme": {
     "system": "System theme. Use dark theme",
     "dark": "Dark theme. Use light theme",
@@ -95,6 +97,12 @@
       "title": "Info",
       "message": "Showing saved results."
     }
+  },
+  "auth": {
+    "title": "Sign in",
+    "email": "Email address",
+    "login": "Sign in",
+    "logout": "Sign out"
   },
   "favorites": {
     "title": "Favorites",

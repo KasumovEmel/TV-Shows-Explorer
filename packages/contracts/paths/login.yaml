@@ -1,0 +1,23 @@
+post:
+  operationId: login
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required: [email]
+          properties:
+            email:
+              { type: string, description: Email address with optional surrounding whitespace. }
+  responses:
+    '200':
+      description: Signed in with a new session cookie.
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [email]
+            properties:
+              email: { type: string, format: email }
+    '400': { $ref: '../errors.yaml#/E400' }

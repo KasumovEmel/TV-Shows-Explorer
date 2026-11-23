@@ -3,5 +3,5 @@ import type { ServerEnv } from '../../types';
 
 
 export function listFavorites(c: ListFavoritesContext<ServerEnv>) {
-  return c.json({ items: c.var.favorites.list(c.var.ensureSession()) });
+  return c.json({ items: c.var.favorites.list(c.var.token) });
 }

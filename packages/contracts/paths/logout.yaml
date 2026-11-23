@@ -1,0 +1,5 @@
+post:
+  operationId: logout
+  security: [{ session: [] }, {}]
+  responses:
+    '204': { description: Session closed and cookie cleared. }

@@ -25,8 +25,10 @@ test('пустой старт, задержка, Enter и прерывание �
   await page.clock.install();
   const now = new Date();
   await page.clock.pauseAt(now.getTime() + 1000);
-  await expect(page.getByRole('button', { name: 'Use dark theme' })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Switch to Russian' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'More options' })).toHaveAttribute(
+    'aria-expanded',
+    'false',
+  );
   await expect(page.getByRole('listitem')).toHaveCount(0);
   expect(requests).toEqual([]);
   await field.fill('ol');

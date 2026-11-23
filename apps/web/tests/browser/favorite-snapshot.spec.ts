@@ -1,5 +1,5 @@
-import { expect, test } from '@playwright/test';
-
+import { expect, test } from './authenticatedTest';
+import { mockSearch } from './mockSearch';
 import type { ReleaseRequest } from './types';
 
 
@@ -46,7 +46,7 @@ test('список управляет сердцами и счётчиком п�
   await expect.poll(() => reads).toBe(2);
   await page.getByRole('button', { name: 'Remove Night Flight' }).click();
   await expect(page.getByRole('heading', { name: 'Night Radio' })).toBeVisible();
-  await page.getByRole('link', { name: 'Search shows' }).click();
+  await page.getByRole('link', { name: 'Season One' }).click();
   await expect(page.getByRole('button', { name: 'Save Night Flight' })).toHaveAttribute(
     'aria-pressed',
     'false',
@@ -66,4 +66,37 @@ test('после ошибки загрузки можно повторить з�
   await expect(retry).toBeEnabled();
   await retry.click();
   await expect(page.getByRole('button', { name: 'Save Night Flight' })).toBeEnabled();
+});
+
+test('избранное загружается один раз за посещение выдачи', async ({ page }) => {
+  await mockSearch(page);
+  const saved = { id: '4', originalTitle: 'Night Train', genres: ['Thriller'] };
+  let reads = 0;
+  await page.route('**/api/favorites/count', (route) => route.fulfill({ json: { count: 1 } }));
+  await page.route('**/api/favorites', (route) => {
+    reads++;
+
+    return route.fulfill({ json: { items: [saved] } });
+  });
+  await page.goto('/');
+  const field = page.getByRole('searchbox');
+  await expect(page.getByRole('link', { name: 'Favorites (1)' })).toBeVisible();
+  expect(reads).toBe(0);
+
+  await field.fill('missing');
+  await expect(page.getByRole('heading', { name: 'No shows found' })).toBeVisible();
+  await expect.poll(() => reads).toBe(1);
+  await field.fill('night');
+  await page.getByRole('link', { name: 'Page 2' }).click();
+  const remove = page.getByRole('button', { name: 'Remove Night Train' });
+  await expect(remove).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('button', { name: 'Thriller', exact: true }).click();
+  await expect(page.getByRole('listitem')).toHaveCount(3);
+  await expect(remove).toHaveAttribute('aria-pressed', 'true');
+  expect(reads).toBe(1);
+
+  await page.getByRole('button', { name: 'Clear search' }).click();
+  await field.fill('night');
+  await expect(remove).toHaveAttribute('aria-pressed', 'true');
+  await expect.poll(() => reads).toBe(2);
 });

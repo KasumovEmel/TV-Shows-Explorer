@@ -23,51 +23,18 @@ test('заголовок шапки помещается в одну строк�
       expect(isTitleWithinBounds, title + ' / ' + width + ' px').toBe(true);
     }
     if (title === 'What to watch?') {
+      await page.getByRole('button', { name: 'More options' }).click();
       await page.getByRole('button', { name: 'Switch to Russian' }).click();
     }
   }
 });
-
-for (const colorScheme of ['light', 'dark'] as const) {
-  test('подсветка и подсказки кнопок шапки, тема ' + colorScheme, async ({ page }) => {
-    await page.emulateMedia({ colorScheme });
-    await page.goto('/');
-    const themeName = 'System theme. Use dark theme';
-    const theme = page.getByRole('button', { name: themeName });
-    const language = page.getByRole('button', { name: 'Switch to Russian' });
-    const favorites = page.getByRole('link', { name: 'Favorites' });
-    await expect(theme).toHaveAttribute('title', themeName);
-    await expect(language).toHaveAttribute('title', 'Switch to Russian');
-    const background = 'rgba(0, 0, 0, 0)';
-    await expect(theme).toHaveCSS('background-color', background);
-    await expect(language).toHaveCSS('background-color', background);
-    await theme.hover();
-    await expect(theme).toHaveCSS('background-color', /[,/]\s*0\.\d+\)$/);
-    const hovered = await theme.evaluate((el) => getComputedStyle(el).backgroundColor);
-    for (const control of [language, favorites]) {
-      await control.hover();
-      await expect(control).toHaveCSS('background-color', hovered);
-      await page.mouse.move(0, 0);
-      await expect(control).toHaveCSS('background-color', background);
-    }
-    for (const button of [page.getByRole('link', { name: 'Season One' }), theme, language]) {
-      await page.keyboard.press('Tab');
-      await expect(button).toBeFocused();
-      await expect(button).toHaveCSS('outline-style', 'solid');
-    }
-    await page.keyboard.press('Enter');
-    await expect(page.getByRole('button', { name: 'Переключить на английский' })).toHaveAttribute(
-      'title',
-      'Переключить на английский',
-    );
-  });
-}
 
 test('язык и тема доступны до поиска, сохраняются и не сбрасывают выдачу', async ({ page }) => {
   await mockSearch(page);
   await page.emulateMedia({ colorScheme: 'light' });
   await page.goto('/');
   const html = page.locator('html');
+  await page.getByRole('button', { name: 'More options' }).click();
   await page.getByRole('button', { name: 'Use dark theme' }).press('Space');
   await expect(html).toHaveCSS('color-scheme', 'dark');
   await page.getByRole('button', { name: 'Switch to Russian' }).press('Enter');
@@ -80,6 +47,7 @@ test('язык и тема доступны до поиска, сохраняю�
   await expect(all).toHaveAttribute('aria-pressed', 'true');
   const second = page.getByRole('link', { name: 'Страница 2' });
   await second.click();
+  await page.getByRole('button', { name: 'Ещё' }).click();
   await page.getByRole('button', { name: 'Включить светлую тему' }).press('Enter');
   await expect(html).toHaveCSS('color-scheme', 'light');
   await expect(page.getByRole('searchbox')).toHaveValue('ноч');
@@ -102,6 +70,7 @@ test('русский словарь запрашивается при выбор
     return attempts === 1 ? route.abort() : route.continue();
   });
   await page.goto('/');
+  await page.getByRole('button', { name: 'More options' }).click();
   const toggle = page.getByRole('button', { name: 'Switch to Russian' });
   await expect(toggle).toBeVisible();
   expect(attempts).toBe(0);

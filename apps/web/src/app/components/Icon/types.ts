@@ -1,4 +1,6 @@
 export type IconName =
+  | 'more'
+  | 'logout'
   | 'heart'
   | 'restore'
   | 'close'

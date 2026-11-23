@@ -10,6 +10,8 @@ export function usePresenter() {
   const { mode, onToggleTheme } = useTheme();
 
   return {
+    title: t('settings.theme'),
+    current: t(`themeMode.${mode}`),
     themeIcon: icons[mode],
     themeLabel: t(`theme.${mode}`),
     onToggleTheme,

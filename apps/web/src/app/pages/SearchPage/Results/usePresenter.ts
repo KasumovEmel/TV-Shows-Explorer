@@ -6,18 +6,11 @@ import { useSearchPage } from '@/app/pages/SearchPage/search';
 import type { ResultsProps } from './types';
 
 
-export function usePresenter({
-  search,
-  criteria,
-  isEntering,
-  selectGenre,
-  refreshFavorites,
-}: ResultsProps) {
+export function usePresenter({ search, criteria, isEntering, selectGenre }: ResultsProps) {
   const { t } = useTranslation();
   const { data, isFailed, retry } = useSearchPage({
     criteria: search ? criteria : null,
     signal: search?.signal,
-    onCards: refreshFavorites,
   });
   const [previousGenres, setGenres] = useState<string[]>([]);
 

@@ -27,3 +27,17 @@
     width: 26px;
   }
 }
+
+@media (max-width: 479px) {
+  .brand[data-compact] {
+    min-width: var(--target);
+    min-height: var(--target);
+  }
+  .brand[data-compact] svg {
+    width: 34px;
+    height: auto;
+  }
+  .brand[data-compact] span {
+    display: none;
+  }
+}

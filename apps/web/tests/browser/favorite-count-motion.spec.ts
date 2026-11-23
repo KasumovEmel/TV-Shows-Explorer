@@ -1,5 +1,6 @@
-import { expect, test } from '@playwright/test';
 import type { Locator } from '@playwright/test';
+
+import { expect, test } from './authenticatedTest';
 
 
 async function watchCount(control: Locator) {

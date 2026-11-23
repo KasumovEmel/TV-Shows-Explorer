@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { changeLanguage } from './logic/tasks/changeLanguage';
 import { useNotify } from '@/app/notifications';
 import { rememberLanguage, setLanguage } from '@/i18n';
+import { languageNames } from '@/i18n/constants';
 
 
 export function usePresenter() {
@@ -32,5 +33,12 @@ export function usePresenter() {
     }
   }
 
-  return { isRussian, toggle: () => void toggle(), isPending, label: t('language.switch') };
+  return {
+    isRussian,
+    current: languageNames[isRussian ? 'ru' : 'en'],
+    title: t('settings.language'),
+    toggle: () => void toggle(),
+    isPending,
+    label: t('language.switch'),
+  };
 }

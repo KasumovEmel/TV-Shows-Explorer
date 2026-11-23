@@ -12,7 +12,6 @@ export interface LoadSearchPageParams {
 export interface SearchPageRequest {
   criteria: SearchCriteria | null;
   signal?: AbortSignal;
-  onCards?: () => void;
 }
 
 export interface SearchPageResponse {

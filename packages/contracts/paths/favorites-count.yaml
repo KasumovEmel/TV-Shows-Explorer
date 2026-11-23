@@ -1,9 +1,10 @@
 get:
   operationId: countFavorites
-  security: [{ session: [] }, {}]
+  security: [{ session: [] }]
   responses:
+    '401': { $ref: '../errors.yaml#/E401' }
     '200':
-      description: Number of saved shows in the current session, or zero without an active session.
+      description: Number of saved shows in the current user's list.
       content:
         application/json:
           schema:

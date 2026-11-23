@@ -35,3 +35,8 @@ export interface ExpectRowsParams {
   rows: Locator;
   container: Locator;
 }
+
+export interface EmailLogin {
+  page: Page;
+  email: string;
+}

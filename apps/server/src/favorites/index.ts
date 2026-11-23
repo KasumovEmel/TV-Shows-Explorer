@@ -1,8 +1,11 @@
 export { FavoritesStore } from './FavoritesStore';
 export { addFavorite } from './handlers/addFavorite';
 export { countFavorites } from './handlers/countFavorites';
+export { getSession } from './handlers/getSession';
 export { listFavorites } from './handlers/listFavorites';
+export { login } from './handlers/login';
+export { logout } from './handlers/logout';
 export { removeFavorite } from './handlers/removeFavorite';
 export { createFavoriteSessionMiddleware } from './middleware/createFavoriteSessionMiddleware';
 export { sessionLifetimeSeconds } from './session';
-export type { FavoriteStorage } from './types';
+export type { FavoriteStorage, SessionStorage } from './types';

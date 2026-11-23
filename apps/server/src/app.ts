@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import { HTTPException } from 'hono/http-exception';
 
 import { ApiFailure } from './errors';
 import { createFavoriteSessionMiddleware } from './favorites';
@@ -14,6 +15,7 @@ export function createApp({ catalog, favorites, isCookieSecure = false }: AppOpt
     if (process.env.RELEASE_SHA) {
       c.header('X-Release-Revision', process.env.RELEASE_SHA);
     }
+    c.set('isCookieSecure', isCookieSecure);
     c.set('catalog', catalog);
     c.set('favorites', favorites);
     await next();
@@ -22,12 +24,19 @@ export function createApp({ catalog, favorites, isCookieSecure = false }: AppOpt
     }
   });
 
-  app.use('/api/favorites/*', createFavoriteSessionMiddleware(isCookieSecure));
+  const session = createFavoriteSessionMiddleware();
+
+  app.use('/api/auth/*', session);
+
+  app.use('/api/favorites/*', session);
 
   app.route('/', routes);
   app.notFound((c) => c.json({ code: 'not_found', message: 'Unknown API route' }, 404));
   // oxlint-disable-next-line project/object-parameters -- Hono передаёт ошибку и контекст отдельно.
   app.onError((err, c) => {
+    if (err instanceof HTTPException && err.status === 400) {
+      return c.json({ code: 'invalid_input', message: 'Invalid request parameters' }, 400);
+    }
     if (err instanceof ApiFailure) {
       if (err.retryAfter) {
         c.header('Retry-After', err.retryAfter);

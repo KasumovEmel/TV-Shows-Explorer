@@ -4,20 +4,18 @@ import type { Clock } from '../types';
 
 export interface FavoritesStoreOptions {
   storage?: FavoriteStorage;
+  sessions?: SessionStorage;
   now?: Clock;
 }
 
 export interface StoredSession {
   expires: number;
-  shows: Show[];
+  email: string;
 }
 
-export type FavoriteStorage = Record<string, StoredSession>;
+export type SessionStorage = Record<string, StoredSession>;
 
-export interface FavoriteSession {
-  id: string;
-  token?: string;
-}
+export type FavoriteStorage = Record<string, Show[]>;
 
 export interface FavoriteKey {
   session: string;

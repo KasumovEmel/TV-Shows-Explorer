@@ -6,6 +6,9 @@ const input = {
   parserOptions: {
     externalRefs: {
       allow: [
+        './paths/login.yaml',
+        './paths/session.yaml',
+        './paths/logout.yaml',
         './paths/shows.yaml',
         './paths/favorite.yaml',
         './paths/favorites.yaml',

@@ -3,30 +3,44 @@ import { useRef } from 'react';
 import { addFavorite } from '../tasks/addFavorite';
 import { removeFavorite } from '../tasks/removeFavorite';
 import * as api from '@/api/generated/catalog';
-import { useNotify, useRequestError } from '@/app/notifications';
+import { useNotify } from '@/app/notifications';
 import type { SaveSelection } from '../types';
-import type { CommitFavorites } from '../types/FavoriteOperations';
+import type { FavoriteChanges } from '../types/FavoriteOperations';
 
 
-export function useFavoriteChanges(commit: CommitFavorites) {
-  const queue = useRef(Promise.resolve());
-  const pending = useRef(new Set<string>());
+export function useFavoriteChanges({ commit, signal, onError }: FavoriteChanges) {
+  const queue = useRef({ last: Promise.resolve(), pending: new Set<string>(), signal });
   const notify = useNotify();
-  const onError = useRequestError();
 
   function setSaved({ show, isSaved }: SaveSelection) {
-    if (pending.current.has(show.id)) {
+    if (queue.current.signal !== signal) {
+      queue.current = { last: Promise.resolve(), pending: new Set<string>(), signal };
+    }
+    const current = queue.current;
+    if (!signal || signal.aborted || current.pending.has(show.id)) {
       return Promise.resolve(false);
     }
-    pending.current.add(show.id);
+    current.pending.add(show.id);
 
     const change = async () => {
+      if (signal.aborted) {
+        return false;
+      }
       try {
         if (isSaved) {
-          await addFavorite({ id: show.id, request: api.addFavorite });
+          await addFavorite({ id: show.id, request: (id) => api.addFavorite(id, { signal }) });
+          if (signal.aborted) {
+            return false;
+          }
           commit((items) => [show, ...items.filter((item) => item.id !== show.id)]);
         } else {
-          const remaining = await removeFavorite({ id: show.id, request: api.removeFavorite });
+          const remaining = await removeFavorite({
+            id: show.id,
+            request: (id) => api.removeFavorite(id, { signal }),
+          });
+          if (signal.aborted) {
+            return false;
+          }
           commit(() => remaining);
         }
         notify({
@@ -37,16 +51,18 @@ export function useFavoriteChanges(commit: CommitFavorites) {
 
         return true;
       } catch (error) {
-        onError(error);
+        if (!signal.aborted) {
+          onError(error);
+        }
 
         return false;
       } finally {
-        pending.current.delete(show.id);
+        current.pending.delete(show.id);
       }
     };
 
-    const result = queue.current.then(change);
-    queue.current = result.then(() => undefined);
+    const result = current.last.then(change);
+    current.last = result.then(() => undefined);
 
     return result;
   }

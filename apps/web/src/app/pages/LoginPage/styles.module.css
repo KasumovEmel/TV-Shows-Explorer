@@ -1,0 +1,30 @@
+.header {
+  background: var(--masthead);
+  color: var(--masthead-text);
+}
+.page {
+  width: min(var(--page-width), 28rem);
+  margin: clamp(40px, 9vw, 100px) auto;
+}
+.page h1 {
+  font-family: var(--font-display);
+  margin-bottom: 1em;
+}
+.form {
+  display: grid;
+  gap: 8px;
+}
+.form label {
+  font-weight: 600;
+}
+.form input {
+  min-height: 50px;
+  padding: 8px 14px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.form button {
+  margin-top: 12px;
+}

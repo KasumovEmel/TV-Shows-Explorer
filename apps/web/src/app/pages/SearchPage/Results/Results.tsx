@@ -72,7 +72,6 @@ export function Results(props: ResultsProps) {
           key={props.revision}
           first={data}
           renderCard={props.renderCard}
-          refreshFavorites={props.refreshFavorites}
           criteria={props.criteria}
           signal={props.search?.signal}
           isLoading={isLoading}

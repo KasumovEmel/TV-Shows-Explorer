@@ -41,17 +41,19 @@ export function ShowCard(props: ShowCardProps) {
         )
       }
       action={
-        <Button
-          variant="icon"
-          icon="heart"
-          className={favorite.isLoading ? styles.loading : undefined}
-          aria-busy={favorite.isLoading || undefined}
-          disabled={favorite.isDisabled}
-          aria-label={favorite.label}
-          title={favorite.label}
-          aria-pressed={favorite.isSaved}
-          onClick={favorite.onClick}
-        />
+        props.isActionVisible !== false && (
+          <Button
+            variant="icon"
+            icon="heart"
+            className={favorite.isLoading ? styles.loading : undefined}
+            aria-busy={favorite.isLoading || undefined}
+            disabled={favorite.isDisabled}
+            aria-label={favorite.label}
+            title={favorite.label}
+            aria-pressed={favorite.isSaved}
+            onClick={favorite.onClick}
+          />
+        )
       }
       title={title}
       year={year}

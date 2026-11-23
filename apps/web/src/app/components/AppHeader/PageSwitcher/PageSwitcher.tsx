@@ -7,14 +7,15 @@ import styles from './styles.module.css';
 
 
 export function PageSwitcher(props: PageSwitcherProps) {
-  const { href, icon, label, count } = usePresenter(props);
+  const { current, label, count } = usePresenter(props);
 
   return (
     <Button
       variant="framedIcon"
       isTransparent
-      icon={icon}
-      href={href}
+      icon="heart"
+      href="/favorites"
+      aria-current={current}
       className={styles.navigation}
       aria-label={label}
       title={label}

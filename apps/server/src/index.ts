@@ -3,10 +3,10 @@ import { serve } from '@hono/node-server';
 import { createApp } from './app';
 import { ShowCatalog } from './catalog';
 import { FavoritesStore } from './favorites';
-import { cache, favorite } from './storage';
+import { cache, favorite, sessions } from './storage';
 
 
-const store = new FavoritesStore({ storage: favorite });
+const store = new FavoritesStore({ storage: favorite, sessions });
 const catalog = new ShowCatalog({ storage: cache });
 const app = createApp({
   catalog,

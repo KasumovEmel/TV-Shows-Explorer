@@ -5,6 +5,12 @@ info:
 paths:
   /api/shows:
     $ref: './paths/shows.yaml'
+  /api/auth/login:
+    $ref: './paths/login.yaml'
+  /api/auth/session:
+    $ref: './paths/session.yaml'
+  /api/auth/logout:
+    $ref: './paths/logout.yaml'
   /api/favorites:
     $ref: './paths/favorites.yaml'
   /api/favorites/count:
@@ -19,7 +25,7 @@ components:
       type: apiKey
       in: cookie
       name: season_one
-      description: Anonymous session created when listing or changing favorites. Expires after 30 days or when the API process restarts.
+      description: Email login session. Ends on logout, expiry after 30 days, or server restart.
   schemas:
     Show:
       $ref: './models.yaml#/Show'

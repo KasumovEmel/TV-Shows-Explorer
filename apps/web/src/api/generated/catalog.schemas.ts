@@ -132,6 +132,25 @@ export type SearchShows504 = {
   message: string;
 };
 
+export type LoginBody = {
+  /** Email address with optional surrounding whitespace. */
+  email: string;
+};
+
+export type Login200 = {
+  email: string;
+};
+
+export type Login400 = {
+  code: string;
+  message: string;
+};
+
+export type GetSession200 = {
+  /** @nullable */
+  email: string | null;
+};
+
 export type ListFavorites200ItemsItem = {
   /** @pattern ^[1-9][0-9]*$ */
   id: string;
@@ -148,6 +167,11 @@ export type ListFavorites200 = {
   items: ListFavorites200ItemsItem[];
 };
 
+export type ListFavorites401 = {
+  code: string;
+  message: string;
+};
+
 export type ListFavorites500 = {
   code: string;
   message: string;
@@ -158,12 +182,22 @@ export type CountFavorites200 = {
   count: number;
 };
 
+export type CountFavorites401 = {
+  code: string;
+  message: string;
+};
+
 export type CountFavorites500 = {
   code: string;
   message: string;
 };
 
 export type AddFavorite400 = {
+  code: string;
+  message: string;
+};
+
+export type AddFavorite401 = {
   code: string;
   message: string;
 };
@@ -210,6 +244,11 @@ export type RemoveFavorite200 = {
 };
 
 export type RemoveFavorite400 = {
+  code: string;
+  message: string;
+};
+
+export type RemoveFavorite401 = {
   code: string;
   message: string;
 };

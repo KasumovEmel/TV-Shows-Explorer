@@ -6,8 +6,11 @@
  */
 import type {
   CountFavorites200,
+  GetSession200,
   Health200,
   ListFavorites200,
+  Login200,
+  LoginBody,
   RemoveFavorite200,
   SearchShows200,
   SearchShowsParams
@@ -25,6 +28,35 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
       return request<SearchShows200>(
       {url: `/api/shows`, method: 'GET',
         params
+    },
+      options);
+    }
+
+export const login = (
+    loginBody: LoginBody,
+ options?: SecondParameter<typeof request<Login200>>,) => {
+      return request<Login200>(
+      {url: `/api/auth/login`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: loginBody
+    },
+      options);
+    }
+
+export const getSession = (
+
+ options?: SecondParameter<typeof request<GetSession200>>,) => {
+      return request<GetSession200>(
+      {url: `/api/auth/session`, method: 'GET'
+    },
+      options);
+    }
+
+export const logout = (
+
+ options?: SecondParameter<typeof request<void>>,) => {
+      return request<void>(
+      {url: `/api/auth/logout`, method: 'POST'
     },
       options);
     }
@@ -75,6 +107,9 @@ export const health = (
     }
 
 export type SearchShowsResult = NonNullable<Awaited<ReturnType<typeof searchShows>>>
+export type LoginResult = NonNullable<Awaited<ReturnType<typeof login>>>
+export type GetSessionResult = NonNullable<Awaited<ReturnType<typeof getSession>>>
+export type LogoutResult = NonNullable<Awaited<ReturnType<typeof logout>>>
 export type ListFavoritesResult = NonNullable<Awaited<ReturnType<typeof listFavorites>>>
 export type CountFavoritesResult = NonNullable<Awaited<ReturnType<typeof countFavorites>>>
 export type AddFavoriteResult = NonNullable<Awaited<ReturnType<typeof addFavorite>>>

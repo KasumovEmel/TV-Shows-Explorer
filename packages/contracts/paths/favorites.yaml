@@ -1,7 +1,8 @@
 get:
   operationId: listFavorites
-  security: [{ session: [] }, {}]
+  security: [{ session: [] }]
   responses:
+    '401': { $ref: '../errors.yaml#/E401' }
     '200':
       description: Saved snapshots in reverse order of addition.
       content:

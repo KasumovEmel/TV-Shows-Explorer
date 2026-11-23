@@ -8,7 +8,8 @@ export interface ServerEnv {
   Variables: {
     catalog: ShowCatalog;
     favorites: FavoritesStore;
-    ensureSession: () => string;
+    token: string;
+    isCookieSecure: boolean;
   };
 }
 

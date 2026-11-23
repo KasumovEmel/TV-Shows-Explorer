@@ -14,7 +14,7 @@ export function SearchPage(props: SearchPageProps) {
   return (
     <>
       <div className={styles.masthead}>
-        <AppHeader count={props.favorites.count} />
+        <AppHeader account={props.account} count={props.favorites.count} />
         <SearchIntro {...intro} />
       </div>
       <main ref={resultsRef}>

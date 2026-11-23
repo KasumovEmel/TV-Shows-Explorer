@@ -3,6 +3,11 @@ E400:
   content:
     application/json:
       schema: { $ref: './models.yaml#/ApiError' }
+E401:
+  description: Login required
+  content:
+    application/json:
+      schema: { $ref: './models.yaml#/ApiError' }
 E404:
   description: Resource not found
   content:

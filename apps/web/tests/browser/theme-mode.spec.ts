@@ -27,7 +27,8 @@ test('три режима имеют разные значки, сохраняю
     ['light', 'Light theme. Use system theme'],
   ]) {
     await page.reload();
-    const button = page.getByRole('button', { name, exact: true });
+    await page.getByRole('button', { name: 'More options' }).click();
+    const button = page.getByRole('button', { name });
     await expect(button).toHaveAttribute('title', name);
     expect(await page.evaluate(() => localStorage.getItem('tv-shows-explorer.theme'))).toBe(mode);
     await expect(html).toHaveAttribute('data-theme', mode);
@@ -61,6 +62,7 @@ test('кнопка темы работает при запрете локаль�
   });
   await page.emulateMedia({ colorScheme: 'light' });
   await page.goto('/');
+  await page.getByRole('button', { name: 'More options' }).click();
   await page.getByRole('button', { name: 'System theme. Use dark theme' }).click();
   await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(32, 29, 35)');
 });

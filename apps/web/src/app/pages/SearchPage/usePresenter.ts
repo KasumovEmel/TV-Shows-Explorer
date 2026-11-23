@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useSearchQuery } from './logic/hooks/useSearchQuery';
 import { useSearchTransition } from './logic/hooks/useSearchTransition';
@@ -8,7 +8,7 @@ import type { SearchPageProps } from './types';
 import type { Show } from '@/app/types/show.types';
 
 
-export function usePresenter({ isRestored, favorites }: SearchPageProps) {
+export function usePresenter({ isRestored, favorites, account }: SearchPageProps) {
   const [filter, setFilter] = useState<SearchFilter>({
     page: 1,
     revision: 0,
@@ -18,6 +18,13 @@ export function usePresenter({ isRestored, favorites }: SearchPageProps) {
   const isDocked = phase !== 'idle';
   const { introRef, inputRef, resultsRef } = useSearchTransition({ isDocked, finishEntrance });
   const criteria = { q: term, page: filter.page, genre: filter.genre };
+  const { refresh } = favorites;
+
+  useEffect(() => {
+    if (isDocked) {
+      refresh();
+    }
+  }, [isDocked, refresh]);
 
   function chooseGenre(value: string) {
     renew();
@@ -30,11 +37,12 @@ export function usePresenter({ isRestored, favorites }: SearchPageProps) {
 
     return {
       show,
+      isActionVisible: !!account.email,
       isSaved,
       isLoading: favorites.isLoading || (!favorites.items && !favorites.isFailed),
       isFailed: favorites.isFailed,
       onAction: () =>
-        favorites.isFailed ? favorites.refresh() : favorites.setSaved({ show, isSaved: !isSaved }),
+        favorites.isFailed ? refresh() : favorites.setSaved({ show, isSaved: !isSaved }),
     };
   }
 
@@ -44,7 +52,6 @@ export function usePresenter({ isRestored, favorites }: SearchPageProps) {
     results: isDocked
       ? {
           search,
-          refreshFavorites: favorites.refresh,
           isEntering: phase === 'entering',
           criteria,
           revision: filter.revision,

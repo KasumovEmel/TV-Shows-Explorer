@@ -7,10 +7,14 @@
 import type { Context, Env } from 'hono';
 
 import type {
-SearchShowsParams
+LoginBody,
+  SearchShowsParams
 } from './routes.schemas';
 
 export type SearchShowsContext<E extends Env = any> = Context<E, '/api/shows', { in: { query: SearchShowsParams, }, out: { query: SearchShowsParams, } }>
+export type LoginContext<E extends Env = any> = Context<E, '/api/auth/login', { in: { json: LoginBody, }, out: { json: LoginBody, } }>
+export type GetSessionContext<E extends Env = any> = Context<E, '/api/auth/session'>
+export type LogoutContext<E extends Env = any> = Context<E, '/api/auth/logout'>
 export type ListFavoritesContext<E extends Env = any> = Context<E, '/api/favorites'>
 export type CountFavoritesContext<E extends Env = any> = Context<E, '/api/favorites/count'>
 export type AddFavoriteContext<E extends Env = any> = Context<E, '/api/favorites/:showId', { in: { param: {

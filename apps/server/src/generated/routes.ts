@@ -10,6 +10,9 @@ import {
 
 
 import { searchShowsHandlers } from './handlers/searchShows';
+import { loginHandlers } from './handlers/login';
+import { getSessionHandlers } from './handlers/getSession';
+import { logoutHandlers } from './handlers/logout';
 import { listFavoritesHandlers } from './handlers/listFavorites';
 import { countFavoritesHandlers } from './handlers/countFavorites';
 import { addFavoriteHandlers } from './handlers/addFavorite';
@@ -19,6 +22,15 @@ import { healthHandlers } from './handlers/health';
 const app = new Hono()
 
   .get('/api/shows', ...searchShowsHandlers)
+
+
+  .post('/api/auth/login', ...loginHandlers)
+
+
+  .get('/api/auth/session', ...getSessionHandlers)
+
+
+  .post('/api/auth/logout', ...logoutHandlers)
 
 
   .get('/api/favorites', ...listFavoritesHandlers)

@@ -2,34 +2,43 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { listFavorites } from '../tasks/listFavorites';
 import * as api from '@/api/generated/catalog';
-import { useRequestError } from '@/app/notifications';
-import type { FavoriteSnapshot, UpdateFavorites } from '../types/FavoriteOperations';
+import type {
+  FavoriteAccess,
+  FavoriteSnapshot,
+  UpdateFavorites,
+} from '../types/FavoriteOperations';
 
 
-export function useFavoriteList(isFavoritesPage: boolean) {
+export function useFavoriteList({ signal, onError }: FavoriteAccess) {
   const [snapshot, setSnapshot] = useState<FavoriteSnapshot>();
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
-  const isInitialSearch = useRef(!isFavoritesPage);
   const listRequest = useRef<AbortController | null>(null);
-  const onError = useRequestError();
+  const [previous, setPrevious] = useState(signal);
+  if (previous !== signal) {
+    setPrevious(signal);
+    setSnapshot(undefined);
+    setIsLoading(false);
+    setIsFailed(false);
+  }
 
   const refresh = useCallback(() => {
-    if (listRequest.current) {
+    if (!signal || signal.aborted || listRequest.current) {
       return;
     }
     const controller = new AbortController();
     listRequest.current = controller;
     setIsLoading(true);
     setIsFailed(false);
-    void listFavorites(() => api.listFavorites({ signal: controller.signal }))
+    const requestSignal = AbortSignal.any([controller.signal, signal]);
+    void listFavorites(() => api.listFavorites({ signal: requestSignal }))
       .then((items) => {
-        if (!controller.signal.aborted) {
+        if (!requestSignal.aborted) {
           setSnapshot(items);
         }
       })
       .catch((error: unknown) => {
-        if (!controller.signal.aborted) {
+        if (!requestSignal.aborted) {
           setIsFailed(true);
           onError(error);
         }
@@ -40,20 +49,21 @@ export function useFavoriteList(isFavoritesPage: boolean) {
           setIsLoading(false);
         }
       });
-  }, [onError]);
+  }, [onError, signal]);
 
   useEffect(() => {
     const controller = new AbortController();
-    if (isInitialSearch.current) {
+    const requestSignal = signal && AbortSignal.any([controller.signal, signal]);
+    if (requestSignal && location.pathname !== '/favorites') {
       void api
-        .countFavorites({ signal: controller.signal })
+        .countFavorites({ signal: requestSignal })
         .then(({ count }) => {
-          if (!controller.signal.aborted) {
+          if (!requestSignal.aborted) {
             setSnapshot((current) => current ?? count);
           }
         })
         .catch((error: unknown) => {
-          if (!controller.signal.aborted) {
+          if (!requestSignal.aborted) {
             onError(error);
           }
         });
@@ -64,7 +74,7 @@ export function useFavoriteList(isFavoritesPage: boolean) {
       listRequest.current?.abort();
       listRequest.current = null;
     };
-  }, [onError]);
+  }, [onError, signal]);
 
   const commit = useCallback((update: UpdateFavorites) => {
     listRequest.current?.abort();

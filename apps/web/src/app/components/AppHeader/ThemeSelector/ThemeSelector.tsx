@@ -1,18 +1,20 @@
 import { usePresenter } from './usePresenter';
-import { Button } from '@components/Button';
+import { Icon } from '@components/Icon';
 
 
 export function ThemeSelector() {
-  const { themeIcon, themeLabel, onToggleTheme } = usePresenter();
+  const { themeIcon, themeLabel, title, current, onToggleTheme } = usePresenter();
 
   return (
-    <Button
-      variant="framedIcon"
-      isTransparent
-      icon={themeIcon}
-      aria-label={themeLabel}
+    <button
+      type="button"
+      aria-label={`${title}, ${current}. ${themeLabel}`}
       title={themeLabel}
       onClick={onToggleTheme}
-    />
+    >
+      <Icon name={themeIcon} size={20} />
+      {title}
+      <small>{current}</small>
+    </button>
   );
 }

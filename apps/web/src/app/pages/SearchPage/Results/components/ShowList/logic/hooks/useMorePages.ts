@@ -5,13 +5,7 @@ import type { ShowListProps } from '../../types';
 import type { SearchResult } from '@/app/pages/SearchPage/search';
 
 
-export function useMorePages({
-  first,
-  criteria,
-  signal,
-  isLoading,
-  refreshFavorites,
-}: ShowListProps) {
+export function useMorePages({ first, criteria, signal, isLoading }: ShowListProps) {
   const [target, open] = useState(1);
   const [extra, setExtra] = useState<SearchResult[]>([]);
   const total = isLoading ? 0 : (first?.totalAfterFilter ?? 0);
@@ -20,7 +14,6 @@ export function useMorePages({
   const { data, isFailed, retry } = useSearchPage({
     criteria: next <= Math.min(target, pages) ? { ...criteria, page: next } : null,
     signal,
-    onCards: refreshFavorites,
   });
 
   if (data?.page === next) {

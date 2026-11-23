@@ -18,11 +18,9 @@ for (const width of [1440, 390]) {
     await page.keyboard.press('Tab');
     await expect(banner.getByRole('link', { name: 'Season One' })).toBeFocused();
     await page.keyboard.press('Tab');
-    await expect(banner.getByRole('button', { name: 'Включить тёмную тему' })).toBeFocused();
+    await expect(banner.getByRole('link', { name: 'Войти' })).toBeFocused();
     await page.keyboard.press('Tab');
-    await expect(banner.getByRole('button', { name: 'Переключить на английский' })).toBeFocused();
-    await page.keyboard.press('Tab');
-    await expect(banner.getByRole('link', { name: 'Избранное' })).toBeFocused();
+    await expect(banner.getByRole('button', { name: 'Ещё' })).toBeFocused();
     await page.keyboard.press('Tab');
     await expect(field).toBeFocused();
     await page.evaluate(() => document.fonts.ready);

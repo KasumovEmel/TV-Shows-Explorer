@@ -6,7 +6,6 @@ import type { Show } from '@/app/types/show.types';
 
 export interface SearchCardList {
   renderCard: (show: Show) => ReactNode;
-  refreshFavorites: () => void;
 }
 
 export interface ResultsProps extends SearchCardList {

@@ -17,6 +17,7 @@ test('данные сериала остаются привязаны к кар�
   await expect(card.getByRole('img', { name: 'Rating: 8.4/10' })).toHaveText('★ 8.4');
   await expect(card.getByText('Genres: Thriller, Drama')).toBeVisible();
   await expect(card.getByText('A night pilot & a dispatcher', { exact: false })).toBeVisible();
+  await page.getByRole('button', { name: 'More options' }).click();
   await page.getByRole('button', { name: 'Switch to Russian' }).click();
   await expect(card.getByRole('img', { name: 'Рейтинг: 8,4/10' })).toHaveText('★ 8,4');
   await expect(card.getByText('Жанры: Триллер, Драма')).toBeVisible();

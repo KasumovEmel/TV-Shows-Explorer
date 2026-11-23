@@ -1,31 +1,30 @@
 import englishFlag from './assets/english.svg';
 import russianFlag from './assets/russian.svg';
 import { usePresenter } from './usePresenter';
-import { Button } from '@components/Button';
 
 import styles from './styles.module.css';
 
 
 export function LanguageSelector() {
-  const { label, isRussian, isPending, toggle } = usePresenter();
+  const { label, title, current, isRussian, isPending, toggle } = usePresenter();
 
   return (
-    <Button
-      variant="framedIcon"
-      isTransparent
-      icon={
-        <img
-          className={styles.flag}
-          src={isRussian ? russianFlag : englishFlag}
-          width="24"
-          height="16"
-          alt=""
-        />
-      }
-      aria-label={label}
+    <button
+      type="button"
+      aria-label={`${title}, ${current}. ${label}`}
       title={label}
       aria-disabled={isPending}
       onClick={toggle}
-    />
+    >
+      <img
+        className={styles.flag}
+        src={isRussian ? russianFlag : englishFlag}
+        width="20"
+        height="14"
+        alt=""
+      />
+      {title}
+      <small>{current}</small>
+    </button>
   );
 }

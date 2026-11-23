@@ -1,19 +1,52 @@
 .toolbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  gap: 12px;
   width: var(--page-width);
   margin: 0 auto;
   padding: 30px 0 19px;
   border-bottom: 1px solid var(--line);
 }
-.settings {
+.controls {
   display: flex;
-  gap: 6px;
+  align-items: center;
+  min-width: 0;
+  gap: 8px;
+}
+.email {
+  min-width: 0;
+  margin-inline-end: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.login {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--target);
+  padding: 0 16px;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.login:hover {
+  border-color: var(--accent);
 }
 @media (max-width: 767px) {
   .toolbar {
     padding: 8px 0 5px;
+    gap: 8px;
+  }
+  .controls {
+    gap: 5px;
   }
 }

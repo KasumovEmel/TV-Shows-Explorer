@@ -1,0 +1,13 @@
+get:
+  operationId: getSession
+  security: [{ session: [] }, {}]
+  responses:
+    '200':
+      description: Current email or null for a guest.
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [email]
+            properties:
+              email: { type: string, format: email, nullable: true }
