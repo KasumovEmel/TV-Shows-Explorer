@@ -1,4 +1,4 @@
-import { saveFavorite } from '../logic/saveFavorite';
+import { saveFavorite } from '../logic/tasks/saveFavorite';
 import type { AddFavoriteContext } from '../../generated/routes.context';
 import type { ServerEnv } from '../../types';
 

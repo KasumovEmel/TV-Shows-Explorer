@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { ApiFailure } from '../../../errors';
 import { normalizeShow } from '../helpers/normalizeShow';
 import { tvShow } from './tvShow';
-import type { TvMazeClientOptions, TvMazeRequest } from '../../types';
+import type { TvMazeClientOptions, TvMazeRequest } from '../types/TvMazeRequest';
 
 
 const hits = z.array(z.object({ show: tvShow }));
@@ -17,7 +17,7 @@ export class TvMazeClient {
     this.timeout = timeout;
   }
 
-  private async read<T>({ path, schema, byId = false }: TvMazeRequest<T>) {
+  private async read<T>({ path, schema, isLookupById = false }: TvMazeRequest<T>) {
     const signal = AbortSignal.timeout(this.timeout);
     try {
       const res = await this.transport('https://api.tvmaze.com' + path, { signal });
@@ -29,7 +29,7 @@ export class TvMazeClient {
           retryAfter: res.headers.get('retry-after'),
         });
       }
-      if (byId && res.status === 404) {
+      if (isLookupById && res.status === 404) {
         throw new ApiFailure({ status: 404, code: 'show_not_found', message: 'Show not found' });
       }
       if (!res.ok) {
@@ -61,7 +61,7 @@ export class TvMazeClient {
     const show = await this.read({
       path: '/shows/' + encodeURIComponent(id),
       schema: tvShow,
-      byId: true,
+      isLookupById: true,
     });
     if (String(show.id) !== id) {
       throw new ApiFailure({

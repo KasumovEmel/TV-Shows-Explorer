@@ -4,15 +4,15 @@ import { usePresenter } from './usePresenter';
 import type { AppRoutesProps } from './types';
 
 
-export function AppRoutes({ restored }: AppRoutesProps) {
-  const { favorites } = usePresenter();
+export function AppRoutes({ isRestored }: AppRoutesProps) {
+  const { isFavoritesPage } = usePresenter();
 
   return (
     <>
-      <div hidden={favorites}>
-        <SearchPage restored={restored} />
+      <div hidden={isFavoritesPage}>
+        <SearchPage isRestored={isRestored} />
       </div>
-      {favorites && <FavoritesPage />}
+      {isFavoritesPage && <FavoritesPage />}
     </>
   );
 }

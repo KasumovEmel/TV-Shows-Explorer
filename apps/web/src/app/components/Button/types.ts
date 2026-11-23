@@ -12,7 +12,7 @@ type IconButton = {
 
 type TextButton = { variant?: 'primary' | 'chip'; icon?: IconName; children: string };
 
-export type ButtonProps = { transparent?: boolean } & (
+export type ButtonProps = { isTransparent?: boolean } & (
   | (Omit<ComponentPropsWithRef<'button'>, 'children'> & (IconButton | TextButton))
   | (ComponentPropsWithRef<'a'> & { href: string } & Omit<IconButton, 'children'>)
 );

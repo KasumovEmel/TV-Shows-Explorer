@@ -1,12 +1,18 @@
 import type { Show } from '../generated/routes.schemas';
 import type { Clock } from '../types';
-import type { FavoritesStore } from './FavoritesStore';
 
 
 export interface FavoritesStoreOptions {
-  path: string;
+  storage?: FavoriteStorage;
   now?: Clock;
 }
+
+export interface StoredSession {
+  expires: number;
+  shows: Show[];
+}
+
+export type FavoriteStorage = Record<string, StoredSession>;
 
 export interface FavoriteSession {
   id: string;
@@ -21,11 +27,4 @@ export interface FavoriteKey {
 export interface FavoriteSnapshot {
   session: string;
   show: Show;
-}
-
-export interface SaveFavoriteParams {
-  store: Pick<FavoritesStore, 'has' | 'insert'>;
-  session: string;
-  id: string;
-  loadShow: (id: string) => Promise<Show>;
 }

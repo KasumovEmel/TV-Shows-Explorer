@@ -6,13 +6,13 @@ import type { PageSwitcherProps } from './types';
 import styles from './styles.module.css';
 
 
-export function PageSwitcher({ favoritesPage, onClick }: PageSwitcherProps) {
-  const { href, icon, label, count } = usePresenter(favoritesPage);
+export function PageSwitcher({ isFavoritesPage, onClick }: PageSwitcherProps) {
+  const { href, icon, label, count } = usePresenter(isFavoritesPage);
 
   return (
     <Button
       variant="framedIcon"
-      transparent
+      isTransparent
       icon={icon}
       href={href}
       className={styles.navigation}

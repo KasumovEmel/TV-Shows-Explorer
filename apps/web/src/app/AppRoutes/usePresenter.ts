@@ -12,5 +12,5 @@ function subscribe(update: OnLocationChange) {
 const pathname = () => location.pathname;
 
 export function usePresenter() {
-  return { favorites: useSyncExternalStore(subscribe, pathname) === '/favorites' };
+  return { isFavoritesPage: useSyncExternalStore(subscribe, pathname) === '/favorites' };
 }

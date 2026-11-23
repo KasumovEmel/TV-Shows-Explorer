@@ -17,6 +17,8 @@ test('saved snapshot survives reload, failed changes can be retried', async ({ p
   await field.fill('night');
   const card = page.getByRole('listitem').first();
   const add = card.getByRole('button', { name: 'Save Night Flight' });
+  await expect(add).toBeEnabled();
+  expect(listRequests).toHaveLength(1);
   await page.route(
     '**/api/favorites/1',
     (r) => r.fulfill({ status: 500, json: { code: 'internal_error', message: 'Failed' } }),

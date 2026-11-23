@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { behavior } from '@/styles/tokens';
-import type { SearchPhase } from '../../types';
+import type { SearchPhase } from '../types/SearchTransition';
 
 
 export function useSearchQuery() {

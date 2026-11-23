@@ -50,9 +50,9 @@ for (const reducedMotion of ['reduce', 'no-preference'] as const) {
     await request;
     await expect(intro).toHaveAttribute('data-docked', '');
     await expect(skeletons).toHaveCount(3);
-    const moving = reducedMotion === 'no-preference';
-    expect(await motions.evaluate((list) => list.length)).toBe(moving ? 2 : 0);
-    if (moving) {
+    const isMotionEnabled = reducedMotion === 'no-preference';
+    expect(await motions.evaluate((list) => list.length)).toBe(isMotionEnabled ? 2 : 0);
+    if (isMotionEnabled) {
       expect(await form.boundingBox()).toEqual(start);
       await expect(results).toHaveCSS('opacity', '0');
       await motions.evaluate((list) => {
@@ -84,10 +84,10 @@ for (const reducedMotion of ['reduce', 'no-preference'] as const) {
     ).toEqual([1, 4]);
     await field.fill('a');
     await expect(page.getByRole('heading', { name: 'The Bear' })).toBeVisible();
-    expect(await motions.evaluate((list) => list.length)).toBe(moving ? 2 : 0);
+    expect(await motions.evaluate((list) => list.length)).toBe(isMotionEnabled ? 2 : 0);
     await page.getByRole('button', { name: 'Clear search' }).click();
     await expect(intro).not.toHaveAttribute('data-docked');
-    if (moving) {
+    if (isMotionEnabled) {
       await motions.evaluate((list) => list[list.length - 1].finish());
     }
     expect(await form.boundingBox()).toEqual(start);
@@ -96,7 +96,7 @@ for (const reducedMotion of ['reduce', 'no-preference'] as const) {
     // Cache hits must dock the field too, even without a new network request.
     await field.fill('night');
     await expect(intro).toHaveAttribute('data-docked', '');
-    if (moving) {
+    if (isMotionEnabled) {
       await motions.evaluate((list) => list.slice(-2).forEach((motion) => motion.finish()));
     }
     await expect(page.getByRole('listitem')).toHaveCount(3);

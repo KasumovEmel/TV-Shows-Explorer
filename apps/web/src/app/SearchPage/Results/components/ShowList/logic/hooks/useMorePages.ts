@@ -1,17 +1,17 @@
 import { useState } from 'react';
 
-import { useSearchPage } from '../../../../logic/useSearchPage';
-import type { SearchResult } from '../../../../logic/searchResult.types';
+import { useSearchPage } from '@/app/SearchPage/search';
 import type { ShowListProps } from '../../types';
+import type { SearchResult } from '@/app/SearchPage/search';
 
 
-export function useMorePages({ first, criteria, signal, loading }: ShowListProps) {
+export function useMorePages({ first, criteria, signal, isLoading }: ShowListProps) {
   const [target, open] = useState(1);
   const [extra, setExtra] = useState<SearchResult[]>([]);
-  const total = loading ? 0 : (first?.totalAfterFilter ?? 0);
+  const total = isLoading ? 0 : (first?.totalAfterFilter ?? 0);
   const pages = first ? Math.ceil(total / first.pageSize) : 0;
   const next = 2 + extra.length;
-  const { data, error, mutate } = useSearchPage({
+  const { data, isFailed, retry } = useSearchPage({
     criteria: next <= Math.min(target, pages) ? { ...criteria, page: next } : null,
     signal,
   });
@@ -19,7 +19,7 @@ export function useMorePages({ first, criteria, signal, loading }: ShowListProps
   if (data?.page === next) {
     setExtra([...extra, data]);
   }
-  const groups = first && !loading ? [first, ...extra].slice(0, pages) : [];
+  const groups = first && !isLoading ? [first, ...extra].slice(0, pages) : [];
 
-  return { groups, total, pages, open, failed: Boolean(error), retry: () => void mutate() };
+  return { groups, total, pages, open, isFailed, retry };
 }

@@ -4,10 +4,10 @@ import type { GenreChipProps } from './types';
 
 
 export function GenreChip(props: GenreChipProps) {
-  const { label, selected, select } = usePresenter(props);
+  const { label, isSelected, select } = usePresenter(props);
 
   return (
-    <Button variant="chip" aria-pressed={selected} onClick={select}>
+    <Button variant="chip" aria-pressed={isSelected} onClick={select}>
       {label}
     </Button>
   );

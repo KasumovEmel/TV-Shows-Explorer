@@ -180,7 +180,7 @@ importers:
         version: 22.20.5
       orval:
         specifier: 8.48.0
-        version: 8.48.0(swr@2.5.1(react@19.3.1))(zod@4.6.7)
+        version: 8.48.0(zod@4.6.7)
       oxc-parser:
         specifier: 0.158.0
         version: 0.158.0
@@ -242,9 +242,6 @@ importers:
       react-i18next:
         specifier: 18.0.1
         version: 18.0.1(@types/react@19.3.0)(i18next@27.1.1(typescript@7.0.2))(react@19.3.1)(typescript@7.0.2)
-      swr:
-        specifier: 2.5.1
-        version: 2.5.1(react@19.3.1)
     devDependencies:
       '@playwright/test':
         specifier: 1.63.0
@@ -1566,10 +1563,6 @@ packages:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
     engines: {node: '>=0.4.0'}
 
-  dequal@2.0.3:
-    resolution: {integrity: sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==}
-    engines: {node: '>=6'}
-
   diff@9.0.0:
     resolution: {integrity: sha512-svtcdpS8CgJyqAjEQIXdb3OjhFVVYjzGAPO8WGCmRbrml64SPw/jJD4GoE98aR7r25A0XcgrK3F02yw9R/vhQw==}
     engines: {node: '>=0.3.1'}
@@ -2001,11 +1994,6 @@ packages:
     resolution: {integrity: sha512-aulFJcD6YK8V1G7iRB5tigAP4TsHBZZrOV8pjV++zdUwmeV8uzbY7yn6h9MswN62adStNZFuCIx4haBnRuMDaw==}
     engines: {node: '>=18'}
 
-  swr@2.5.1:
-    resolution: {integrity: sha512-BRw55e8r0B7SpDN20CAzoQAHl7y1yP7/Zt7oqUjMv0vSt2u2Xnkm88Ws+VypbV9BXHQVuSuyVq7zMjO16wSExw==}
-    peerDependencies:
-      react: ^16.11.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-
   tagged-tag@1.0.0:
     resolution: {integrity: sha512-yEFYrVhod+hdNyx7g5Bnkkb0G6si8HJurOoOEgC8B/O0uXLHlaey/65KRv6cuWBNhBgHKAROVpc7QyYqE5gFng==}
     engines: {node: '>=20'}
@@ -2058,11 +2046,6 @@ packages:
   unicorn-magic@0.3.0:
     resolution: {integrity: sha512-+QBBXBCvifc56fsbuxZQ6Sic3wqqc3WWaqxs58gvJrcOuN83HGTCwz3oS5phzU9LthRNE9VrJCFCLUgHeeFnfA==}
     engines: {node: '>=18'}
-
-  use-sync-external-store@1.7.0:
-    resolution: {integrity: sha512-6L+EeigHMQhdaIPNIFUKwfWJSwWFQ8gJbJ2DLOs5sDIegTwR9fRxvnM3uciHKjIZhFz+KAv2emhWMRvDmMcY8A==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   which@2.0.2:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}
@@ -2427,12 +2410,10 @@ snapshots:
       - '@faker-js/faker'
       - '@modelcontextprotocol/server'
 
-  '@orval/swr@8.48.0(swr@2.5.1(react@19.3.1))':
+  '@orval/swr@8.48.0':
     dependencies:
       '@orval/core': 8.48.0
       '@orval/fetch': 8.48.0
-    optionalDependencies:
-      swr: 2.5.1(react@19.3.1)
     transitivePeerDependencies:
       - '@faker-js/faker'
       - '@modelcontextprotocol/server'
@@ -2993,8 +2974,6 @@ snapshots:
 
   delayed-stream@1.0.0: {}
 
-  dequal@2.0.3: {}
-
   diff@9.0.0: {}
 
   dom-serializer@3.1.1:
@@ -3257,7 +3236,7 @@ snapshots:
       stdin-discarder: 0.3.2
       string-width: 8.3.0
 
-  orval@8.48.0(swr@2.5.1(react@19.3.1))(zod@4.6.7):
+  orval@8.48.0(zod@4.6.7):
     dependencies:
       '@commander-js/extra-typings': 15.1.0(commander@15.1.0)
       '@orval/angular': 8.48.0
@@ -3271,7 +3250,7 @@ snapshots:
       '@orval/pinia-colada': 8.48.0
       '@orval/query': 8.48.0
       '@orval/solid-start': 8.48.0
-      '@orval/swr': 8.48.0(swr@2.5.1(react@19.3.1))
+      '@orval/swr': 8.48.0
       '@orval/valibot': 8.48.0
       '@orval/zod': 8.48.0(zod@4.6.7)
       '@scalar/json-magic': 0.16.1
@@ -3458,12 +3437,6 @@ snapshots:
 
   strip-final-newline@4.0.0: {}
 
-  swr@2.5.1(react@19.3.1):
-    dependencies:
-      dequal: 2.0.3
-      react: 19.3.1
-      use-sync-external-store: 1.7.0(react@19.3.1)
-
   tagged-tag@1.0.0: {}
 
   tinyglobby@0.2.17:
@@ -3527,10 +3500,6 @@ snapshots:
   undici@8.12.3: {}
 
   unicorn-magic@0.3.0: {}
-
-  use-sync-external-store@1.7.0(react@19.3.1):
-    dependencies:
-      react: 19.3.1
 
   which@2.0.2:
     dependencies:

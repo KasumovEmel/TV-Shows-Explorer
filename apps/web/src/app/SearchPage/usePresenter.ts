@@ -2,19 +2,20 @@ import { useState } from 'react';
 
 import { useSearchQuery } from './logic/hooks/useSearchQuery';
 import { useSearchTransition } from './logic/hooks/useSearchTransition';
-import { selectGenre } from './logic/tasks/selectGenre';
-import type { SearchFilter, SearchPageProps } from './types';
+import { selectGenre } from '@/app/SearchPage/search';
+import type { SearchFilter } from './logic/types/SearchTransition';
+import type { SearchPageProps } from './types';
 
 
-export function usePresenter({ restored }: SearchPageProps) {
+export function usePresenter({ isRestored }: SearchPageProps) {
   const [filter, setFilter] = useState<SearchFilter>({
     page: 1,
     revision: 0,
   });
   const { value, term, search, phase, finishEntrance, onChange, onSubmit, renew } =
     useSearchQuery();
-  const docked = phase !== 'idle';
-  const { introRef, inputRef, resultsRef } = useSearchTransition({ docked, finishEntrance });
+  const isDocked = phase !== 'idle';
+  const { introRef, inputRef, resultsRef } = useSearchTransition({ isDocked, finishEntrance });
   const criteria = { q: term, page: filter.page, genre: filter.genre };
 
   function chooseGenre(value: string) {
@@ -24,11 +25,11 @@ export function usePresenter({ restored }: SearchPageProps) {
   }
 
   return {
-    intro: { restored, introRef, field: { value, onChange, onSubmit, inputRef } },
-    results: docked
+    intro: { isRestored, introRef, field: { value, onChange, onSubmit, inputRef } },
+    results: isDocked
       ? {
           search,
-          entering: phase === 'entering',
+          isEntering: phase === 'entering',
           criteria,
           revision: filter.revision,
           selectGenre: chooseGenre,

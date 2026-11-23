@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { enqueueNotification } from './logic/enqueueNotification';
+import { enqueueNotification } from './logic/tasks/enqueueNotification';
 import type { NotificationEvent } from '../types';
-import type { NotificationProviderProps, NotificationStack } from './types';
+import type { NotificationStack } from './logic/types/NotificationQueue';
+import type { NotificationProviderProps } from './types';
 
 
 export function usePresenter({ children }: NotificationProviderProps) {

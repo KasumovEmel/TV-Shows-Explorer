@@ -3,8 +3,9 @@ import type { FocusEvent, MouseEvent } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { useDismissTimer } from './logic/useDismissTimer';
-import type { NotificationLayerParams, NotificationProps } from './types';
+import { useDismissTimer } from './logic/hooks/useDismissTimer';
+import type { NotificationLayerParams } from './logic/types/NotificationPresentation';
+import type { NotificationProps } from './types';
 
 
 export function usePresenter({
@@ -18,10 +19,10 @@ export function usePresenter({
   const { kind, id } = cards[cards.length - 1];
   const exitRef = useRef<HTMLDivElement>(null);
   const previous = useRef<HTMLElement | null>(null);
-  const [hover, setHover] = useState(false);
-  const [focus, setFocus] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
-  useDismissTimer({ paused: hover || focus, id, expire: onExpire });
+  useDismissTimer({ isPaused: isHovered || isFocused, id, expire: onExpire });
 
   function present({ item, depth }: NotificationLayerParams) {
     const { show } = item;
@@ -55,13 +56,13 @@ export function usePresenter({
   function enter(event: FocusEvent<HTMLElement>) {
     if (!event.currentTarget.contains(event.relatedTarget)) {
       previous.current = event.relatedTarget instanceof HTMLElement ? event.relatedTarget : null;
-      setFocus(true);
+      setIsFocused(true);
     }
   }
 
   function leave(event: FocusEvent<HTMLElement>) {
     if (!event.currentTarget.contains(event.relatedTarget)) {
-      setFocus(false);
+      setIsFocused(false);
     }
   }
 
@@ -85,7 +86,7 @@ export function usePresenter({
     enter,
     leave,
     close,
-    onEnter: () => setHover(true),
-    onLeave: () => setHover(false),
+    onEnter: () => setIsHovered(true),
+    onLeave: () => setIsHovered(false),
   };
 }

@@ -17,7 +17,7 @@ export type Clock = () => number;
 export interface AppOptions {
   catalog: ShowCatalog;
   favorites: FavoritesStore;
-  secure?: boolean;
+  isCookieSecure?: boolean;
 }
 
 export interface ApiFailureOptions {

@@ -1,4 +1,4 @@
-import type { FavoriteMutationParams } from '../../types';
+import type { FavoriteMutationParams } from '../types/FavoriteOperations';
 
 
 export function removeFavorite({ id, request }: FavoriteMutationParams) {

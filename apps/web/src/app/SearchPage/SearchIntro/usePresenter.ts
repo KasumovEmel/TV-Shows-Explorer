@@ -6,18 +6,18 @@ import { useNotify } from '../../notifications';
 import type { SearchIntroProps } from './types';
 
 
-export function usePresenter({ introRef, restored, field }: SearchIntroProps) {
+export function usePresenter({ introRef, isRestored, field }: SearchIntroProps) {
   const { t } = useTranslation();
   const { inputRef } = field;
   const headingId = useId();
   const notify = useNotify();
 
   useLayoutEffect(() => {
-    if (restored) {
+    if (isRestored) {
       inputRef.current?.focus();
       notify({ kind: 'success' });
     }
-  }, [restored, notify, inputRef]);
+  }, [isRestored, notify, inputRef]);
 
   return {
     introRef,

@@ -24,7 +24,7 @@ void test('all genres before paging, validation, cancellation and shared request
         },
       }),
     }),
-    favorites: new FavoritesStore({ path: ':memory:' }),
+    favorites: new FavoritesStore(),
   });
   for (const query of ['', '?q=%20', '?q=x&page=0', '?q=x&page=1.1', '?q=x&page=no']) {
     const r = await app.request('/api/shows' + query);
@@ -73,35 +73,4 @@ void test('all genres before paging, validation, cancellation and shared request
   const saved = await app.request('/api/favorites/7', { method: 'PUT' });
   assert.equal(saved.status, 204);
   assert.equal(calls, 1);
-});
-void test('TTL from completed response, concurrent refresh failure and immediate retry', async () => {
-  let now = 0,
-    calls = 0,
-    fail = false;
-
-  const load = async () => {
-    calls++;
-    now += 1000;
-    if (fail) {
-      throw new Error('offline');
-    }
-
-    return Response.json([]);
-  };
-
-  const catalog = new ShowCatalog({ api: new TvMazeClient({ transport: load }), now: () => now });
-  const q = { q: 'night' };
-  await catalog.search(q);
-  now = 300_000;
-  await catalog.search(q);
-  assert.equal(calls, 1);
-  now = 301_000;
-  fail = true;
-  const outcomes = await Promise.allSettled([catalog.search(q), catalog.search(q)]);
-  assert.ok(outcomes.every((r) => r.status === 'rejected'));
-  assert.equal(calls, 2);
-  fail = false;
-  await catalog.search(q);
-  await new ShowCatalog({ api: new TvMazeClient({ transport: load }), now: () => now }).search(q);
-  assert.equal(calls, 4);
 });

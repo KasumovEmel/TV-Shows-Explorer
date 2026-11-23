@@ -14,13 +14,13 @@ test('заголовок шапки помещается в одну строк�
     await page.evaluate(() => document.fonts.ready);
     for (const width of [320, 390, 767, 768, 1024, 1440]) {
       await page.setViewportSize({ width, height: 844 });
-      const fits = await heading.evaluate((el) => {
+      const isTitleWithinBounds = await heading.evaluate((el) => {
         const range = document.createRange();
         range.selectNodeContents(el);
 
         return range.getClientRects().length === 1 && el.scrollWidth <= el.clientWidth;
       });
-      expect(fits, title + ' / ' + width + ' px').toBe(true);
+      expect(isTitleWithinBounds, title + ' / ' + width + ' px').toBe(true);
     }
     if (title === 'What to watch?') {
       await page.getByRole('button', { name: 'Switch to Russian' }).click();

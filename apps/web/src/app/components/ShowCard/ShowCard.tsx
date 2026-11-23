@@ -42,10 +42,10 @@ export function ShowCard(props: ShowCardProps) {
         <Button
           variant="icon"
           icon="heart"
-          disabled={favorite.disabled}
+          disabled={favorite.isDisabled}
           aria-label={favorite.label}
           title={favorite.label}
-          aria-pressed={favorite.saved}
+          aria-pressed={favorite.isSaved}
           onClick={favorite.onClick}
         />
       }

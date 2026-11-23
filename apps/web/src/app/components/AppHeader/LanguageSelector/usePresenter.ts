@@ -2,24 +2,23 @@ import { useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { changeLanguage } from './logic/changeLanguage';
+import { changeLanguage } from './logic/tasks/changeLanguage';
 import { useNotify } from '@/app/notifications';
-import { rememberLanguage } from '@/i18n/languageStorage';
-import { setLanguage } from '@/i18n/setLanguage';
+import { rememberLanguage, setLanguage } from '@/i18n';
 
 
 export function usePresenter() {
   const { i18n, t } = useTranslation();
   const notify = useNotify();
-  const [pending, setPending] = useState(false);
-  const russian = i18n.resolvedLanguage === 'ru';
-  const next = russian ? 'en' : 'ru';
+  const [isPending, setIsPending] = useState(false);
+  const isRussian = i18n.resolvedLanguage === 'ru';
+  const next = isRussian ? 'en' : 'ru';
 
   async function toggle() {
-    if (pending) {
+    if (isPending) {
       return;
     }
-    setPending(true);
+    setIsPending(true);
     try {
       if (
         !(await changeLanguage({ language: next, apply: setLanguage, remember: rememberLanguage }))
@@ -29,9 +28,9 @@ export function usePresenter() {
     } catch {
       notify({ kind: 'error', messageKey: 'language.loadError' });
     } finally {
-      setPending(false);
+      setIsPending(false);
     }
   }
 
-  return { russian, toggle: () => void toggle(), pending, label: t('language.switch') };
+  return { isRussian, toggle: () => void toggle(), isPending, label: t('language.switch') };
 }

@@ -1,4 +1,4 @@
 export interface RecoveryScreenProps {
-  retrying: boolean;
+  isRetrying: boolean;
   onRestore: () => void;
 }

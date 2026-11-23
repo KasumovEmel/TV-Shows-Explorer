@@ -1,6 +1,6 @@
-import { summary } from './summary';
+import { formatSummary } from './formatSummary';
 import type { Show } from '../../../generated/routes.schemas';
-import type { TvShow } from '../api/types';
+import type { TvShow } from '../types/TvShow';
 
 
 export function normalizeShow(show: TvShow): Show {
@@ -11,6 +11,6 @@ export function normalizeShow(show: TvShow): Show {
     year: show.premiered ? Number(show.premiered.slice(0, 4)) : undefined,
     poster: show.image?.medium || show.image?.original || undefined,
     rating: show.rating?.average ?? undefined,
-    summary: summary(show.summary),
+    summary: formatSummary(show.summary),
   };
 }

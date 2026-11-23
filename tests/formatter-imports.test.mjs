@@ -29,7 +29,7 @@ void test('типы завершают свою группу импортов в
     [
       "import axios from 'axios';",
       "import type { AxiosError } from 'axios';",
-      "import type { Key } from 'swr';",
+      "import type { TFunction } from 'i18next';",
     ],
     [
       "import { button } from './button';",
@@ -39,7 +39,7 @@ void test('типы завершают свою группу импортов в
     ["import './page.css';"],
   ];
   const code =
-    'export type { A, AxiosError, Key, ReactNode, Z };\nexport { axios, button, useState };\n';
+    'export type { A, AxiosError, ReactNode, TFunction, Z };\nexport { axios, button, useState };\n';
   const input = groups.flat().reverse().join('\n') + '\n' + code;
   const expected = groups.map((group) => group.join('\n')).join('\n\n') + '\n\n\n' + code;
   assert.equal(await formatSource({ filename: 'imports.ts', input }), expected);

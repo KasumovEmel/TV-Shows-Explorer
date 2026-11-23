@@ -8,7 +8,7 @@ export function ThemeSelector() {
   return (
     <Button
       variant="framedIcon"
-      transparent
+      isTransparent
       icon={themeIcon}
       aria-label={themeLabel}
       title={themeLabel}

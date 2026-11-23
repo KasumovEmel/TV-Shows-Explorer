@@ -1,3 +1,3 @@
 export interface AppHeaderProps {
-  favoritesPage?: boolean;
+  isFavoritesPage?: boolean;
 }

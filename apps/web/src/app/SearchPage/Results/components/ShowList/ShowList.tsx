@@ -21,8 +21,8 @@ export function ShowList(props: ShowListProps) {
     list,
     shown,
     total,
-    loading,
-    failed,
+    isLoading,
+    isFailed,
     retry,
   } = usePresenter(props);
 
@@ -31,7 +31,7 @@ export function ShowList(props: ShowListProps) {
       <div className={styles.heading} ref={bar}>
         <div>
           <h2>{heading}</h2>
-          {loading ? (
+          {isLoading ? (
             <CountSkeleton />
           ) : (
             <span className={styles.count} role="status">
@@ -39,11 +39,11 @@ export function ShowList(props: ShowListProps) {
             </span>
           )}
         </div>
-        {(loading || pages > 1) && (
-          <PageNav loading={loading} pages={pages} current={current} jump={jump} />
+        {(isLoading || pages > 1) && (
+          <PageNav isLoading={isLoading} pages={pages} current={current} jump={jump} />
         )}
       </div>
-      {loading ? (
+      {isLoading ? (
         <CardListSkeleton listClassName={styles.list} />
       ) : (
         <div ref={list}>
@@ -56,8 +56,8 @@ export function ShowList(props: ShowListProps) {
           ))}
         </div>
       )}
-      {failed && props.renderPageError(retry)}
-      <ListBoundary loading={loading} shown={shown} total={total} />
+      {isFailed && props.renderPageError(retry)}
+      <ListBoundary isLoading={isLoading} shown={shown} total={total} />
     </>
   );
 }

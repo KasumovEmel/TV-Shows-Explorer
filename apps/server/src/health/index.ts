@@ -1,1 +1,1 @@
-export { health } from './health';
+export { health } from './handlers/health';

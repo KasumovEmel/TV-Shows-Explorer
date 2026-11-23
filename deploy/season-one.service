@@ -8,7 +8,6 @@ Group=season-one
 WorkingDirectory=/srv/season-one/current
 Environment=NODE_ENV=production
 Environment=PORT=3001
-Environment=SQLITE_PATH=/srv/season-one/data/catalog.sqlite
 EnvironmentFile=/srv/season-one/current/release.env
 ExecStart=/opt/season-one/node/bin/node /srv/season-one/current/server.mjs
 Restart=on-failure
@@ -17,7 +16,6 @@ UMask=0007
 NoNewPrivileges=yes
 PrivateTmp=yes
 ProtectSystem=strict
-ReadWritePaths=/srv/season-one/data
 
 [Install]
 WantedBy=multi-user.target

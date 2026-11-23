@@ -12,17 +12,17 @@ export function usePresenter({ show, animateRemoval }: ShowCardProps) {
   const [broken, setBroken] = useState<string>();
   const title = t('titles.' + show.id, { defaultValue: show.originalTitle });
   const rating = show.rating?.toLocaleString(i18n.resolvedLanguage) ?? '-';
-  const { items, error, isLoading, pending, toggle } = useFavorites();
-  const saved = items?.some((item) => item.id === show.id) ?? false;
-  let action = saved ? 'favorites.remove' : 'favorites.add';
-  if (!items && error) {
+  const { items, isFailed, isLoading, isPending, toggle } = useFavorites();
+  const isSaved = items?.some((item) => item.id === show.id) ?? false;
+  let action = isSaved ? 'favorites.remove' : 'favorites.add';
+  if (isFailed) {
     action = 'favorites.retry';
   }
 
   return {
     favorite: {
-      saved,
-      disabled: isLoading || pending || (!items && !error),
+      isSaved,
+      isDisabled: isLoading || isPending,
       label: t(action, { title }),
       onClick: ({ currentTarget }: MouseEvent<HTMLButtonElement>) =>
         void toggle({

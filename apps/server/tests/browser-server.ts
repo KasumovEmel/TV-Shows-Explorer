@@ -29,7 +29,7 @@ const catalog = new ShowCatalog({
   }),
 });
 serve({
-  fetch: createApp({ catalog, favorites: new FavoritesStore({ path: ':memory:' }) }).fetch,
+  fetch: createApp({ catalog, favorites: new FavoritesStore() }).fetch,
   hostname: '127.0.0.1',
   port: 4818,
 });

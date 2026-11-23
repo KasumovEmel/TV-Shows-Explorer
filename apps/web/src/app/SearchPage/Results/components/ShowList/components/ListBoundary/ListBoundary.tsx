@@ -6,11 +6,11 @@ import styles from './styles.module.css';
 
 
 export function ListBoundary(props: ListBoundaryProps) {
-  const { loading, hint, source } = usePresenter(props);
+  const { isLoading, hint, source } = usePresenter(props);
 
   return (
-    <footer className={styles.end} aria-hidden={loading || undefined}>
-      {loading ? (
+    <footer className={styles.end} aria-hidden={isLoading || undefined}>
+      {isLoading ? (
         <ListBoundarySkeleton />
       ) : (
         <>

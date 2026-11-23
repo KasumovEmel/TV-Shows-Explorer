@@ -2,8 +2,8 @@ import { StrictMode } from 'react';
 import type { PropsWithChildren } from 'react';
 
 import { AppRoutes } from './AppRoutes';
+import { FavoritesProvider } from './favorites';
 import { NotificationProvider } from './notifications';
-import { AppSWRConfig } from '@components/AppSWRConfig';
 import { ErrorBoundary } from '@components/ErrorBoundary';
 
 import '@/styles/base.css';
@@ -14,11 +14,11 @@ export function App({ children }: PropsWithChildren) {
     <StrictMode>
       <NotificationProvider>
         <ErrorBoundary>
-          {(restored) => (
-            <AppSWRConfig>
+          {(isRestored) => (
+            <FavoritesProvider>
               {children}
-              <AppRoutes restored={restored} />
-            </AppSWRConfig>
+              <AppRoutes isRestored={isRestored} />
+            </FavoritesProvider>
           )}
         </ErrorBoundary>
       </NotificationProvider>

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import type { PageScrollParams } from '../../types';
+import type { PageScrollParams } from '../types/PageScroll';
 
 
 export function usePageScroll({ list, jumpY, opened, pages, open }: PageScrollParams) {

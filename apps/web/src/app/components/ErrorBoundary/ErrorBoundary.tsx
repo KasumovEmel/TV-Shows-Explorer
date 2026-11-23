@@ -5,33 +5,37 @@ import type { BoundaryState, ErrorBoundaryProps } from './types';
 
 
 export class ErrorBoundary extends Component<ErrorBoundaryProps, BoundaryState> {
-  state: BoundaryState = { failed: false, retrying: false, attempt: 0 };
-  private locked = false;
+  state: BoundaryState = { isFailed: false, isRetrying: false, attempt: 0 };
+  private isLocked = false;
 
   static getDerivedStateFromError() {
-    return { failed: true, retrying: false };
+    return { isFailed: true, isRetrying: false };
   }
 
   componentDidUpdate() {
-    if (!this.state.retrying) {
-      this.locked = false;
+    if (!this.state.isRetrying) {
+      this.isLocked = false;
     }
   }
 
   private restore = () => {
-    if (this.locked || !this.state.failed) {
+    if (this.isLocked || !this.state.isFailed) {
       return;
     }
-    this.locked = true;
-    this.setState({ retrying: true }, () => {
-      this.setState(({ attempt }) => ({ failed: false, retrying: false, attempt: attempt + 1 }));
+    this.isLocked = true;
+    this.setState({ isRetrying: true }, () => {
+      this.setState(({ attempt }) => ({
+        isFailed: false,
+        isRetrying: false,
+        attempt: attempt + 1,
+      }));
     });
   };
 
   render() {
-    const { failed, retrying, attempt } = this.state;
-    if (failed) {
-      return <RecoveryScreen key={attempt} retrying={retrying} onRestore={this.restore} />;
+    const { isFailed, isRetrying, attempt } = this.state;
+    if (isFailed) {
+      return <RecoveryScreen key={attempt} isRetrying={isRetrying} onRestore={this.restore} />;
     }
 
     return this.props.children(attempt > 0);

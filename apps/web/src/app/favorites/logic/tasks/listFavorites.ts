@@ -1,4 +1,4 @@
-import type { ReadFavorites } from '../../types';
+import type { ReadFavorites } from '../types/FavoriteOperations';
 
 
 export async function listFavorites(load: ReadFavorites) {

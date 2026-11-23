@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { useTheme } from './logic/useTheme';
+import { useTheme } from './logic/hooks/useTheme';
 
 
 const icons = { system: 'sunMoon', dark: 'moon', light: 'sun' } as const;

@@ -1,4 +1,4 @@
-import type { FavoriteMutationParams } from '../../types';
+import type { FavoriteMutationParams } from '../types/FavoriteOperations';
 
 
 export function addFavorite({ id, request }: FavoriteMutationParams) {

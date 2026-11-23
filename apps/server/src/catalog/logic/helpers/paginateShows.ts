@@ -1,5 +1,5 @@
 import type { SearchPage } from '../../../generated/routes.schemas';
-import type { PaginateShowsParams } from '../../types';
+import type { PaginateShowsParams } from '../types/PaginateShowsParams';
 
 
 const pageSize = 3;

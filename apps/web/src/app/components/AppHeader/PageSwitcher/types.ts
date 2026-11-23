@@ -2,6 +2,6 @@ import type { MouseEventHandler } from 'react';
 
 
 export type PageSwitcherProps = {
-  favoritesPage: boolean;
+  isFavoritesPage: boolean;
   onClick: MouseEventHandler<HTMLAnchorElement>;
 };

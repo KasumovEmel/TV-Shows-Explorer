@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next';
 
-import { useFavoritesCount } from '@/app/favorites';
+import { useFavoritesState } from '@/app/favorites';
 
 
-export function usePresenter(favoritesPage: boolean) {
+export function usePresenter(isFavoritesPage: boolean) {
   const { t } = useTranslation();
-  const count = useFavoritesCount();
+  const { count } = useFavoritesState();
 
-  if (favoritesPage) {
+  if (isFavoritesPage) {
     return { href: '/', icon: 'search' as const, label: t('favorites.search') };
   }
 

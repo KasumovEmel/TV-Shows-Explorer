@@ -1,4 +1,4 @@
-import type { languageNames } from './preferences';
+import type { languageNames } from './constants';
 
 
 export type Language = keyof typeof languageNames;

@@ -1,11 +1,11 @@
 import { useLayoutEffect, useRef } from 'react';
 
-import type { SearchTransitionParams } from '../../types';
+import type { SearchTransitionParams } from '../types/SearchTransition';
 
 
 const duration = 560;
 
-export function useSearchTransition({ docked, finishEntrance }: SearchTransitionParams) {
+export function useSearchTransition({ isDocked, finishEntrance }: SearchTransitionParams) {
   const introRef = useRef<HTMLElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const resultsRef = useRef<HTMLElement>(null);
@@ -15,16 +15,16 @@ export function useSearchTransition({ docked, finishEntrance }: SearchTransition
     const intro = introRef.current;
     const form = inputRef.current?.form;
     const results = resultsRef.current;
-    if (!intro || !form || !results || intro.hasAttribute('data-docked') === docked) {
+    if (!intro || !form || !results || intro.hasAttribute('data-docked') === isDocked) {
       return;
     }
 
     // Sample the visible field first so clearing mid-flight reverses from its current position.
     const from = form.getBoundingClientRect();
     motion.current?.cancel();
-    intro.toggleAttribute('data-docked', docked);
+    intro.toggleAttribute('data-docked', isDocked);
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !form.animate) {
-      if (docked) {
+      if (isDocked) {
         finishEntrance();
       }
 
@@ -43,7 +43,7 @@ export function useSearchTransition({ docked, finishEntrance }: SearchTransition
       { duration, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' },
     );
     motion.current = movement;
-    if (!docked) {
+    if (!isDocked) {
       return;
     }
     const fade = results.animate([{ opacity: 0 }, { opacity: 1 }], {
@@ -56,7 +56,7 @@ export function useSearchTransition({ docked, finishEntrance }: SearchTransition
       movement.onfinish = null;
       fade.cancel();
     };
-  }, [docked, finishEntrance]);
+  }, [isDocked, finishEntrance]);
 
   useLayoutEffect(() => () => motion.current?.cancel(), []);
 

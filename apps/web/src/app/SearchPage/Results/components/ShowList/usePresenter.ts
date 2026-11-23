@@ -5,13 +5,14 @@ import { useTranslation } from 'react-i18next';
 import { useMorePages } from './logic/hooks/useMorePages';
 import { usePageScroll } from './logic/hooks/usePageScroll';
 import { usePageViewport } from './logic/hooks/usePageViewport';
-import type { PageJump, ShowListProps } from './types';
+import type { PageJump } from './components/PageNav';
+import type { ShowListProps } from './types';
 
 
 export function usePresenter(props: ShowListProps) {
   const { t } = useTranslation();
-  const { loading } = props;
-  const { groups: pageCards, total, pages, open, failed, retry } = useMorePages(props);
+  const { isLoading } = props;
+  const { groups: pageCards, total, pages, open, isFailed, retry } = useMorePages(props);
   const [current, setCurrent] = useState(1);
   const list = useRef<HTMLDivElement>(null),
     bar = useRef<HTMLDivElement>(null);
@@ -25,11 +26,11 @@ export function usePresenter(props: ShowListProps) {
     cards,
   }));
 
-  function jump({ page, keyboard }: PageJump) {
+  function jump({ page, isKeyboardNavigation }: PageJump) {
     if (page <= visible) {
-      jumpToPage({ page, keyboard });
+      jumpToPage({ page, isKeyboardNavigation });
     } else {
-      pendingJump.current = { page, keyboard };
+      pendingJump.current = { page, isKeyboardNavigation };
       open(page);
     }
   }
@@ -48,14 +49,14 @@ export function usePresenter(props: ShowListProps) {
     const target = pendingJump.current;
     if (target && target.page <= visible) {
       pendingJump.current = null;
-      jumpToPage({ page: target.page, keyboard: target.keyboard });
+      jumpToPage({ page: target.page, isKeyboardNavigation: target.isKeyboardNavigation });
     }
   }, [visible, jumpToPage]);
 
   return {
-    failed,
+    isFailed,
     retry,
-    loading,
+    isLoading,
     heading: t('catalog.results'),
     count: t('catalog.count', { count: total }),
     pages,

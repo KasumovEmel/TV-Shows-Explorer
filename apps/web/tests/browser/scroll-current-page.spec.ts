@@ -29,8 +29,8 @@ for (const viewport of [
     const atEnd = () =>
       page.evaluate(() => scrollY + innerHeight >= document.documentElement.scrollHeight - 1);
 
-    let checkedFirstOverlap = false;
-    let checkedLastBeforeFooter = false;
+    let isFirstOverlapChecked = false;
+    let isLastPageChecked = false;
     for (const direction of [1, -1]) {
       const seen = [await current.innerText()];
       for (let step = 0; step < 80; step++) {
@@ -53,7 +53,7 @@ for (const viewport of [
           second.bottom > viewport.height
         ) {
           expect(active, 'Первая тройка видна целиком, вторая только частично').toBe('1');
-          checkedFirstOverlap = true;
+          isFirstOverlapChecked = true;
         }
         if (
           last?.bottom <= viewport.height &&
@@ -61,7 +61,7 @@ for (const viewport of [
           !(await atEnd())
         ) {
           expect(active, 'Видна вся последняя группа, ниже ещё остаётся подвал').toBe('4');
-          checkedLastBeforeFooter = true;
+          isLastPageChecked = true;
         }
         if (active !== seen.at(-1)) {
           seen.push(active);
@@ -86,9 +86,9 @@ for (const viewport of [
       }
     }
     if (viewport.width === 2300) {
-      expect(checkedFirstOverlap).toBe(true);
+      expect(isFirstOverlapChecked).toBe(true);
     }
-    expect(checkedLastBeforeFooter).toBe(true);
+    expect(isLastPageChecked).toBe(true);
     await expect(cards).toHaveCount(10);
   });
 }

@@ -1,1 +1,0 @@
-export { AppSWRConfig } from './AppSWRConfig';

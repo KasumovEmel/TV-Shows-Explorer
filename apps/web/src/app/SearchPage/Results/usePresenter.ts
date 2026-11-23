@@ -1,16 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { useSearchPage } from './logic/useSearchPage';
-import { useNotify } from '@/app/notifications';
+import { useSearchPage } from '@/app/SearchPage/search';
 import type { ResultsProps } from './types';
 
 
-export function usePresenter({ search, criteria, entering }: ResultsProps) {
+export function usePresenter({ search, criteria, isEntering, selectGenre }: ResultsProps) {
   const { t } = useTranslation();
-  const notify = useNotify();
-  const { data, error, mutate, isValidating } = useSearchPage({
+  const { data, isFailed, retry } = useSearchPage({
     criteria: search ? criteria : null,
     signal: search?.signal,
   });
@@ -19,34 +17,33 @@ export function usePresenter({ search, criteria, entering }: ResultsProps) {
   if (data && data.genres !== previousGenres) {
     setGenres(data.genres);
   }
-  const stale = Boolean(data && error);
-
-  useEffect(() => {
-    if (stale) {
-      notify({ kind: 'info' });
-    }
-  }, [stale, notify]);
 
   const selectedGenre = criteria.genre ?? '';
   const genres = new Set(data?.genres ?? previousGenres);
   if (selectedGenre) {
     genres.add(selectedGenre);
   }
-  const hasGenres = genres.size > 0;
-  const isLoading = entering || (!data && (!error || isValidating));
-  const loadError = !data && !isLoading ? error : undefined;
+  const isGenreListPopulated = genres.size > 0;
+  const isLoading = isEntering || (!data && !isFailed);
+  const isLoadError = isFailed && !isEntering;
   const isEmpty = !isLoading && data?.items.length === 0;
 
   return {
     data,
     // The empty option clears the genre filter.
-    genreOptions: hasGenres ? ['', ...genres] : [],
-    hasGenres,
-    selectedGenre,
+    genreOptions: isGenreListPopulated
+      ? ['', ...genres].map((value) => ({
+          value,
+          isSelected: value === selectedGenre,
+          select: () => selectGenre(value),
+        }))
+      : [],
+    isGenreListPopulated,
+    isGenreListLoading: isLoading && !isGenreListPopulated,
     isLoading,
-    loadError,
+    isLoadError,
     isEmpty,
-    showGenreSection: !loadError && (!isEmpty || hasGenres),
+    isGenreSectionVisible: !isLoadError && (!isEmpty || isGenreListPopulated),
     genreLabel: t('catalog.genres'),
     emptyCopy: {
       title: t(selectedGenre ? 'catalog.noGenreMatches' : 'catalog.noMatches'),
@@ -57,6 +54,6 @@ export function usePresenter({ search, criteria, entering }: ResultsProps) {
       hint: t('catalog.retrySearch'),
       retry: t('catalog.retry'),
     },
-    retry: () => void mutate(),
+    retry,
   };
 }

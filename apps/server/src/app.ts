@@ -1,12 +1,12 @@
 import { Hono } from 'hono';
 
 import { ApiFailure } from './errors';
-import { favoriteSession } from './favorites';
+import { createFavoriteSessionMiddleware } from './favorites';
 import routes from './generated/routes';
 import type { AppOptions, ServerEnv } from './types';
 
 
-export function createApp({ catalog, favorites, secure = false }: AppOptions) {
+export function createApp({ catalog, favorites, isCookieSecure = false }: AppOptions) {
   const app = new Hono<ServerEnv>();
 
   // oxlint-disable-next-line project/object-parameters -- Hono передаёт контекст и next отдельно.
@@ -22,7 +22,7 @@ export function createApp({ catalog, favorites, secure = false }: AppOptions) {
     }
   });
 
-  app.use('/api/favorites/*', favoriteSession(secure));
+  app.use('/api/favorites/*', createFavoriteSessionMiddleware(isCookieSecure));
 
   app.route('/', routes);
   app.notFound((c) => c.json({ code: 'not_found', message: 'Unknown API route' }, 404));

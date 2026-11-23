@@ -24,7 +24,7 @@ void test('TVmaze errors, timeout and malformed records have safe envelopes', as
     for (const [transport, status] of cases) {
       const app = createApp({
         catalog: new ShowCatalog({ api: new TvMazeClient({ transport, timeout: 5 }) }),
-        favorites: new FavoritesStore({ path: ':memory:' }),
+        favorites: new FavoritesStore(),
       });
       const r = await app.request('/api/shows?q=night');
       assert.equal(r.status, status);

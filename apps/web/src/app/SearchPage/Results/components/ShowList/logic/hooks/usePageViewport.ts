@@ -1,6 +1,7 @@
 import { useCallback, useLayoutEffect, useRef } from 'react';
 
-import type { PageJump, PageViewportParams } from '../../types';
+import type { PageJump } from '../../components/PageNav';
+import type { PageViewportParams } from '../types/PageScroll';
 
 
 export function usePageViewport({ list, bar, opened, pages, select }: PageViewportParams) {
@@ -66,7 +67,7 @@ export function usePageViewport({ list, bar, opened, pages, select }: PageViewpo
   }, [list, bar, opened, pages, select]);
 
   const jumpToPage = useCallback(
-    ({ page, keyboard }: PageJump) => {
+    ({ page, isKeyboardNavigation }: PageJump) => {
       const group = list.current?.children[page - 1];
       const toolbar = bar.current;
       if (!(group instanceof HTMLElement) || !toolbar) {
@@ -75,7 +76,7 @@ export function usePageViewport({ list, bar, opened, pages, select }: PageViewpo
       window.scrollTo(0, window.scrollY + group.getBoundingClientRect().top - toolbar.offsetHeight);
       jumpY.current = window.scrollY;
       select(page);
-      if (keyboard) {
+      if (isKeyboardNavigation) {
         group.focus({ preventScroll: true });
       }
     },

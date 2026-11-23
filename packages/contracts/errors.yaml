@@ -26,7 +26,7 @@ E502:
     application/json:
       schema: { $ref: './models.yaml#/ApiError' }
 E503:
-  description: Database unavailable
+  description: Storage unavailable
   content:
     application/json:
       schema: { $ref: './models.yaml#/ApiError' }

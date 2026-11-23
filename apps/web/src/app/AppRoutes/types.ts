@@ -1,5 +1,5 @@
 export interface AppRoutesProps {
-  restored: boolean;
+  isRestored: boolean;
 }
 
 export type OnLocationChange = () => void;

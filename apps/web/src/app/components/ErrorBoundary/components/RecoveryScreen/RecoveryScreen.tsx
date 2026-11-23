@@ -8,7 +8,7 @@ import styles from './styles.module.css';
 
 
 export function RecoveryScreen(props: RecoveryScreenProps) {
-  const { heading, title, description, action, retrying, onRestore } = usePresenter(props);
+  const { heading, title, description, action, isRetrying, onRestore } = usePresenter(props);
 
   return (
     <main className={styles.page}>
@@ -21,7 +21,7 @@ export function RecoveryScreen(props: RecoveryScreenProps) {
             {title}
           </h1>
           <p>{description}</p>
-          <Button icon="restore" disabled={retrying} onClick={onRestore}>
+          <Button icon="restore" disabled={isRetrying} onClick={onRestore}>
             {action}
           </Button>
         </div>

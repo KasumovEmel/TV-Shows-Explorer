@@ -10,11 +10,11 @@ export class ShowCatalog {
   private shows: CatalogCache<Show>;
   private api: CatalogSource;
 
-  constructor({ api = new TvMazeClient(), now = Date.now }: ShowCatalogOptions = {}) {
+  constructor({ api = new TvMazeClient(), now = Date.now, storage = {} }: ShowCatalogOptions = {}) {
     this.api = api;
 
-    this.searches = new CatalogCache(now);
-    this.shows = new CatalogCache(now);
+    this.searches = new CatalogCache({ entries: (storage.searches ??= {}), now });
+    this.shows = new CatalogCache({ entries: (storage.shows ??= {}), now });
   }
 
   prune() {
@@ -23,17 +23,17 @@ export class ShowCatalog {
   }
 
   byId(id: string) {
-    return this.shows.get({ key: id, load: () => this.api.byId(id) });
+    return this.shows.get({ key: 'id:' + id, load: () => this.api.byId(id) });
   }
 
   async search({ q, genre, page = 1 }: SearchShowsParams) {
     const title = q.trim();
     const shows = await this.searches.get({
-      key: title,
+      key: 'title:' + title,
       load: async () => {
         const cards = await this.api.search(title);
         for (const card of cards) {
-          this.shows.store({ key: card.id, value: card });
+          this.shows.store({ key: 'id:' + card.id, value: card });
         }
 
         return cards;

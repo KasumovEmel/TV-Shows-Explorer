@@ -1,10 +1,10 @@
-import type { SearchCriteria } from '../logic/criteria.types';
+import type { SearchCriteria } from '@/app/SearchPage/search';
 
 
 export interface ResultsProps {
   search: { query: string; signal: AbortSignal } | null;
   criteria: SearchCriteria;
-  entering: boolean;
+  isEntering: boolean;
   revision: number;
   selectGenre: (value: string) => void;
 }

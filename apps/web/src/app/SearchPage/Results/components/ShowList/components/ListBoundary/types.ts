@@ -1,5 +1,5 @@
 export interface ListBoundaryProps {
-  loading: boolean;
+  isLoading: boolean;
   shown: number;
   total: number;
 }

@@ -7,16 +7,16 @@ import styles from './styles.module.css';
 
 
 export function LanguageSelector() {
-  const { label, russian, pending, toggle } = usePresenter();
+  const { label, isRussian, isPending, toggle } = usePresenter();
 
   return (
     <Button
       variant="framedIcon"
-      transparent
+      isTransparent
       icon={
         <img
           className={styles.flag}
-          src={russian ? russianFlag : englishFlag}
+          src={isRussian ? russianFlag : englishFlag}
           width="24"
           height="16"
           alt=""
@@ -24,7 +24,7 @@ export function LanguageSelector() {
       }
       aria-label={label}
       title={label}
-      aria-disabled={pending}
+      aria-disabled={isPending}
       onClick={toggle}
     />
   );

@@ -1,4 +1,3 @@
-import { animateFavoriteRemoval } from './logic/animateFavoriteRemoval';
 import { usePresenter } from './usePresenter';
 import { AnimatedCount } from '@components/AnimatedCount';
 import { AppHeader } from '@components/AppHeader';
@@ -9,12 +8,22 @@ import styles from './styles.module.css';
 
 
 export function FavoritesPage() {
-  const { title, headingLabel, count, items, error, retry, label, message } = usePresenter();
+  const {
+    title,
+    headingLabel,
+    count,
+    items,
+    isFailed,
+    retry,
+    label,
+    message,
+    animateFavoriteRemoval,
+  } = usePresenter();
 
   return (
     <>
       <div className={styles.header}>
-        <AppHeader favoritesPage />
+        <AppHeader isFavoritesPage />
       </div>
       <main className={styles.page}>
         <h1 aria-label={headingLabel}>
@@ -35,7 +44,7 @@ export function FavoritesPage() {
         ) : (
           <p role="status">{message}</p>
         )}
-        {error && <Button onClick={retry}>{label}</Button>}
+        {isFailed && <Button onClick={retry}>{label}</Button>}
       </main>
     </>
   );

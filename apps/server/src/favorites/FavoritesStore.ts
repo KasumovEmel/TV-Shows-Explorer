@@ -1,102 +1,83 @@
 import { randomBytes } from 'node:crypto';
-import { DatabaseSync } from 'node:sqlite';
 
-import { hashSessionToken } from './logic/hashSessionToken';
+import { hashSessionToken } from './logic/helpers/hashSessionToken';
 import { sessionLifetimeSeconds } from './session';
-import type { Show } from '../generated/routes.schemas';
 import type { Clock } from '../types';
 import type {
   FavoriteKey,
   FavoriteSession,
   FavoriteSnapshot,
+  FavoriteStorage,
   FavoritesStoreOptions,
 } from './types';
 
 
 export class FavoritesStore {
-  private db: DatabaseSync;
+  private sessions: FavoriteStorage;
   private now: Clock;
 
-  constructor({ path, now = Date.now }: FavoritesStoreOptions) {
+  constructor({ storage = {}, now = Date.now }: FavoritesStoreOptions = {}) {
+    this.sessions = storage;
     this.now = now;
-
-    this.db = new DatabaseSync(path);
-    this.db.exec(`PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL;
-      CREATE TABLE IF NOT EXISTS sessions(token_hash TEXT PRIMARY KEY, created_at INTEGER NOT NULL, expires_at INTEGER NOT NULL);
-      CREATE INDEX IF NOT EXISTS session_expiry ON sessions(expires_at);
-      CREATE TABLE IF NOT EXISTS favorites(session_id TEXT NOT NULL REFERENCES sessions(token_hash) ON DELETE CASCADE,
-        show_id TEXT NOT NULL, show_snapshot TEXT NOT NULL, added_at INTEGER NOT NULL, PRIMARY KEY(session_id,show_id));`);
-    this.prune();
-  }
-
-  close() {
-    this.db.close();
   }
 
   ready() {
-    this.db.prepare('SELECT token_hash FROM sessions LIMIT 1').get();
+    return Object.isExtensible(this.sessions);
   }
 
   prune() {
-    this.db.prepare('DELETE FROM sessions WHERE expires_at <= ?').run(this.now());
+    const time = this.now();
+    for (const [id, session] of Object.entries(this.sessions)) {
+      if (session.expires <= time) {
+        delete this.sessions[id];
+      }
+    }
+  }
+
+  private activeSession(id: string) {
+    const session = this.sessions[id];
+    if (session && session.expires > this.now()) {
+      return session;
+    }
   }
 
   session(cookie?: string): FavoriteSession {
-    const time = this.now();
-    this.prune();
     if (cookie) {
       const id = hashSessionToken(cookie);
-      if (
-        this.db.prepare('SELECT 1 FROM sessions WHERE token_hash=? AND expires_at>?').get(id, time)
-      ) {
+      if (this.activeSession(id)) {
         return { id };
       }
     }
     const token = randomBytes(32).toString('base64url');
     const id = hashSessionToken(token);
-    this.db
-      .prepare('INSERT INTO sessions VALUES (?,?,?)')
-      .run(id, time, time + sessionLifetimeSeconds * 1000);
+    this.sessions[id] = { expires: this.now() + sessionLifetimeSeconds * 1000, shows: [] };
 
     return { id, token };
   }
 
-  list(id: string): Show[] {
-    return this.db
-      .prepare(
-        'SELECT show_snapshot FROM favorites WHERE session_id=? ORDER BY added_at DESC, rowid DESC',
-      )
-      .all(id)
-      .map((row) => JSON.parse(String(row.show_snapshot)) as Show);
+  list(id: string) {
+    return structuredClone(this.activeSession(id)?.shows ?? []);
   }
 
   count(cookie?: string) {
-    if (!cookie) {
-      return 0;
-    }
-    const row = this.db
-      .prepare(`SELECT COUNT(*) AS count FROM favorites JOIN sessions ON token_hash=session_id
-        WHERE session_id=? AND expires_at>?`)
-      .get(hashSessionToken(cookie), this.now())!;
-
-    return Number(row.count);
+    return cookie ? (this.activeSession(hashSessionToken(cookie))?.shows.length ?? 0) : 0;
   }
 
   has({ session, id }: FavoriteKey) {
-    return Boolean(
-      this.db.prepare('SELECT 1 FROM favorites WHERE session_id=? AND show_id=?').get(session, id),
-    );
+    return this.activeSession(session)?.shows.some((show) => show.id === id) ?? false;
   }
 
   insert({ session, show }: FavoriteSnapshot) {
-    this.db
-      .prepare(
-        'INSERT INTO favorites SELECT token_hash,?,?,? FROM sessions WHERE token_hash=? AND expires_at>? ON CONFLICT(session_id,show_id) DO NOTHING',
-      )
-      .run(show.id, JSON.stringify(show), this.now(), session, this.now());
+    const entry = this.activeSession(session);
+    if (entry && !entry.shows.some((item) => item.id === show.id)) {
+      entry.shows.unshift(structuredClone(show));
+    }
   }
 
   remove({ session, id }: FavoriteKey) {
-    this.db.prepare('DELETE FROM favorites WHERE session_id=? AND show_id=?').run(session, id);
+    const entry = this.activeSession(session);
+    if (entry) {
+      entry.shows = entry.shows.filter((show) => show.id !== id);
+    }
   }
 }

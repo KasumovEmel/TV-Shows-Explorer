@@ -12,18 +12,17 @@ export function Results(props: ResultsProps) {
   const {
     data,
     genreOptions,
-    hasGenres,
-    selectedGenre,
+    isGenreListPopulated,
+    isGenreListLoading,
     isLoading,
-    loadError,
+    isLoadError,
     isEmpty,
-    showGenreSection,
+    isGenreSectionVisible,
     genreLabel,
     emptyCopy,
     errorCopy,
     retry,
   } = usePresenter(props);
-  const loadingChips = isLoading && !hasGenres;
 
   function renderError(onRetry: RetrySearch) {
     return (
@@ -39,49 +38,42 @@ export function Results(props: ResultsProps) {
 
   return (
     <section className={styles.results}>
-      {showGenreSection && (
-        <div className={styles.genres} aria-hidden={!hasGenres}>
-          {(isLoading || hasGenres) && (
+      {isGenreSectionVisible && (
+        <div className={styles.genres} aria-hidden={!isGenreListPopulated}>
+          {(isLoading || isGenreListPopulated) && (
             <>
               <span>{genreLabel}</span>
               <div
                 className={styles.chips}
-                inert={loadingChips}
-                aria-hidden={loadingChips || undefined}
-                role={loadingChips ? undefined : 'group'}
-                aria-label={loadingChips ? undefined : genreLabel}
+                inert={isGenreListLoading}
+                aria-hidden={isGenreListLoading || undefined}
+                role={isGenreListLoading ? undefined : 'group'}
+                aria-label={isGenreListLoading ? undefined : genreLabel}
               >
-                {loadingChips ? (
+                {isGenreListLoading ? (
                   <ChipSkeleton />
                 ) : (
-                  genreOptions.map((genre) => (
-                    <GenreChip
-                      key={genre}
-                      value={genre}
-                      selected={genre === selectedGenre}
-                      select={() => props.selectGenre(genre)}
-                    />
-                  ))
+                  genreOptions.map((option) => <GenreChip key={option.value} {...option} />)
                 )}
               </div>
             </>
           )}
         </div>
       )}
-      {loadError && renderError(retry)}
+      {isLoadError && renderError(retry)}
       {isEmpty && (
         <div className={styles.notice} role="status">
           <h2>{emptyCopy.title}</h2>
           <p>{emptyCopy.hint}</p>
         </div>
       )}
-      {!loadError && !isEmpty && (
+      {!isLoadError && !isEmpty && (
         <ShowList
           key={props.revision}
           first={data}
           criteria={props.criteria}
           signal={props.search?.signal}
-          loading={isLoading}
+          isLoading={isLoading}
           renderPageError={renderError}
         />
       )}

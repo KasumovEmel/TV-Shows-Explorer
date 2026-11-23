@@ -2,7 +2,7 @@ get:
   operationId: health
   responses:
     '200':
-      description: API and SQLite ready
+      description: API and in-memory session storage ready
       content:
         application/json:
           schema:

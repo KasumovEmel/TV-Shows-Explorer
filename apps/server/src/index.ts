@@ -1,17 +1,18 @@
 import { serve } from '@hono/node-server';
-import { mkdirSync } from 'node:fs';
-import { dirname } from 'node:path';
 
 import { createApp } from './app';
 import { ShowCatalog } from './catalog';
 import { FavoritesStore } from './favorites';
+import { cache, favorite } from './storage';
 
 
-const file = process.env.SQLITE_PATH ?? 'data/catalog.sqlite';
-mkdirSync(dirname(file), { recursive: true });
-const store = new FavoritesStore({ path: file });
-const catalog = new ShowCatalog();
-const app = createApp({ catalog, favorites: store, secure: process.env.NODE_ENV === 'production' });
+const store = new FavoritesStore({ storage: favorite });
+const catalog = new ShowCatalog({ storage: cache });
+const app = createApp({
+  catalog,
+  favorites: store,
+  isCookieSecure: process.env.NODE_ENV === 'production',
+});
 const timer = setInterval(() => {
   catalog.prune();
   store.prune();
@@ -25,7 +26,7 @@ const server = serve({
 
 function close() {
   clearInterval(timer);
-  server.close(() => store.close());
+  server.close();
 }
 
 process.once('SIGTERM', close);

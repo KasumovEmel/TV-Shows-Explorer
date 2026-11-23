@@ -4,7 +4,7 @@ import type { SearchFieldProps } from './components/SearchField';
 
 
 export interface SearchIntroProps {
-  restored: boolean;
+  isRestored: boolean;
   introRef: RefObject<HTMLElement | null>;
   field: SearchFieldProps;
 }

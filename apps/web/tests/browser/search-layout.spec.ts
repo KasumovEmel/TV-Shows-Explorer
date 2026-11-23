@@ -8,8 +8,8 @@ import type { ReleaseRequest } from './types';
 for (const width of [1440, 390]) {
   test('макет поиска: ' + width + ' px', async ({ page }) => {
     await mockSearch(page);
-    const wide = width === 1440;
-    await page.setViewportSize({ width, height: wide ? 1000 : 844 });
+    const isWideViewport = width === 1440;
+    await page.setViewportSize({ width, height: isWideViewport ? 1000 : 844 });
     await page.addInitScript(() => localStorage.setItem('tv-shows-explorer.language', 'ru'));
     await page.goto('/');
     const banner = page.getByRole('banner');
@@ -33,7 +33,7 @@ for (const width of [1440, 390]) {
     const initial = await form.boundingBox();
     const top = await intro.boundingBox();
     expect(initial!.y).toBeGreaterThan(top!.y + top!.height);
-    expect(initial!.width).toBe(wide ? 640 : 350);
+    expect(initial!.width).toBe(isWideViewport ? 640 : 350);
     let release!: ReleaseRequest;
     const pending = new Promise<void>((resolve) => {
       release = resolve;
@@ -55,7 +55,7 @@ for (const width of [1440, 390]) {
     const docked = await form.boundingBox();
     const end = await intro.boundingBox();
     expect(docked!.y + docked!.height).toBeLessThanOrEqual(end!.y + end!.height);
-    if (wide) {
+    if (isWideViewport) {
       expect(docked!.x).toBeGreaterThan(initial!.x);
     }
     await expect(skeletons).toHaveCount(3);
@@ -75,7 +75,7 @@ for (const width of [1440, 390]) {
     await expect(posters.first()).toHaveCSS('object-fit', 'contain');
     await expect(posters.first().locator('..')).toHaveCSS('border-radius', '12px');
     await expectRows({ rows: page.getByRole('listitem'), container });
-    await expect(form).toHaveCSS('height', wide ? '62px' : '52px');
+    await expect(form).toHaveCSS('height', isWideViewport ? '62px' : '52px');
     const clear = page.getByRole('button', { name: 'Очистить поиск' });
     await expect(clear).toHaveCSS('min-width', '44px');
     await page.screenshot({ path: test.info().outputPath('results.png') });

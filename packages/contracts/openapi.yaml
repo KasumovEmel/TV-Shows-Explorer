@@ -19,7 +19,7 @@ components:
       type: apiKey
       in: cookie
       name: season_one
-      description: Anonymous session created when listing or changing favorites, valid for 30 days.
+      description: Anonymous session created when listing or changing favorites. Expires after 30 days or when the API process restarts.
   schemas:
     Show:
       $ref: './models.yaml#/Show'

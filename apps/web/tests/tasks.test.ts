@@ -4,8 +4,8 @@ import test from 'node:test';
 import { addFavorite } from '../src/app/favorites/logic/tasks/addFavorite';
 import { listFavorites } from '../src/app/favorites/logic/tasks/listFavorites';
 import { removeFavorite } from '../src/app/favorites/logic/tasks/removeFavorite';
-import { selectGenre } from '../src/app/SearchPage/logic/tasks/selectGenre';
-import { loadSearchPage } from '../src/app/SearchPage/Results/logic/tasks/loadSearchPage';
+import { loadSearchPage } from '../src/app/SearchPage/search/logic/tasks/loadSearchPage';
+import { selectGenre } from '../src/app/SearchPage/search/logic/tasks/selectGenre';
 
 
 void test('search and genre tasks operate on plain criteria', async () => {

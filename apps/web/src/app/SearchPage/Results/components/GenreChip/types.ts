@@ -1,5 +1,5 @@
 export interface GenreChipProps {
   value: string;
-  selected: boolean;
+  isSelected: boolean;
   select: () => void;
 }
