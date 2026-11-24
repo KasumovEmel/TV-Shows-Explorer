@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { loadSearchPage } from '../tasks/loadSearchPage';
 import { searchShows } from '@/api/generated/catalog';
 import { useRequestError } from '@/app/notifications';
+import { runAbortableRequest } from '@/app/utils/runAbortableRequest';
 import type { SearchPageRequest, SearchPageResponse } from '../types/SearchPageRequest';
 
 
@@ -20,22 +21,17 @@ export function useSearchPage({ criteria, signal }: SearchPageRequest) {
     if (!request) {
       return;
     }
-    const controller = new AbortController();
-    const signal = AbortSignal.any([request.signal, controller.signal]);
-    void loadSearchPage({ criteria: request.criteria, signal, requestPage: searchShows })
-      .then((data) => {
-        if (!signal.aborted) {
-          setResponse({ request, data });
-        }
-      })
-      .catch((error: unknown) => {
-        if (!signal.aborted) {
-          setResponse({ request, error });
-          onError(error);
-        }
-      });
 
-    return () => controller.abort();
+    return runAbortableRequest({
+      parentSignal: request.signal,
+      run: (signal) =>
+        loadSearchPage({ criteria: request.criteria, signal, requestPage: searchShows }),
+      onSuccess: ({ data }) => setResponse({ request, data }),
+      onError: (error) => {
+        setResponse({ request, error });
+        onError(error);
+      },
+    }).abort;
   }, [request, attempt, onError]);
 
   function retry() {

@@ -2,18 +2,20 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { listFavorites } from '../tasks/listFavorites';
 import * as api from '@/api/generated/catalog';
+import { runAbortableRequest } from '@/app/utils/runAbortableRequest';
 import type {
   FavoriteAccess,
   FavoriteSnapshot,
   UpdateFavorites,
 } from '../types/FavoriteOperations';
+import type { AbortRequest } from '@/app/types/request.types';
 
 
 export function useFavoriteList({ signal, onError }: FavoriteAccess) {
   const [snapshot, setSnapshot] = useState<FavoriteSnapshot>();
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
-  const listRequest = useRef<AbortController | null>(null);
+  const abortList = useRef<AbortRequest | null>(null);
   const [previous, setPrevious] = useState(signal);
   if (previous !== signal) {
     setPrevious(signal);
@@ -23,62 +25,47 @@ export function useFavoriteList({ signal, onError }: FavoriteAccess) {
   }
 
   const refresh = useCallback(() => {
-    if (!signal || signal.aborted || listRequest.current) {
+    if (!signal || signal.aborted || abortList.current) {
       return;
     }
-    const controller = new AbortController();
-    listRequest.current = controller;
     setIsLoading(true);
     setIsFailed(false);
-    const requestSignal = AbortSignal.any([controller.signal, signal]);
-    void listFavorites(() => api.listFavorites({ signal: requestSignal }))
-      .then((items) => {
-        if (!requestSignal.aborted) {
-          setSnapshot(items);
-        }
-      })
-      .catch((error: unknown) => {
-        if (!requestSignal.aborted) {
-          setIsFailed(true);
-          onError(error);
-        }
-      })
-      .finally(() => {
-        if (listRequest.current === controller) {
-          listRequest.current = null;
-          setIsLoading(false);
-        }
-      });
+    abortList.current = runAbortableRequest({
+      parentSignal: signal,
+      run: (signal) => listFavorites(() => api.listFavorites({ signal })),
+      onSuccess: ({ data }) => setSnapshot(data),
+      onError: (error) => {
+        setIsFailed(true);
+        onError(error);
+      },
+      onSettled: () => {
+        abortList.current = null;
+        setIsLoading(false);
+      },
+    }).abort;
   }, [onError, signal]);
 
   useEffect(() => {
-    const controller = new AbortController();
-    const requestSignal = signal && AbortSignal.any([controller.signal, signal]);
-    if (requestSignal && location.pathname !== '/favorites') {
-      void api
-        .countFavorites({ signal: requestSignal })
-        .then(({ count }) => {
-          if (!requestSignal.aborted) {
-            setSnapshot((current) => current ?? count);
-          }
-        })
-        .catch((error: unknown) => {
-          if (!requestSignal.aborted) {
-            onError(error);
-          }
-        });
-    }
-
     return () => {
-      controller.abort();
-      listRequest.current?.abort();
-      listRequest.current = null;
+      abortList.current?.();
+      abortList.current = null;
     };
+  }, [signal]);
+
+  useEffect(() => {
+    if (signal && location.pathname !== '/favorites') {
+      return runAbortableRequest({
+        parentSignal: signal,
+        run: (signal) => api.countFavorites({ signal }),
+        onSuccess: ({ data }) => setSnapshot((current) => current ?? data.count),
+        onError,
+      }).abort;
+    }
   }, [onError, signal]);
 
   const commit = useCallback((update: UpdateFavorites) => {
-    listRequest.current?.abort();
-    listRequest.current = null;
+    abortList.current?.();
+    abortList.current = null;
     setSnapshot((current) => update(Array.isArray(current) ? current : []));
     setIsLoading(false);
     setIsFailed(false);

@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useState } from 'react';
 
+import { useAbortScope } from '@/app/logic/hooks/useAbortScope';
 import { behavior } from '@/styles/tokens';
 import type { SearchPhase } from '../types/SearchTransition';
 
 
 export function useSearchQuery() {
   const [value, setValue] = useState('');
-  const [controller, setController] = useState<AbortController | null>(null);
+  const [signal, setSignal] = useState<AbortSignal>();
   const [phase, setPhase] = useState<SearchPhase>('idle');
+  const { getSignal, renew, abort } = useAbortScope();
 
   const finishEntrance = useCallback(() => {
     setPhase((current) => (current === 'entering' ? 'docked' : current));
@@ -16,11 +18,9 @@ export function useSearchQuery() {
   const term = value.trim();
 
   const startSearch = useCallback(() => {
-    setController((current) => current ?? new AbortController());
+    setSignal(getSignal());
     setPhase((current) => (current === 'idle' ? 'entering' : current));
-  }, []);
-
-  useEffect(() => () => controller?.abort(), [controller]);
+  }, [getSignal]);
 
   useEffect(() => {
     if (!term) {
@@ -33,7 +33,8 @@ export function useSearchQuery() {
 
   function onChange(nextValue: string) {
     if (nextValue.trim() !== term) {
-      setController(null);
+      abort();
+      setSignal(undefined);
     }
     if (!nextValue.trim()) {
       setPhase('idle');
@@ -44,8 +45,8 @@ export function useSearchQuery() {
   return {
     value,
     term,
-    search: controller ? { query: term, signal: controller.signal } : null,
-    renew: () => setController(new AbortController()),
+    search: signal ? { query: term, signal } : null,
+    renew: () => setSignal(renew()),
     phase,
     finishEntrance,
     onChange,

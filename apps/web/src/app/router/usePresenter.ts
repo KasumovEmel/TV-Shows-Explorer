@@ -17,7 +17,7 @@ const pathname = () => location.pathname;
 export function usePresenter() {
   const path = useSyncExternalStore(subscribe, pathname);
   const { session, isPending, login, logout, onFavoriteError } = useAuth();
-  const access = { signal: session?.scope.signal, onError: onFavoriteError };
+  const access = { signal: session?.signal, onError: onFavoriteError };
   const { commit, ...list } = useFavoriteList(access);
   const setSaved = useFavoriteChanges({ ...access, commit });
 

@@ -6,7 +6,7 @@ export interface AccountControls {
 
 export interface UserSession {
   email: string;
-  scope: AbortController;
+  signal: AbortSignal;
 }
 
 export type SubmitEmail = (email: string) => void;
